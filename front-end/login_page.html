@@ -3,27 +3,52 @@
 <head>
     <style>
         body {
-            background-image: url('https://i.ibb.co/qYKxLwn/Screenshot-2023-10-25-220240.png');
-            background-size: cover;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
+            padding: 0;
         }
-        form {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        input {
+
+        .header-container {
+            border: 2px solid #000;
             padding: 10px;
-            margin: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 200px;
+        }
+
+        .logo {
+            max-width: 100px;
+            height: 100px;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        form {
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    <div class="header-container">
+        <div class="logo">
+            <img src="https://www.nus.edu.sg/images/default-source/identity-images/NUS_logo_full-horizontal.jpg" alt="NUS Logo" style="height: 100px;">
+        </div>
+        <div class="header">
+            <h1>Login Page</h1>
+        </div>
+        <div class="logo">
+            <!-- ignore -->
+        </div>
+    </div>
     <form action="login.php" method="post">
         <h2>Login</h2>
         <label for="UserID">User ID:</label>
