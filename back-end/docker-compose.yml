@@ -6,7 +6,9 @@ services:
   database:
     image: mysql
     ports:
-      - "33061:3306"
+      - '1001:3306'
+    expose:
+      - '1001'
     environment:
       MYSQL_DATABASE: 'db'
       MYSQL_USER: 'user'
