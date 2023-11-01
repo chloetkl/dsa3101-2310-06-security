@@ -1,0 +1,14 @@
+
+version: '0.1'
+
+services:
+
+  database:
+    image: mysql
+    ports:
+      - "33061:3306"
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'dsa3101'
+      MYSQL_ROOT_PASSWORD: 'dsa3101'
