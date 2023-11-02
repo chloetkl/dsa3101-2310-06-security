@@ -37,8 +37,12 @@ generate_add_time <- function(Incident) {
                         var_resolution_times[Incident])))
 }
 
+users_sec <- c("sec1","sec2","sec3","sec4","sec5")
+
 df %>%
   mutate(IncidentID = row_number(),.before=Classification) %>% 
+  # add User
+  mutate(User = sample(users_sec,nrow(.),replace=TRUE)) %>% 
   # rename current datetime col as 'Open'
   rename('Open'='datetime') %>% 
   # add close time
@@ -48,10 +52,11 @@ df %>%
          Close = Open + seconds(days_to_seconds(Add)),
          .after=Open) -> df_with_close_time
 
+
 df_Incidentlog <- df_with_close_time %>% 
   select( 
     # Incident details to keep
-    IncidentID, Incidents, Location, Building, Longtitude, Latitude,
+    IncidentID, Incidents, Location, Building, Longtitude, Latitude,User,
     # Timestamps generated and status
     Open,Close) %>% 
   pivot_longer(cols=c('Open','Close'),
@@ -61,9 +66,9 @@ df_Incidentlog <- df_with_close_time %>%
 
 ```{r}
 df_with_close_time %>% 
-  write.csv("back-end/data/data_intermediate(for checking)_with_status.csv",row.names = FALSE)
+  write.csv("back-end/data/data_v0.2_intermediate(for checking)_with_status.csv",row.names = FALSE)
 df_Incidentlog %>% 
-  write.csv("back-end/data/data_with_status.csv",row.names = FALSE)
+  write.csv("back-end/data/data_v0.3_with_status.csv",row.names = FALSE)
 ```
 
 
