@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 def establish_sql_connection():
     db = mysql.connector.connect(
-        host = "database_1", #this is what the container was called when i did docker compose up so i just put that name here first
+        host = "database", #this is what the container was called when i did docker compose up so i just put that name here first
         user = "user",
         password = "dsa3101",
         database = "db"

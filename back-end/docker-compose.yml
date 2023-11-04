@@ -7,21 +7,26 @@ services:
     image: mysql
     restart: always
     ports:
-      - '1001:3306'
+      - 1001:3306
     expose:
-      - '1001'
+      - 1001
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'dsa3101'
+      MYSQL_DATABASE: 'secdb'
       MYSQL_ROOT_PASSWORD: 'dsa3101'
     volumes:
-      - ./database:/docker-entrypoint-initdb.d
+      - ./database/0. init:/docker-entrypoint-initdb.d
 
-  adminer: 
+  database-manager: 
     image: adminer
     restart: always
     depends_on: 
       - database
     ports:
-      - '8080:8080'
+      - 8080:8080
+
+  database-pop:
+    build: 
+      context: ./database
+      dockerfile: Dockerfile
+    volumes:
+      - ./

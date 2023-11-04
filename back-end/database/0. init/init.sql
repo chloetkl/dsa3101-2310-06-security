@@ -1,7 +1,7 @@
 DO SLEEP(10);
 
-CREATE DATABASE IF NOT EXISTS db;
-USE db;
+CREATE DATABASE IF NOT EXISTS secdb;
+USE secdb;
 
 CREATE TABLE IF NOT EXISTS User_roles (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Users (
   role_id INT,
   salt VARCHAR(255),
   hash VARCHAR(255),
-  FOREIGN KEY (role_id) REFERENCES User_roles.id
+  FOREIGN KEY (role_id) REFERENCES User_roles(id)
 );
 
 CREATE TABLE IF NOT EXISTS Incident_types (
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS Incident_location (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255),
   group_id INT,
-  latitude DOUBLE PRECISION,
-  longitude DOUBLE PRECISION,
+  latitude DECIMAL,
+  longitude DECIMAL,
   FOREIGN KEY (group_id) REFERENCES Incident_location_groups(id)
 );
 
