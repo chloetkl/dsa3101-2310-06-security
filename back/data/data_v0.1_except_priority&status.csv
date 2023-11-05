@@ -1,4 +1,4 @@
-datetime,Year,DayOfYear,Month,DayOfWeek,time_period,Building,Location,Longtitude,Latitude,Incidents
+datetime,Year,DayOfYear,Month,DayOfWeek,time_period,Building,Location,Latitude,Longitude,Incidents
 13/2/19 13:05,2019,44,2,2,day_weekday,SRC MINI GRAND STAND,YIH,1.298645794,103.7777397,LOST AND FOUND
 2/3/19 13:55,2019,61,3,5,weekend,PGP RESIDENCES (BLOCK 13),PGP,1.290867796,103.7802755,LOST AND FOUND
 18/3/19 3:05,2019,77,3,0,day_weekday,PGP RESIDENCES CANTEEN 2,PGP,1.290619681,103.7816946,LOST AND FOUND

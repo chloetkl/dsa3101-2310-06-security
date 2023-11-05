@@ -1,4 +1,4 @@
-"IncidentID","Incidents","Location","Building","Longtitude","Latitude","User","Status","Time"
+"IncidentID","Incidents","Location","Building","Latitude","Longitude","User","Status","Time"
 1,"LOST AND FOUND","YIH","SRC MINI GRAND STAND",1.298645794,103.7777397,"sec3","Open",2019-02-13 13:05:00
 1,"LOST AND FOUND","YIH","SRC MINI GRAND STAND",1.298645794,103.7777397,"sec3","Close",2019-02-16 05:55:01
 2,"LOST AND FOUND","PGP","PGP RESIDENCES (BLOCK 13)",1.290867796,103.7802755,"sec3","Open",2019-03-02 13:55:00
