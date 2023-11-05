@@ -19,6 +19,7 @@ def establish_sql_connection():
     #     )
     return db
 
+
 def add_user_roles(filepath):
     
     db = establish_sql_connection()
@@ -32,6 +33,9 @@ def add_user_roles(filepath):
     query = f'INSERT INTO User_roles(role) VALUES {values};'
 
     cursor.execute(query)
+    db.commit()
+    print(f"Number of rows affected: {cursor.rowcount}")
+
     cursor.close()
     db.close()
 
@@ -39,6 +43,15 @@ def add_user_roles(filepath):
 
 add_user_roles('User_roles.txt')
 
+## Checks
+db = establish_sql_connection()
+cursor = db.cursor()
+query = "SELECT * from User_roles"
+cursor.execute(query)
+result = cursor.fetchall()
+print(result)
+cursor.close()
+db.close()
 
 
 # cursor = db.cursor()

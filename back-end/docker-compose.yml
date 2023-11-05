@@ -14,7 +14,7 @@ services:
       MYSQL_DATABASE: 'secdb'
       MYSQL_ROOT_PASSWORD: 'dsa3101'
     volumes:
-      - ./database/0. init:/docker-entrypoint-initdb.d
+      - ./database/init:/docker-entrypoint-initdb.d
 
   database-manager: 
     image: adminer
@@ -26,7 +26,7 @@ services:
 
   database-pop:
     build: 
-      context: ./database
+      context: ./database/
       dockerfile: Dockerfile
     volumes:
-      - ./
+      - ./populate:/data/populate
