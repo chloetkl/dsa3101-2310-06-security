@@ -28,6 +28,8 @@ services:
     build: 
       context: .
       dockerfile: database_pop_dockerfile
+    depends_on: 
+      - database
     stdin_open: true
     tty: true
     volumes:

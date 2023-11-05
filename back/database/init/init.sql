@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Users (
 
 CREATE TABLE IF NOT EXISTS Incident_types (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  type VARCHAR(255),
+  type VARCHAR(255) UNIQUE,
   default_priority VARCHAR(255) CHECK (default_priority IN ('Normal', 'High'))
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Incident_location_groups (
 
 CREATE TABLE IF NOT EXISTS Incident_location (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255),
+  name VARCHAR(255) UNIQUE,
   group_id INT,
   latitude DECIMAL,
   longitude DECIMAL,
@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS Incident_location (
 
 CREATE TABLE IF NOT EXISTS Incidents (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  description TEXT,
   location_id INT,
   incident_type_id INT,
   FOREIGN KEY (location_id) REFERENCES Incident_location(id),
