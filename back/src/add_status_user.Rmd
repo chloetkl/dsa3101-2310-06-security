@@ -1,0 +1,77 @@
+---
+title: "Updating raw data to add response times"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+df <- read_csv("back-end/data/data_except_priority&status.csv")
+```
+
+
+```{r}
+mean_resolution_times <- c(
+  "EMERGENCY INCIDENTS" = 2,
+  "DAMAGED PROPERTY" = 7,
+  "LOST AND FOUND" = 3,
+  "SEXUAL INCIDENTS" = 7,
+  "STOLEN ITEMS" = 2
+)
+var_resolution_times <- c(
+  "EMERGENCY INCIDENTS" =  1,
+  "DAMAGED PROPERTY" = 2,
+  "LOST AND FOUND" = 0.5,
+  "SEXUAL INCIDENTS" = 2,
+  "STOLEN ITEMS" = 0.5
+)
+
+days_to_seconds <- function(days) {return(round(days * 24 * 60 * 60))}
+generate_add_time <- function(Incident) {
+  return (log(rlnorm(1,mean_resolution_times[Incident],
+                        var_resolution_times[Incident])))
+}
+
+users_sec <- c("sec1","sec2","sec3","sec4","sec5")
+
+df %>%
+  mutate(IncidentID = row_number(),.before=Classification) %>% 
+  # add User
+  mutate(User = sample(users_sec,nrow(.),replace=TRUE)) %>% 
+  # rename current datetime col as 'Open'
+  rename('Open'='datetime') %>% 
+  # add close time
+  rowwise() %>% 
+  mutate(Add = generate_add_time(Incidents),
+         Open = as.POSIXct(Open,format="%d/%m/%y %H:%M"),
+         Close = Open + seconds(days_to_seconds(Add)),
+         .after=Open) -> df_with_close_time
+
+
+df_Incidentlog <- df_with_close_time %>% 
+  select( 
+    # Incident details to keep
+    IncidentID, Incidents, Location, Building, Longtitude, Latitude,User,
+    # Timestamps generated and status
+    Open,Close) %>% 
+  pivot_longer(cols=c('Open','Close'),
+               names_to = 'Status', values_to = 'Time')
+  
+```
+
+```{r}
+df_with_close_time %>% 
+  write.csv("back-end/data/data_v0.2_intermediate(for checking)_with_status.csv",row.names = FALSE)
+df_Incidentlog %>% 
+  write.csv("back-end/data/data_v0.3_with_status.csv",row.names = FALSE)
+```
+
+
+
+
+

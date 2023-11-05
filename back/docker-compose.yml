@@ -1,0 +1,36 @@
+
+version: '0.1'
+
+services:
+
+  database:
+    image: mysql
+    restart: always
+    ports:
+      - 1001:3306
+    expose:
+      - 1001
+    environment:
+      MYSQL_DATABASE: 'secdb'
+      MYSQL_ROOT_PASSWORD: 'dsa3101'
+    volumes:
+      - ./database/init:/docker-entrypoint-initdb.d
+
+  database-manager: 
+    image: adminer
+    restart: always
+    depends_on: 
+      - database
+    ports:
+      - 8080:8080
+
+  database-pop:
+    build: 
+      context: .
+      dockerfile: database_pop_dockerfile
+    depends_on: 
+      - database
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./database/populate:/database/populate

@@ -1,0 +1,501 @@
+,Classification,Disposition,datetime
+0,Criminal Mischief,Open Investigation,2023-04-29 15:58:31
+1,Harassment: Domestic Violence,Open Investigation,2023-09-06 08:03:37
+2,Harassment,Open Investigation,2023-06-23 18:02:19
+3,Trespassing, Arrest,2023-01-19 00:40:24
+4,Assault,Arrest,2023-06-07 05:07:03
+5,Trespass, Closed,2023-02-16 21:18:02
+6,Harassment: Domestic Violence,Open Investigation,2023-02-20 15:34:11
+7,Shoplifting,Arrest,2023-04-17 22:05:27
+8,Fraud,Open Investigation,2023-06-23 02:38:40
+9,Theft,Unfounded,2023-03-21 01:47:17
+10,Stalking,Closed,2023-04-04 09:33:49
+11,Theft,Open Investigation,2023-01-05 22:52:09
+12,Harassment,Open Investigation,2023-05-17 09:30:50
+13,Trespassing,,2023-10-29 03:26:58
+14,Theft,Open Investigation,2023-01-06 10:40:52
+15,Harassment,Open Investigation,2023-01-10 21:31:48
+16,Fraud,Open Investigation,2023-01-17 21:03:28
+17,Rape,Closed,2022-12-17 11:40:07
+18,Trespassing,Arrest,2023-02-02 22:08:37
+19,Trespassing,Arrest,2023-05-20 07:31:15
+20,False Public Alarm,Open Investigation,2023-05-20 20:34:27
+21,Trespassing,Arrest,2023-01-22 02:59:36
+22,Trespassing, Arrest,2022-11-14 13:56:41
+23,Obstruction of Justice,Arrest,2023-02-05 13:44:38
+24,Trespassing,,2023-10-28 09:09:58
+25,Lewdness,Arrest,2022-10-25 17:05:20
+26,Trespassing,,2023-11-05 16:15:02
+27,False Public Alarm,Unfounded,2022-10-30 03:21:38
+28,Bias Intimidation,Open Investigation,2023-10-28 13:53:39
+29,Theft,Unfounded,2023-02-23 22:52:21
+30,Trespassing,Arrest,2023-03-10 19:44:14
+31,Criminal Mischief,Open Investigation,2023-04-17 11:12:02
+32,Shoplifting,Open Investigation,2023-02-04 14:14:00
+33,Burglary,Arrest,2023-03-14 04:19:02
+34,Trespassing,Open Investigation,2023-03-16 12:56:38
+35,Theft,Unfounded,2022-11-28 04:51:50
+36,Theft,Unfounded,2023-01-16 06:07:04
+37,Harassment,Open Investigation,2023-06-15 18:30:47
+38,Theft,Open Investigation,2023-09-21 10:37:12
+39,Theft,Unfounded,2023-01-17 10:02:57
+40,Criminal Mischief,Open Investigation,2023-04-14 08:42:37
+41,Theft,Open Investigation,2023-09-26 22:55:24
+42,Harassment: Fraud,Arrest,2023-05-18 16:09:24
+43,Theft,Unfounded,2023-08-27 15:59:34
+44,Shoplifting,Open Investigation,2023-01-15 00:55:37
+45,Hindering Possession of Burglary Tools,Arrest,2023-02-15 11:34:14
+46,Theft,Unfounded,2023-09-06 20:15:16
+47,Trespassing,Arrest,2023-06-07 15:19:21
+48,Trespassing,Arrest,2023-05-08 20:47:27
+49,Rape,Closed,2023-07-14 18:30:31
+50,Burglary,Arrest,2023-03-15 22:15:57
+51,Trespassing,,2023-09-23 12:22:41
+52,Theft,Open Investigation,2023-06-06 14:10:12
+53,Burglary,Open Investigation,2023-03-11 21:30:04
+54,Theft,Open Investigation,2023-10-03 07:07:21
+55,Possession of Burglary Tools 2,Arrest,2023-03-03 23:32:29
+56,Assault,Open Investigation,2023-04-15 22:08:08
+57,Lewdness,Arrest,2023-01-06 07:24:03
+58,Theft,Unfounded,2023-08-19 14:57:17
+59,Theft,Unfounded,2023-09-11 00:21:51
+60,Theft,Open Investigation,2023-07-02 01:45:24
+61,Assault,Arrest,2023-04-09 16:29:49
+62,Criminal Mischief,Open Investigation,2023-05-19 19:51:20
+63,Theft,Unfounded,2023-02-15 15:23:16
+64,Trespassing,,2023-11-29 19:04:59
+65,Trespassing,,2023-10-22 20:24:51
+66,Fraud,Open Investigation,2023-05-20 06:24:54
+67,Theft,Judicial Referral,2023-01-17 03:02:58
+68,Theft,Open Investigation,2023-10-03 19:07:24
+69,Theft,Unfounded,2023-01-01 11:30:40
+70,False Public Alarm,Arrest,2023-03-23 05:26:10
+71,Trespassing,Closed,2023-06-26 01:55:55
+72,Criminal Mischief,Open Investigation,2023-05-17 18:59:48
+73,Fraud,Open Investigation,2023-03-27 03:38:01
+74,Criminal Mischief,Open Investigation,2023-10-06 18:43:07
+75,Trespassing,Closed,2023-03-20 16:21:22
+76,Theft,Unfounded,2023-03-07 07:59:10
+77,Bias Intimidation,Open Investigation,2023-08-05 16:20:22
+78,Theft,Unfounded,2023-01-30 05:53:44
+79,Aggravated Assault,Open Investigation,2023-05-23 12:23:30
+80,Theft,Unfounded,2023-09-27 03:57:08
+81,Rape,Closed,2023-06-17 15:52:06
+82,Theft,Unfounded,2023-05-10 16:51:11
+83,Theft,Unfounded,2023-01-21 06:01:44
+84,Trespassing,Closed,2023-03-22 06:38:16
+85,Theft,Unfounded,2023-02-02 13:30:55
+86,Assault,Open Investigation,2023-01-24 18:53:33
+87,Shoplifting,Open Investigation,2022-11-07 01:48:04
+88,Lewdness,Arrest,2022-12-28 16:45:50
+89,Shoplifting,,2023-02-24 08:05:36
+90,Trespassing,Closed,2023-05-13 20:01:33
+91,Trespassing,Arrest,2023-03-23 15:03:56
+92,Trespassing,Arrest,2023-06-05 13:30:33
+93,Theft,Unfounded,2023-02-04 13:07:13
+94,Theft,Open Investigation,2022-12-05 22:18:51
+95,Shoplifting,Arrest,2023-01-09 17:59:40
+96,Trespassing,,2023-09-02 12:53:34
+97,Theft,Open Investigation,2023-04-30 23:37:52
+98,Service of Warrant,Arrest,2023-05-06 21:14:59
+99,Lewdness,Unfounded,2022-10-29 00:24:45
+100,Harassment,Closed,2023-05-08 03:37:10
+101,Criminal Mischief,Open Investigation,2023-05-25 23:13:49
+102,Disorderly Conduct,Unfounded,2023-02-21 12:26:38
+103,Criminal Mischief,Open Investigation,2023-05-04 15:41:34
+104,Theft,Open Investigation,2023-05-29 20:43:38
+105,Theft,Unfounded,2023-01-07 20:18:33
+106,Trespassing,Closed,2022-12-16 07:25:37
+107,Rape,Closed,2022-12-27 05:48:28
+108,Criminal Mischief,Open Investigation,2023-05-31 08:10:11
+109,Harassment: Bias Incident,Open Investigation,2023-05-16 23:15:45
+110,Assault,Open Investigation,2023-03-05 10:42:57
+111,Harassment: Bias Incident,Open Investigation,2023-07-10 18:30:10
+112,Theft,Open Investigation,2023-05-17 15:25:08
+113,Shoplifting,Open Investigation,2023-06-02 13:01:57
+114,Harassment,Open Investigation,2022-12-22 03:39:59
+115,Theft,Unfounded,2023-01-24 09:58:29
+116,Theft,Open Investigation,2023-04-19 02:49:14
+117,Harassment: Bias Incident,Open Investigation,2023-06-12 16:28:07
+118,False Public Alarm,Open Investigation,2023-06-12 19:23:11
+119,False Public Alarm,Open Investigation,2023-05-22 04:43:24
+120,Theft,Unfounded,2023-09-22 23:06:55
+121,Theft,Unfounded,2023-09-04 19:05:12
+122,Shoplifting,Open Investigation,2023-04-05 11:22:55
+123,False Public Alarm,Closed,2023-04-19 09:26:50
+124,Theft,unfounded,2022-12-28 03:53:05
+125,Trespassing,Open Investigation,2023-03-29 04:02:53
+126,Rape,Closed,2022-12-18 22:22:31
+127,Theft,Unfounded,2022-11-06 02:30:17
+128,Burglary,Arrest,2023-01-05 17:06:10
+129,Theft,Open Investigation,2023-09-19 02:38:30
+130,Trespassing,,2023-11-19 01:54:21
+131,Shoplifting,Open Investigation,2022-12-10 03:44:07
+132,Extortion,Open Investigation,2023-01-14 08:01:48
+133,Shoplifting,Arrest,2023-04-25 07:58:11
+134,Criminal Mischief,Open Investigation,2023-05-10 05:30:35
+135,Theft,Unfounded,2023-02-18 08:06:31
+136,Trespassing, Arrest,2022-11-26 23:34:08
+137,Theft,Unfounded,2023-09-04 18:30:02
+138,Theft,Unfounded,2023-10-15 07:43:33
+139,Fraud,Open Investigation,2023-04-12 22:52:38
+140,Harassment,Open Investigation,2023-10-28 18:28:46
+141,Shoplifting,Arrest,2023-03-24 04:41:15
+142,Trespassing,Arrest,2023-04-16 09:32:08
+143,Trespassing,Arrest,2022-12-30 00:22:18
+144,Trespassing,Open Investigation,2023-04-19 16:02:40
+145,Theft,Unfounded,2022-11-18 11:51:07
+146,Trespassing,Arrest,2022-12-05 14:34:41
+147,Theft,Open Investigation,2023-10-10 18:57:30
+148,Theft,Open Investigation,2023-03-10 14:56:26
+149,Trespassing,Closed,2023-05-25 07:55:15
+150,Shoplifting,Open Investigation,2023-04-30 13:21:57
+151,Theft,Open Investigation,2023-04-11 02:06:21
+152,Trespassing,Closed,2023-03-24 16:39:45
+153,Stalking,Unfounded,2022-12-26 11:35:53
+154,Criminal Mischief,Open Investigation,2023-04-28 00:43:15
+155,Theft,Unfounded,2023-01-03 15:18:57
+156,Theft,Unfounded,2023-02-12 17:15:57
+157,Harassment,Open Investigation,2023-07-02 17:32:59
+158,False Public Alarm,Closed,2023-02-22 22:36:14
+159,Theft, Open Investigation,2023-04-09 18:33:32
+160,Theft,Open Investigation,2023-05-28 13:36:48
+161,Theft, Open Investigation,2023-02-12 22:35:10
+162,Theft,Unfounded,2023-09-10 02:54:32
+163,Theft,Unfounded,2022-11-16 14:06:05
+164,Trespassing,Arrest,2023-01-29 04:01:51
+165,Theft,Unfounded,2023-03-24 17:08:30
+166,Criminal Mischief,Open Investigation,2023-03-19 08:54:23
+167,Theft, Open Investigation,2023-02-04 11:32:49
+168,Theft,unfounded,2023-04-25 08:42:40
+169,Shoplifting,Arrest,2023-01-16 16:49:55
+170,Rape,Closed,2023-05-23 02:23:25
+171,Harassment,Closed,2023-02-03 03:50:10
+172,Criminal Mischief,Open Investigation,2023-03-27 03:18:44
+173,Theft,Unfounded,2023-09-01 21:26:30
+174,Defiant Trespass,Open Investigation,2023-11-29 15:17:00
+175,Trespassing,Open Investigation,2023-05-08 02:08:12
+176,Burglary,Arrest,2023-02-19 18:52:46
+177,Terroristic Threats,Open Investigation,2023-10-09 11:09:29
+178,Criminal Mischief,Open Investigation,2023-05-17 08:52:58
+179,Theft,Unfounded,2023-08-23 04:06:43
+180,False Public Alarm,Arrest,2022-11-29 12:57:21
+181,Trespassing,,2023-10-23 00:45:50
+182,Disorderly Conduct,Arrest,2023-06-10 08:10:39
+183,Theft,Open Investigation,2023-04-19 08:55:42
+184,Trespass,Closed,2023-06-06 23:16:28
+185,Trespassing,Open Investigation,2023-01-07 10:20:22
+186,Theft,Unfounded,2023-01-26 00:32:08
+187,Theft,Open Investigation,2022-12-03 07:36:33
+188,Shoplifting,Open Investigation,2023-03-29 21:53:05
+189,Trespassing, Arrest,2022-12-17 21:10:43
+190,Harassment: Bias Incident,Unfounded,2023-04-07 03:37:21
+191,Trespassing,,2023-06-16 09:07:31
+192,Trespass,Closed,2023-03-11 02:45:59
+193,Trespass,Closed,2023-04-29 22:51:44
+194,Theft,Unfounded,2022-11-28 11:40:20
+195,Theft: Criminal Mischief,Open Investigation,2023-03-30 05:41:34
+196,Theft,Open Investigation,2023-01-08 15:55:29
+197,Trespassing,Open Investigation,2023-05-27 00:35:34
+198,Shoplifting,Closed,2023-05-22 11:21:10
+199,Criminal Mischief,Open Investigation,2023-01-30 20:18:38
+200,Theft,Open Investigation,2023-05-14 15:24:04
+201,Harassment,Open Investigation,2023-05-12 18:45:30
+202,Theft,Unfounded,2023-09-29 09:30:21
+203,Trespassing, Arrest,2022-11-07 00:44:53
+204,Theft,Unfounded,2022-12-31 15:35:15
+205,Theft,Open Investigation,2023-10-08 12:19:51
+206,Theft,Open Investigation,2023-07-04 04:35:22
+207,Theft,Open Investigation,2023-01-20 16:04:06
+208,Criminal Mischief,Open Investigation,2023-03-28 22:13:46
+209,Theft,Open Investigation,2023-05-26 16:28:38
+210,Theft,Open Investigation,2023-01-22 18:15:30
+211,Theft,Unfounded,2023-02-25 13:54:09
+212,Possession of Burglary Tools 2,Arrest,2023-02-27 21:30:12
+213,Theft,Unfounded,2023-09-26 03:25:01
+214,Theft,Open Investigation,2023-03-07 09:14:56
+215,Theft,Unfounded,2023-03-21 20:49:43
+216,Harassment,Open Investigation,2023-07-15 14:35:56
+217,Trespassing,Open Investigation,2023-04-25 09:56:40
+218,Theft,Unfounded,2023-09-06 14:44:48
+219,Assault,Open Investigation,2023-04-25 04:30:45
+220,Theft,Open Investigation,2023-05-01 15:14:02
+221,Shoplifting ,Judicial Referral,2022-10-13 01:57:56
+222,Trespassing,Open Investigation,2023-04-09 00:35:53
+223,Assault: Domestic Violence,Arrest,2023-06-18 01:11:10
+224,Attempted Extortion,Open Investigation,2023-07-31 02:24:33
+225,Trespassing,,2023-10-17 03:31:30
+226,Criminal Mischief,Open Investigation,2023-01-30 12:59:58
+227,Theft,Arrest,2023-01-05 16:35:29
+228,Theft,Unfounded,2023-05-01 06:48:56
+229,Theft,Unfounded,2023-09-09 13:04:08
+230,Theft,Open Investigation,2023-10-21 12:20:09
+231,Theft,Unfounded,2023-09-17 16:09:36
+232,Harassment,Open Investigation,2023-10-07 23:03:19
+233,Theft,Unfounded,2023-04-13 14:32:58
+234,Harassment,Open Investigation,2023-01-21 05:51:23
+235,Theft,Unfounded,2023-08-22 12:18:14
+236,Theft,Unfounded,2022-12-09 13:25:19
+237,Theft,Open Investigation,2023-05-07 18:22:16
+238,Theft,Open Investigation,2023-11-13 19:30:12
+239,Shoplifting,Unfounded,2022-12-18 04:57:06
+240,Theft,Unfounded,2023-03-18 02:41:08
+241,Stalking,Closed,2023-01-14 09:30:22
+242,Theft,Open Investigation,2023-09-30 20:09:22
+243,Trespass, Closed,2023-03-05 11:58:07
+244,Theft,Unfounded,2023-08-09 17:20:23
+245,Burglary,Arrest,2023-02-16 09:50:47
+246,Theft,Open Investigation,2022-11-19 21:24:39
+247,Trespass,Arrest,2023-04-03 00:57:04
+248,Assault,Arrest,2022-12-23 10:37:02
+249,Trespassing,Arrest,2022-12-03 22:59:36
+250,Theft,Unfounded,2022-10-09 14:04:48
+251,Trespass,Arrest,2023-05-01 09:27:11
+252,Trespassing,Arrest,2023-03-04 19:51:16
+253,Stalking,Closed,2022-11-21 17:16:35
+254,Theft,Unfounded,2022-11-01 14:39:22
+255,Harassment,Open Investigation,2023-01-11 13:26:59
+256,Theft,Open Investigation,2023-04-13 13:04:00
+257,Criminal Mischief,Open Investigation,2023-03-09 09:42:41
+258,Assault,Open Investigation,2023-05-10 10:54:55
+259,Rape,Closed,2023-02-06 05:41:31
+260,Trespassing, Arrest,2022-11-02 02:39:23
+261,Theft,Unfounded,2023-06-09 10:52:11
+262,Trespass,Arrest,2023-03-14 00:58:14
+263,Theft,Unfounded,2023-09-02 16:10:54
+264,Criminal Mischief,Open Investigation,2023-04-21 23:16:53
+265,Theft,Open Investigation,2022-12-06 18:16:05
+266,Theft,Unfounded,2023-03-31 08:50:33
+267,Theft,Unfounded,2023-03-12 04:20:48
+268,Theft,Unfounded,2023-10-02 05:07:55
+269,Trespassing,Closed,2023-02-14 09:45:45
+270,False Public Alarm,Open Investigation,2023-06-03 01:04:54
+271,Theft,Open Investigation,2023-04-05 05:20:52
+272,Criminal Mischief,Open Investigation,2023-04-11 23:04:01
+273,Theft,Unfounded,2023-03-23 03:50:51
+274,Fraud,Open Investigation,2023-05-25 04:46:32
+275,Theft,Open Investigation,2023-02-12 21:19:55
+276,Fraud,Open Investigation,2023-03-03 05:13:05
+277,Theft,Unfounded,2022-10-21 14:46:10
+278,Fraud,Open Investigation,2023-04-15 19:19:42
+279,Theft,Unfounded,2023-03-17 02:24:57
+280,Liquor Law Violation,Closed,2023-02-25 06:09:46
+281,Theft,Open Investigation,2023-04-29 16:03:12
+282,Criminal Mischief,Open Investigation,2023-06-09 01:32:08
+283,Theft,Unfounded,2022-10-29 17:35:35
+284,Harassment,Open Investigation,2023-10-23 15:28:32
+285,Theft,Unfounded,2023-01-06 01:20:00
+286,Theft,Open Investigation,2023-06-12 03:18:20
+287,Trespassing, Arrest,2023-01-02 10:24:37
+288,Theft,Unfounded,2023-03-10 15:36:46
+289,Trespassing,,2023-10-10 09:23:40
+290,Trespass,Closed,2023-05-01 08:06:55
+291,Theft,Unfounded,2023-03-04 01:15:47
+292,Theft,Open Investigation,2023-10-27 03:50:06
+293,Trespassing,,2023-10-03 13:01:13
+294,Rape,Unfounded,2022-12-17 18:45:56
+295,Trespassing,,2023-09-16 10:05:54
+296,Rape,Closed,2023-05-09 23:05:41
+297,Hindering Possession of Burglary Tools,Arrest,2023-02-14 14:28:56
+298,Liquor Law Violation,Closed,2023-04-29 06:53:20
+299,Criminal Mischief,Open Investigation,2023-06-06 08:18:51
+300,Theft,Open Investigation,2023-06-07 08:22:08
+301,Stalking,Unfounded,2023-02-07 18:55:43
+302,Theft,Open Investigation,2022-11-22 05:01:15
+303,Theft,Unfounded,2023-02-18 01:25:04
+304,Theft: Criminal Mischief,Open Investigation,2022-10-29 02:57:28
+305,Theft,Unfounded,2023-01-16 05:17:49
+306,Criminal Mischief,Open Investigation,2023-05-03 06:03:00
+307,Burglary,Arrest,2023-01-15 03:58:35
+308,Theft,Open Investigation,2023-10-05 01:27:10
+309,Theft,Unfounded,2022-12-10 22:55:04
+310,Theft,Open Investigation,2023-03-27 06:29:03
+311,Theft,Unfounded,2022-11-27 03:27:45
+312,False Public Alarm,Open Investigation,2023-04-08 14:24:21
+313,Harassment,Open Investigation,2023-05-16 09:19:33
+314,Theft,Unfounded,2023-10-07 10:33:07
+315,Trespassing,Arrest,2023-06-13 19:03:58
+316,Harassment,Open Investigation,2023-10-16 19:43:18
+317,Trespassing,Open Investigation,2023-05-13 16:38:17
+318,Criminal Mischief,Open Investigation,2023-01-09 21:31:02
+319,False Public Alarm,Closed,2023-09-30 21:05:43
+320,Theft,Open Investigation,2023-04-01 23:42:54
+321,Theft,Open Investigation,2023-05-26 16:47:14
+322,Theft,Unfounded,2023-02-10 17:26:57
+323,Trespassing, Arrest,2022-10-13 10:54:30
+324,Criminal Mischief,Open Investigation,2023-07-10 20:39:35
+325,Theft,Open Investigation,2023-11-11 19:34:06
+326,False Public Alarm,Open Investigation,2022-10-15 08:49:29
+327,Theft,Unfounded,2022-10-21 15:51:20
+328,Criminal Mischief,Open Investigation,2023-04-14 10:40:37
+329,Shoplifting,Open Investigation,2023-02-11 19:45:40
+330,Theft,Unfounded,2023-08-16 14:14:51
+331,Theft,Unfounded,2022-12-21 22:34:40
+332,Shoplifting,Open Investigation,2022-12-21 17:05:09
+333,Rape,Open Investigation,2023-06-01 10:53:28
+334,Criminal Mischief,Open Investigation,2023-09-28 01:03:05
+335,Theft: Criminal Mischief,Open Investigation,2023-01-26 21:50:12
+336,Criminal Mischief,Open Investigation,2022-12-17 09:30:55
+337,Theft,Unfounded,2023-05-03 03:23:27
+338,Trespassing,Arrest,2023-01-22 11:05:47
+339,Harassment: Trespassing,Open Investigation,2023-07-06 21:09:16
+340,Trespass,Closed,2023-04-26 04:00:31
+341,Shoplifting,Open Investigation,2023-06-10 08:24:48
+342,Theft,Unfounded,2023-08-25 11:56:36
+343,Theft,Unfounded,2023-03-17 08:56:48
+344,Criminal Mischief,Open Investigation,2023-02-24 22:09:10
+345,Theft,Open Investigation,2022-10-31 02:24:57
+346,False Public Alarm,Closed,2023-03-19 14:48:01
+347,Theft,Open Investigation,2023-08-24 02:22:53
+348,Theft,Open Investigation,2023-10-21 06:58:52
+349,Harassment,Open Investigation,2023-01-25 12:14:28
+350,Theft,Open Investigation,2023-01-03 07:24:00
+351,Theft,Open Investigation,2023-05-24 08:53:08
+352,Criminal Mischief,Open Investigation,2023-06-09 02:09:46
+353,Theft,Open Investigation,2023-03-02 05:13:39
+354,False Public Alarm,Closed,2023-01-13 10:33:54
+355,Rape,Closed,2023-03-14 18:01:59
+356,Shoplifting,Arrest,2023-01-29 23:22:51
+357,Criminal Mischief,Open Investigation,2023-01-17 19:10:42
+358,Theft,Unfounded,2022-12-20 03:46:36
+359,Disorderly Conduct,Open Investigation,2023-04-18 06:48:32
+360,Trespassing,Open Investigation,2023-05-09 09:59:47
+361,Theft,Open Investigation,2023-04-19 05:26:09
+362,Criminal Mischief,Open Investigation,2023-04-06 14:06:20
+363,Criminal Mischief,Open Investigation,2023-04-27 12:32:00
+364,Theft,Open Investigation,2023-02-02 10:40:52
+365,Theft,Open Investigation,2023-06-25 09:37:31
+366,Fraud,Open Investigation,2023-01-01 12:25:54
+367,Fraud,Open Investigation,2023-03-25 12:08:44
+368,Theft,Open Investigation,2023-05-10 03:24:23
+369,Criminal Mischief,Open Investigation,2023-03-23 04:29:36
+370,Harassment,Open Investigation,2023-06-02 05:42:22
+371,Theft,Unfounded,2023-03-24 14:05:58
+372,Theft,Unfounded,2022-10-14 10:32:43
+373,Harassment: Domestic Violence,Open Investigation,2023-02-17 07:10:36
+374,Trespass,Closed,2022-12-26 04:58:32
+375,Trespassing,Open Investigation,2023-05-20 14:06:24
+376,Trespassing,Open Investigation,2023-06-06 04:47:17
+377,Stalking,Closed,2023-02-26 14:46:25
+378,Theft,Unfounded,2022-10-28 21:12:02
+379,Rape,Closed,2023-04-23 01:02:33
+380,Theft,Open Investigation,2023-09-23 15:56:15
+381,Theft,Unfounded,2023-08-24 20:35:16
+382,Trespass,Closed,2023-03-18 04:43:38
+383,Theft,Unfounded,2023-02-02 18:15:53
+384,Trespassing,,2023-11-05 10:44:59
+385,Fraud,Open Investigation,2023-04-23 05:23:08
+386,Theft,Open Investigation,2023-05-11 17:15:51
+387,Attempted Extortion,Closed,2023-04-28 13:53:07
+388,Trespassing,,2023-10-25 20:54:41
+389,Harassment,Open Investigation,2023-09-06 17:51:36
+390,Criminal Mischief,Open Investigation,2023-05-30 07:13:44
+391,Harassment: Bias Incident,Arrest,2023-05-10 12:56:26
+392,Theft,Unfounded,2023-07-19 23:41:53
+393,Shoplifting,Arrest,2022-12-05 08:56:44
+394,Theft,Open Investigation,2022-12-14 20:02:49
+395,Harassment,Open Investigation,2023-09-24 08:33:17
+396,Trespassing,Closed,2023-04-12 19:38:43
+397,Theft,Unfounded,2023-09-12 04:19:28
+398,Theft,Open Investigation,2023-10-12 06:46:46
+399,Theft,Unfounded,2022-11-14 10:18:09
+400,Theft,Unfounded,2023-08-03 12:15:59
+401,Theft,Unfounded,2023-09-28 22:46:05
+402,Burglary,Arrest,2023-03-08 16:46:57
+403,Assault,Open Investigation,2023-01-28 21:27:43
+404,Theft,Open Investigation,2023-11-03 06:26:14
+405,Rape,Closed,2023-08-15 23:25:15
+406,Harassment,Open Investigation,2023-10-28 18:21:10
+407,Theft: Bias Incident,Open Investigation,2023-01-30 08:39:56
+408,Criminal Mischief,Open Investigation,2023-06-21 09:30:42
+409,Theft,Unfounded,2023-02-03 03:38:07
+410,Theft,Unfounded,2023-02-19 07:59:27
+411,Criminal Mischief,Open Investigation,2023-02-20 17:18:44
+412,Trespassing,,2023-11-13 14:01:25
+413,Theft,Open Investigation,2023-09-22 08:03:08
+414,Harassment,Open Investigation,2023-03-24 14:52:49
+415,Theft,Unfounded,2023-07-15 22:24:56
+416,Harassment,Open Investigation,2023-04-30 16:08:00
+417,Theft,Open Investigation,2023-09-24 00:10:25
+418,Shoplifting,Arrest,2022-12-06 12:22:44
+419,Trespassing,Arrest,2022-12-18 00:03:46
+420,Theft,Open Investigation,2023-10-31 12:38:04
+421,Defiant Trespass: Aggravated Assault,Arrest,2023-04-25 19:22:32
+422,Rape,Closed,2023-05-19 19:53:31
+423,Theft,Open Investigation,2023-06-01 01:50:10
+424,Harassment,Open Investigation,2023-10-25 21:15:09
+425,Theft,Open Investigation,2023-10-03 14:25:52
+426,Harassment: Stalking,Open Investigation,2023-01-03 13:16:11
+427,Shoplifting,Arrest,2022-12-08 14:39:10
+428,Criminal Mischief,Open Investigation,2023-09-25 23:28:55
+429,Criminal Mischief,Open Investigation,2023-04-06 06:28:30
+430,Shoplifting,Open Investigation,2023-09-10 06:34:18
+431,Trespassing, Arrest,2022-11-22 20:54:00
+432,Criminal Mischief,Open Investigation,2023-05-20 05:06:44
+433,Trespassing,Closed,2023-04-29 08:01:20
+434,Intimidation,Unfounded,2023-01-26 18:54:08
+435,Trespass,Closed,2023-06-15 03:53:53
+436,False Public Alarm,Closed,2023-02-09 14:35:21
+437,Harassment,Open Investigation,2023-09-20 16:20:42
+438,Theft,Unfounded,2023-07-24 12:26:29
+439,Theft,Open Investigation,2022-12-30 19:53:07
+440,Theft,Open Investigation,2023-04-16 12:47:14
+441,Theft,Open Investigation,2023-05-14 14:47:47
+442,Trespassing,Closed,2023-05-10 16:39:05
+443,Trespassing,,2023-10-26 19:53:15
+444,Harassment: Bias Incident,Open Investigation,2023-03-19 06:18:05
+445,Trespassing,,2023-10-26 10:15:55
+446,Theft,unfounded,2022-12-21 12:54:09
+447,Hindering Possession of Burglary Tools,Arrest,2023-04-04 10:53:32
+448,Trespassing,Arrest,2023-05-12 08:01:17
+449,Theft,Unfounded,2023-08-01 20:47:45
+450,Criminal Mischief,Open Investigation,2023-04-11 06:52:29
+451,Theft,Unfounded,2022-12-01 05:20:39
+452,Trespassing,Unfounded,2022-11-24 16:38:21
+453,Trespassing,Open Investigation,2022-12-20 23:43:29
+454,Trespassing,Open Investigation,2023-01-13 19:42:52
+455,Defiant Trespass,Arrest,2023-10-03 09:14:12
+456,Theft,Open Investigation,2023-05-27 05:46:46
+457,Stalking,Closed,2022-12-04 21:04:56
+458,Harassment: Trespassing,Open Investigation,2023-07-24 05:39:36
+459,Theft,Unfounded,2022-11-06 10:09:16
+460,Trespassing,,2023-10-12 02:35:52
+461,Trespassing,Closed,2023-02-10 02:36:46
+462,Harassment,Open Investigation,2023-06-01 13:44:11
+463,Criminal Mischief,Open Investigation,2023-05-01 16:24:42
+464,Theft,Open Investigation,2023-04-14 18:03:56
+465,Fraud,Unfounded,2023-02-02 23:17:37
+466,Trespassing, Arrest,2022-10-26 08:59:56
+467,Criminal Mischief,Open Investigation,2023-04-27 20:25:55
+468,Theft,Open Investigation,2023-06-14 01:34:13
+469,Theft,Unfounded,2022-12-04 09:42:12
+470,Liquor Law Violation,Closed,2023-07-17 01:08:38
+471,Theft,Open Investigation,2023-04-28 21:50:05
+472,Fraud,Open Investigation,2023-05-03 05:41:19
+473,Service of Warrant,Arrest,2023-05-09 12:19:16
+474,Trespassing,Closed,2023-04-06 05:46:43
+475,Theft,Unfounded,2022-11-25 17:08:52
+476,Theft: Criminal Mischief,Open Investigation,2023-04-22 11:57:42
+477,Theft,Unfounded,2023-05-04 22:28:29
+478,Theft,Open Investigation,2023-08-27 07:13:41
+479,Criminal Mischief,Open Investigation,2023-05-05 04:05:30
+480,Theft,Open Investigation,2023-01-05 23:24:13
+481,Theft,Open Investigation,2023-10-08 16:48:51
+482,Theft,Open Investigation,2023-06-23 14:16:57
+483,Criminal Mischief,Open Investigation,2023-04-17 09:39:42
+484,Rape,Closed,2023-04-07 20:25:31
+485,Trespassing,Arrest,2023-09-22 23:35:52
+486,Criminal Mischief,Open Investigation,2023-09-30 03:56:04
+487,Theft,Open Investigation,2022-12-30 20:44:48
+488,Trespassing,Closed,2023-04-10 13:52:44
+489,Theft,Open Investigation,2022-12-20 01:14:22
+490,Theft,Unfounded,2023-03-27 18:25:08
+491,Harassment: Bias Incident,Open Investigation,2023-04-08 15:55:07
+492,Fraud,Open Investigation,2023-05-08 02:38:06
+493,Trespassing,Open Investigation,2023-04-28 21:32:22
+494,Rape,Closed,2023-01-03 05:37:47
+495,Fraud,Open Investigation,2023-03-28 07:27:31
+496,Theft,Open Investigation,2023-09-04 12:41:09
+497,Theft,Unfounded,2022-12-11 16:06:41
+498,Theft,Unfounded,2023-02-15 23:30:41
+499,Criminal Mischief,Open Investigation,2023-03-29 09:59:18
