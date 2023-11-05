@@ -26,7 +26,9 @@ services:
 
   database-pop:
     build: 
-      context: ./database/
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: database_pop_dockerfile
+    stdin_open: true
+    tty: true
     volumes:
-      - ./populate:/data/populate
+      - ./database/populate:/database/populate
