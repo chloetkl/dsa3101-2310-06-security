@@ -1,17 +1,10 @@
 from flask import Flask
 import mysql.connector
 import bcrypt
+from back_end.database.populate import add_user, check_auth
 
 app = Flask(__name__)
 
-def establish_sql_connection():
-    db = mysql.connector.connect(
-        host = "database", 
-        user = "user",
-        password = "dsa3101",
-        database = "secdb"
-        )
-    return db
         
 @app.route("/")
 def nusecure():
