@@ -1,0 +1,43 @@
+---
+title: "Updating raw data to add response times"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+df <- read_csv("../data/data_v0.3_with_status.csv")
+```
+
+```{r}
+priority <- c(
+  "EMERGENCY INCIDENTS" = 'High',
+  "DAMAGED PROPERTY" = 'High',
+  "LOST AND FOUND" = 'Normal',
+  "SEXUAL INCIDENTS" = 'High',
+  "STOLEN ITEMS" = 'Normal'
+)
+df %>% 
+  mutate(Description = paste(Incidents,"at",Building),
+         Priority = priority[Incidents],
+         .after=IncidentID) -> backend_df
+backend_df %>% group_by(IncidentID) %>% 
+  mutate(FirstUpdate = min(Time),
+         LatestUpdate = max(Time),
+         .before=Status) %>% 
+  arrange(desc(Time)) %>% filter(row_number()==1) %>% 
+  mutate(Time = NULL) -> frontend_df
+```
+
+```{r}
+frontend_df %>% write.csv("../data/data_v0.4(front).csv",row.names = FALSE)
+backend_df %>% write.csv("../data/data_v0.4(back).csv",row.names = FALSE)
+```
+
+
+
+
