@@ -140,6 +140,56 @@ def authenticate(user,password):
 
 
 # ADD incident_location_groups and incident_location
+def add_incident_locations(filepath):
+    try: 
+        ## establish connection
+        db, cursor = establish_sql_connection()
+        if db is None:
+            print("add_incident_locations | Failed to establish a database connection.")
+            return
+        print(f'add_incident_locations | db established: {db.is_connected()}')
+
+        ## read incident locations from CSV file
+        df = pd.read_csv(filepath)
+        unique_locations = df['Location'].unique()
+
+        # Populate Incident_location_groups table with unique locations
+        for location in unique_locations:
+            try:
+                query = f"INSERT INTO Incident_location_groups(location_group) VALUES ('{location}')"
+                cursor.execute(query)
+                db.commit()
+                print(f"add_incident_locations | Location Group added: {location}")
+            except mysql.connector.Error as err:
+                print(f"add_incident_locations | Error adding location group: {err}")
+
+        # Map CSV columns to MySQL columns and insert data into Incident_location table
+        for index, row in df.iterrows():
+            building = row['Buildings']
+            location = row['Location']
+            latitude = row['Latitude']
+            longitude = row['Longitude']
+            residence = row['Residence']
+
+            # Get location_group_id from Incident_location_groups table
+            query = f"SELECT id FROM Incident_location_groups WHERE location_group = '{location}'"
+            cursor.execute(query)
+            location_group_id = cursor.fetchone()[0]
+
+            # Insert data into Incident_location table
+            try:
+                query = f"INSERT INTO Incident_location(name, location_group_id, latitude, longitude, is_residence) VALUES ('{building}', {location_group_id}, {latitude}, {longitude}, {residence})"
+                cursor.execute(query)
+                db.commit()
+                print(f"add_incident_locations | Incident Location added: {building}")
+            except mysql.connector.Error as err:
+                print(f"add_incident_locations | Error adding incident location: {err}")
+
+        cursor.close()
+        db.close()
+
+    except mysql.connector.Error as err:
+        print(f"add_incident_locations | database error: {err}")
 
 
 # ADD incident_types
@@ -178,6 +228,8 @@ def add_incident_types(filepath):
 ## perform default adds
 add_user_roles('User_roles.txt')
 add_incident_types('Incident_types.txt')
+add_incident_locations("Incident_location.csv")
+
 
 ## Checks
 # db = establish_sql_connection()
