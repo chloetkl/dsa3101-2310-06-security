@@ -18,4 +18,5 @@ ENV FLASK_APP nusecure
 
 ENTRYPOINT python -u -m nusecure
 
-CMD ["python", "nusecure.py"]
+# Run app.py when the container launches
+# CMD ["python", "nusecure.py"]

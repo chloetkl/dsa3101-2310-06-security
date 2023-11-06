@@ -9,7 +9,7 @@ def nusecure():
 
 @app.route("/prediction")
 def send_p():
-    return send_plot("back/data/test.png")
+    return send_file("back/data/test.png")
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
