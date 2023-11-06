@@ -42,6 +42,17 @@ def security():
     #     update_csv(new_report)
 
     data = pd.read_csv('data/data_test.csv')
+
+    ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
+    # df['FirstUpdate'] = pd.to_datetime(df['FirstUpdate'])
+    # df['Date'] = df['FirstUpdate'].dt.date
+    # df['Time'] = df['FirstUpdate'].dt.time
+    # df.rename(columns={'IncidentID': 'Incident ID',
+    #                    'Incidents': 'Incident Type'}, inplace=True)
+    # df = df[['Incident ID','Description','Date','Time',
+    #          'Incident Type','Location','Building','Status','Priority',
+    #          'User','Latitude','Longitude'
+    #          ]]
     data_dict = data.to_dict(orient='records')
     return render_template('security_table.html', data=data_dict)
 
