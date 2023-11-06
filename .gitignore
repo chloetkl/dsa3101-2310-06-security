@@ -2,3 +2,4 @@
 *.Rhistory
 *.ipynb_checkpoints*
 Police_Department_Incident_Reports__2018_to_Present_20231025.csv
+*__pycache__/*

@@ -23,6 +23,8 @@
         padding: 20px;
      }
 </style>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 
 <h2>Filter By:</h2>
@@ -139,46 +141,31 @@
 
 <table id="dataTable">
     <thead>
-        <tr>
-            <th>Incident ID</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Incident Type</th>
-            <th>Priority</th>
-            <th>Location</th>
-            <th>Building</th>
-            <th>Status</th>
-            <th>User Added</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-        </tr>
-    </thead>
+    <tr>
+        {% for column in columns %}
+        <th>{{ column }}</th>
+        {% endfor %}
+    </tr>
+</thead>
     <tbody>
         {% for row in data %}
-    	<tr>
-        	<td>{{ row['IncidentID'] }}</td>
-       		<td>{{ row['FirstUpdate'][:9] }}</td>
-        	<td>{{ row['FirstUpdate'][10:] }}</td>
-        	<td>{{ row['Incidents'] }}</td>
-            <td>{{ row['Priority'] }}</td>
-            <td>{{ row['Location'] }}</td>
-            <td>{{ row['Building'] }}</td>
+        <tr>
+            {% for column, value in row.items() %}
+            {% if column == 'Status' %}
             <td>
-            	<select class="status-input">
-                	<option value="open" {% if row['Status'] == 'Open' %}selected{% 
-endif %}>Open</option>
-                	<option value="close" {% if row['Status'] == 'Close' %}selected{% 
-endif %}>Close</option>
-            	</select>
+                <select class="status-input">
+                    <option value="open" {% if value == 'Open' %}selected{% endif %}>Open</option>
+                    <option value="close" {% if value == 'Close' %}selected{% endif %}>Close</option>
+                </select>
             </td>
-        	<td>{{ row['User'] }}</td>
-            <td>{{ row['Latitude'] }}</td>
-            <td>{{ row['Longitude'] }}</td>
-    	</tr>
-    	{% endfor %}
+            {% else %}
+            <td>{{ value }}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
-            
 <script>            
     const addReportButton = document.getElementById("addReportButton");   
     const modal = document.getElementById("modal");
@@ -219,8 +206,8 @@ document.getElementById("dataTable").getElementsByTagName('tbody')[0];
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
             <td>${id}</td>
-            <td>${datetime[:9]}</td>
-            <td>${datetime[10:]}</td>
+            <td>${datetime.slice(0, 10)}</td>
+            <td>${datetime.slice(11)}</td>
             <td>${type}</td>
             <td>${priority}</td>
             <td>${location}</td>
@@ -258,60 +245,20 @@ document.getElementById("dataTable").getElementsByTagName('tbody')[0];
     userFilter.addEventListener("input", filterTable);
     
     function filterTable() {
-        const idFilterValue = idFilter.value.toLowerCase();
-        const dateFilterValue = dateFilter.value;
-        const timeFilterValue = timeFilter.value.toLowerCase();
-        const typeFilterValue = typeFilter.value.toLowerCase();
-        const priorityFilterValue = priorityFilter.value.toLowerCase();
-        const locationFilterValue = locationFilter.value.toLowerCase();
-        const statusFilterValue = statusFilter.value.toLowerCase();
-        const userFilterValue = userFilter.value.toLowerCase();
-        
-        for (let i = 1; i < rows.length; i++) {
-            const idColumn = rows[i].getElementsByTagName("td")[0];
-            const dateColumn = rows[i].getElementsByTagName("td")[1];
-            const timeColumn = rows[i].getElementsByTagName("td")[2];
-            const typeColumn = rows[i].getElementsByTagName("td")[3];
-            const priorityColumn = rows[i].getElementsByTagName("td")[4];
-            const locationColumn = rows[i].getElementsByTagName("td")[5];
-            const statusColumn = rows[i].getElementsByTagName("td")[7];
-            const userColumn = rows[i].getElementsByTagName("td")[8];
-        
-            if (idColumn && dateColumn && timeColumn && typeColumn && priorityColumn && 
-locationColumn && statusColumn && userColumn) {
-                const idText = idColumn.textContent.toLowerCase();
-                const dateText = dateColumn.textContent;
-                const timeText = timeColumn.textContent.toLowerCase();
-                const typeText = typeColumn.textContent.toLowerCase();
-                const priorityText = priorityColumn.textContent.toLowerCase();
-                const locationText = locationColumn.textContent.toLowerCase();
-                const statusText = statusColumn.textContent.toLowerCase();
-                const userText = userColumn.textContent.toLowerCase();
-            
-                const idMatch = idFilterValue === '' || idText.includes(codeFilterValue);
-                const dateMatch = dateFilterValue === '' || dateText === dateFilterValue;
-                const timeMatch = timeFilterValue === '' || 
-timeText.includes(timeFilterValue);
-                const typeMatch = typeFilterValue === 'all' || 
-typeText.includes(typeFilterValue);
-                const priorityMatch = priorityFilterValue === 'all' || 
-priorityText.includes(priorityFilterValue);
-                const locationMatch = locationFilterValue === 'all' || 
-locationText.includes(locationFilterValue);
-                const statusMatch = statusFilterValue === 'all' || 
-statusText.includes(statusFilterValue);
-                const userMatch = userFilterValue === 'all' || 
-userText.includes(userFilterValue);
-        
-                if (idMatch && dateMatch && timeMatch && typeMatch && priorityMatch && 
-locationMatch && statusMatch && userMatch) {
-                    rows[i].style.display = "";
-                } else {  
-                    rows[i].style.display = "none";
-                }
-            }
-        }
-    }
+    const idFilterValue = idFilter.value.toLowerCase();
+    const dateFilterValue = dateFilter.value;
+    const timeFilterValue = timeFilter.value;
+    const typeFilterValue = typeFilter.value.toLowerCase();
+    const priorityFilterValue = priorityFilter.value.toLowerCase();
+    const locationFilterValue = locationFilter.value.toLowerCase();
+    const statusFilterValue = statusFilter.value.toLowerCase();
+    const userFilterValue = userFilter.value.toLowerCase();
+
+    for (let i = 1; i < rows.length; i++) {
+        const idColumn = rows[i].getElementsByTagName("td")[0];
+        const dateColumn = rows[i].getElementsByTagName("td")[1];
+        const timeColumn =
+
     
     const statusInputs = document.querySelectorAll(".status-input");
     
@@ -329,5 +276,3 @@ locationMatch && statusMatch && userMatch) {
 </script>
 </body>
 </html>
-
-

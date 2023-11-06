@@ -17,37 +17,32 @@ def home():
             return "Invalid UserID or Password"
     return render_template('home.html')
 
-def update_csv(new):
-    df = pd.read_csv('./data/data.csv')
-    df = df.append(new, ignore_index=True)
-    df.to_csv('./data/data.csv', index=False)
+def retrieve_security_table():
+    df = pd.read_csv('data/data.csv')
+    df['FirstUpdate'] = pd.to_datetime(df['FirstUpdate'])
+    df['Date'] = df['FirstUpdate'].dt.date
+    df['Time'] = df['FirstUpdate'].dt.time
+    df.rename(columns={'IncidentID': 'Incident ID',
+                       'Incidents': 'Incident Type'}, inplace=True)
+    df = df[['Incident ID','Description','Date','Time',
+             'Incident Type','Location','Building','Status','Priority',
+             'User','Latitude','Longitude'
+             ]]
+    # df = df.append(new, ignore_index=True)
+    # df.to_csv('../data/data.csv', index=False)
+    return df
 
 @app.route('/security', methods=['GET', 'POST'])
 def security():
-    if request.method == 'POST':
-        new_report = {
-            'IncidentID': request.form['id'],
-            'Description': request.form['description'],
-            'Incidents': request.form['type'],
-	    'FirstUpdate': request.form['datetime'],
-	    'Priority': request.form['priority'],
-            'Location': request.form['location'],
-	    'Building': request.form['building'],
-	    'Status': request.form['status'],
-	    'User': request.form['user'],
-	    'Latitude': request.form['latitude'],
-	    'Longitude': request.form['longitude']
-        }
-
-        update_csv(new_report)
-
-    data = pd.read_csv('./data/data.csv')
+    data = retrieve_security_table()
+    columns = data.columns.tolist()
+    print(columns)
     data_dict = data.to_dict(orient='records')
-    return render_template('security_table.html', data=data_dict)
+    return render_template('security_table.html',columns=columns,data=data_dict)
 
 @app.route('/analytics', methods=['GET'])
 def analytics():
     return render_template('analytics.html')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
