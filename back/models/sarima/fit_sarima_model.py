@@ -9,7 +9,7 @@ import joblib
 
 from feature_eng import engineer_features
 
-data = pd.read_csv("../../data/data_v0.2_intermediate(for checking)_with_status.csv")
+data = pd.read_csv("../../../data/data_v0.2_intermediate(for checking)_with_status.csv")
 
 weekly_incidents = engineer_features(data)
 
