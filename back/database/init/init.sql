@@ -57,5 +57,6 @@ CREATE TABLE IF NOT EXISTS Incident_logs (
   user_id INT,
   notes TEXT,
   FOREIGN KEY (incident_id) REFERENCES Incidents(id),
-  FOREIGN KEY (user_id) REFERENCES Users(id)
+  FOREIGN KEY (user_id) REFERENCES Users(id),
+  UNIQUE (incident_id, time)
 );

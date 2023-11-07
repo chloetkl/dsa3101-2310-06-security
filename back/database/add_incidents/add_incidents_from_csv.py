@@ -47,7 +47,7 @@ def add_incidents_from_csv(filepath):
         if db is None:
             print("add_incidents_from_csv | Failed to establish a database connection.")
             return
-        print(f'add_incidents_from_csv | db established: {db.is_connected()}')
+        # print(f'add_incidents_from_csv | db established: {db.is_connected()}')
 
         ## read unique Incidents
         df = pd.read_csv(filepath)

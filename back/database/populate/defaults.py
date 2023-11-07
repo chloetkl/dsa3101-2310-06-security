@@ -47,7 +47,7 @@ def add_user_roles(filepath):
         if db is None:
             print("add_user_roles | Failed to establish a database connection.")
             return
-        print(f'add_user_roles | db established: {db.is_connected()}')
+        # print(f'add_user_roles | db established: {db.is_connected()}')
 
         ## read users from path and change to QUERY format
         file = open(filepath, 'r')
@@ -80,15 +80,16 @@ def add_incident_locations(filepath):
         unique_locations = df['Location'].unique()
 
         # Populate Incident_location_groups table with unique locations
+        location_groups_added = 0
         for location in unique_locations:
             try:
                 query = f"INSERT INTO Incident_location_groups(location_group) VALUES ('{location}')"
                 cursor.execute(query)
                 db.commit()
-                print(f"add_incident_locations | Location Group added: {location}")
+                location_groups_added += 1
             except mysql.connector.Error as err:
                 print(f"add_incident_locations | Error adding location group: {err}")
-
+        print(f"add_incident_locations | Location Groups added: {location_groups_added}")
         # Map CSV columns to MySQL columns and insert data into Incident_location table
         locations_added = 0
         for index, row in df.iterrows():
@@ -130,7 +131,7 @@ def add_incident_types(filepath):
         if db is None:
             print("add_incident_types | Failed to establish a database connection.")
             return
-        print(f'add_incident_types | db established: {db.is_connected()}')
+        # print(f'add_incident_types | db established: {db.is_connected()}')
 
         ## read incident types from path
         with open(filepath, 'r') as file:
@@ -167,7 +168,7 @@ def add_user(username, password, role, email=None):
         if db is None:
             print("add_user_roles | Failed to establish a database connection.")
             return
-        print(f'add_user | db established: {db.is_connected()}')
+        # print(f'add_user | db established: {db.is_connected()}')
 
         ## generate hash and salt
         salt = bcrypt.gensalt()
