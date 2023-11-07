@@ -1,0 +1,11 @@
+version: "1"
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "4000:5000"
+
+    
