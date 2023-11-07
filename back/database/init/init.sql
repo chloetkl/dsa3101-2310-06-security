@@ -29,9 +29,9 @@ CREATE TABLE IF NOT EXISTS Incident_location_groups (
   location_group VARCHAR(255) UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS Incident_location (
+CREATE TABLE IF NOT EXISTS Incident_locations (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) UNIQUE,
+  location VARCHAR(255) UNIQUE,
   location_group_id INT,
   latitude DECIMAL,
   longitude DECIMAL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Incidents (
   description TEXT,
   location_id INT,
   incident_type_id INT,
-  FOREIGN KEY (location_id) REFERENCES Incident_location(id),
+  FOREIGN KEY (location_id) REFERENCES Incident_locations(id),
   FOREIGN KEY (incident_type_id) REFERENCES Incident_types(id)
 );
 

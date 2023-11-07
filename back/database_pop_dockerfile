@@ -2,11 +2,19 @@
 FROM python:3.10.6-slim-buster
 
 # Copy requirements.txt from host to container
-COPY ./database/populate/requirements.txt /database/populate/
+COPY ./database/requirements.txt /database/
 
-WORKDIR /database/populate
+WORKDIR /database
+
 # things to make .py files work
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
-CMD ["python", "defaults.py"]
+# Copy the Bash script into the container
+COPY ./database/run_commands.sh /database/run_commands.sh
+
+# Make the Bash script executable
+RUN chmod +x /database/run_commands.sh
+
+# Set the Bash script as the default command
+CMD ["/bin/sh", "-c", "/database/run_commands.sh"]
