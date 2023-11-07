@@ -17,5 +17,5 @@ heat_data = [[row['Latitude'], row['Longitude']] for index, row in df_l.iterrows
 # Add heatmap to map
 HeatMap(heat_data).add_to(m)
 
-m.save('../data/heatmap.html')
-m.save('../../main/draft/Testing/data/heatmap.html')
+m.save('../static/data/heatmap.html')
+m.save('../../main/draft/Testing/static/data/heatmap.html')
