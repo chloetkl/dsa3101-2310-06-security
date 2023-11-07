@@ -5,3 +5,5 @@ numpy
 statsmodels
 pmdarima
 joblib
+mysql-connector-python
+bcrypt
