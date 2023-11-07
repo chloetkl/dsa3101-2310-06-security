@@ -1,0 +1,5 @@
+flask
+pandas
+requests
+mysql-connector-python
+bcrypt

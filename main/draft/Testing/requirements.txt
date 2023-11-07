@@ -1,0 +1,11 @@
+flask
+pandas
+requests
+<<<<<<< HEAD:requirements.txt
+numpy
+statsmodels
+pmdarima
+joblib
+=======
+mysql-connector-python
+>>>>>>> d00846954874a39f01f5d4be11d882adc0967496:main/draft/Testing/requirements.txt
