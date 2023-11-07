@@ -1,72 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Map with Pins and Table</title>
+    <title>Map with Incidents</title>
     <style>
         #map {
-            height: 400px;
-            width: 50%;
-            float: left;
-        }
-        #table {
-            width: 50%;
-            float: left;
+            height: 500px;
         }
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
-    <div id="map"></div>
-    <div id="table">
-        <h2>Add Pin</h2>
-        <form id="pinForm">
-            <label for="latInput">Latitude:</label>
-            <input type="text" id="latInput" name="latInput"><br><br>
-            <label for="lngInput">Longitude:</label>
-            <input type="text" id="lngInput" name="lngInput"><br><br>
-            <button type="button" onclick="addPinFromInput()">Add Pin</button>
-        </form>
-        <h2>Table</h2>
-        <table id="pinTable" border="1">
-            <thead>
-                <tr>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Table content will go here -->
-            </tbody>
-        </table>
-    </div>
-
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([51.505, -0.09], 13);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
-
-        function addPin(lat, lng) {
-            var marker = L.marker([lat, lng]).addTo(map);
-            var table = document.getElementById('pinTable').getElementsByTagName('tbody')[0];
-            var row = table.insertRow(-1);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            cell1.innerHTML = lat;
-            cell2.innerHTML = lng;
-        }
-
-        function addPinFromInput() {
-            var lat = parseFloat(document.getElementById('latInput').value);
-            var lng = parseFloat(document.getElementById('lngInput').value);
-            if (!isNaN(lat) && !isNaN(lng)) {
-                addPin(lat, lng);
-            } else {
-                alert('Please enter valid coordinates.');
-            }
-        }
-    </script>
+    <h1>Incident Map</h1>
+    <iframe src="map.html" width="100%" height="100%" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
 </body>
 </html>

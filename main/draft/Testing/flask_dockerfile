@@ -1,0 +1,17 @@
+# base image
+FROM python:3.10.6-slim-buster
+
+## Add Python script, requirements file and templates folder to /app 
+## directory on the image:
+
+WORKDIR /app
+COPY requirements.txt requirements.txt
+COPY nusecure.py nusecure.py
+ADD data data
+ADD templates templates
+
+# things to make customers.py work
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT python -u -m nusecure
