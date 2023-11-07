@@ -33,4 +33,4 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./database/populate:/database/populate
+      - ./database:/database
