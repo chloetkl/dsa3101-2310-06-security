@@ -17,31 +17,42 @@ def home():
             return "Invalid UserID or Password"
     return render_template('home.html')
 
-def update_csv(new):
-    df = pd.read_csv('./data/data.csv')
-    df = df.append(new, ignore_index=True)
-    df.to_csv('./data/data.csv', index=False)
+# def update_csv(new):
+#     df = pd.read_csv('./data/data.csv')
+#     df = df.append(new, ignore_index=True)
+#     df.to_csv('./data/data.csv', index=False)
 
 @app.route('/security', methods=['GET', 'POST'])
 def security():
-    if request.method == 'POST':
-        new_report = {
-            'IncidentID': request.form['id'],
-            'Description': request.form['description'],
-            'Incidents': request.form['type'],
-	    'FirstUpdate': request.form['datetime'],
-	    'Priority': request.form['priority'],
-            'Location': request.form['location'],
-	    'Building': request.form['building'],
-	    'Status': request.form['status'],
-	    'User': request.form['user'],
-	    'Latitude': request.form['latitude'],
-	    'Longitude': request.form['longitude']
-        }
+    # if request.method == 'POST':
+    #     new_report = {
+    #         'IncidentID': request.form['id'],
+    #         'Description': request.form['description'],
+    #         'Incidents': request.form['type'],
+	#     'FirstUpdate': request.form['datetime'],
+	#     'Priority': request.form['priority'],
+    #         'Location': request.form['location'],
+	#     'Building': request.form['building'],
+	#     'Status': request.form['status'],
+	#     'User': request.form['user'],
+	#     'Latitude': request.form['latitude'],
+	#     'Longitude': request.form['longitude']
+    #     }
 
-        update_csv(new_report)
+    #     update_csv(new_report)
 
-    data = pd.read_csv('./data/data.csv')
+    data = pd.read_csv('data/data_test.csv')
+
+    ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
+    # df['FirstUpdate'] = pd.to_datetime(df['FirstUpdate'])
+    # df['Date'] = df['FirstUpdate'].dt.date
+    # df['Time'] = df['FirstUpdate'].dt.time
+    # df.rename(columns={'IncidentID': 'Incident ID',
+    #                    'Incidents': 'Incident Type'}, inplace=True)
+    # df = df[['Incident ID','Description','Date','Time',
+    #          'Incident Type','Location','Building','Status','Priority',
+    #          'User','Latitude','Longitude'
+    #          ]]
     data_dict = data.to_dict(orient='records')
     return render_template('security_table.html', data=data_dict)
 
