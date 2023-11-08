@@ -10,6 +10,7 @@ COPY nusecure.py nusecure.py
 ADD static static
 ADD data data
 ADD templates templates
+ADD static static
 
 # things to make customers.py work
 RUN pip3 install --upgrade pip

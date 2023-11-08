@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
+import folium
 
 app = Flask(__name__)
 
+### Locations
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
@@ -54,7 +56,8 @@ def security():
     #          'User','Latitude','Longitude'
     #          ]]
     data_dict = data.to_dict(orient='records')
-    return render_template('security_table.html', data=data_dict)
+
+    return render_template('security.html', data=data_dict)
 
 @app.route('/analytics', methods=['GET'])
 def analytics():
