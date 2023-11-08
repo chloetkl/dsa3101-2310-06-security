@@ -58,22 +58,17 @@
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 20px;
-            z-index: 1000; /* Adjust the z-index as needed */
-            /* Add other necessary styles */
-            max-width: 80%; /* Limit the maximum width of the modal */
-            max-height: 80%; /* Limit the maximum height of the modal */
-            overflow: auto; /* Add scrollbars if content exceeds the modal size */
+            z-index: 1000;
         }
 
         .modal-content {
-            /* Adjust positioning to center the content within the modal */
             position: relative;
-            top: 50%;
+            top: 150%;
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: white;
-            padding: 20px;
-            /* Add any necessary styles for the modal content */
+            margin: 20px;
+            margin-top: 380px;
         }
 
         .overlay {
@@ -181,7 +176,7 @@
             <h2>Incidents Table</h2>
 
             <button id="addReportButton">New Report</button><br><br>
-            <div id="modal" class="modal">
+            <div id="modal" class="modal" height="500px">
                 <div id="modalContent" class="modal-content">
                     <h2>Add New Report</h2>
                     <form id="addReportForm" method="POST">
