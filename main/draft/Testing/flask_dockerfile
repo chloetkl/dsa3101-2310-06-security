@@ -7,6 +7,7 @@ FROM python:3.10.6-slim-buster
 WORKDIR /app
 COPY requirements.txt requirements.txt
 COPY nusecure.py nusecure.py
+ADD static static
 ADD data data
 ADD templates templates
 ADD static static
