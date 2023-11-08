@@ -5,6 +5,8 @@ FROM python:3.10.6-slim-buster
 WORKDIR /app
 
 COPY nusecure.py nusecure.py
+COPY static static
+COPY templates templates
 COPY requirements.txt requirements.txt
 
 # Install any needed packages specified in requirements.txt
@@ -20,4 +22,4 @@ ENV FLASK_APP nusecure
 ENTRYPOINT python -u -m nusecure
 
 # Run app.py when the container launches
-# CMD ["python", "app.py"]
+CMD ["python", "app.py"]
