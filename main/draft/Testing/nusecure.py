@@ -4,32 +4,6 @@ import folium
 
 app = Flask(__name__)
 
-### Functions
-def create_map():
-    try:
-        data = pd.read_csv('data/data.csv')  # Adjust the path to your CSV file
-        data = data.dropna(subset=['Latitude', 'Longitude'])
-
-        raffles_hall_coords = [1.2959, 103.7745]
-        incident_map = folium.Map(location=raffles_hall_coords, zoom_start=14)
-
-        color_mapping = {
-            'Normal': 'green',
-            'High': 'red'
-        }
-
-        for index, row in data.iterrows():
-            folium.Marker(
-                location=[row['Latitude'], row['Longitude']],
-                popup=row['Description'],
-                icon=folium.Icon(color=color_mapping.get(row['Priority']))
-            ).add_to(incident_map)
-
-        return incident_map._repr_html_()
-
-    except Exception as e:
-        return f"Error generating map: {str(e)}"
-
 def update_csv(new):
     df = pd.read_csv('./data/data.csv')
     df = df.append(new, ignore_index=True)
@@ -72,9 +46,7 @@ def security():
     data = pd.read_csv('./data/data.csv')
     data_dict = data.to_dict(orient='records')
 
-    map_html = create_map()
-
-    return render_template('security.html', map_html=map_html, data=data_dict)
+    return render_template('security.html', data=data_dict)
 
 @app.route('/analytics', methods=['GET'])
 def analytics():

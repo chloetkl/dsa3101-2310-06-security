@@ -9,6 +9,7 @@ COPY requirements.txt requirements.txt
 COPY nusecure.py nusecure.py
 ADD data data
 ADD templates templates
+ADD static static
 
 # things to make customers.py work
 RUN pip3 install --upgrade pip
