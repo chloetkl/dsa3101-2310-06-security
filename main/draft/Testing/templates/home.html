@@ -72,6 +72,10 @@
             margin: 20px auto;
             height: 100px;
         }
+        
+        select#userType {
+            margin-bottom: 15px; /* Adding margin-bottom for spacing */
+        }
     </style>
 </head>
 
@@ -83,15 +87,20 @@
 	<div class="logo">
             <a href="https://imgbb.com/"><img src="https://i.ibb.co/4gmtdBs/Screenshot-2023-11-02-010050.png" alt="Logo"></a>
         </div>
-        <form id="loginForm" method="post" action="/">
+        <form id="loginForm" onsubmit="return redirectToPage()">
+            <label for="userType">User Type:</label>
+            <select id="userType" name="userType">
+                <option value="security">Select User Type</option>
+                <option value="security">Security</option>
+                <option value="analytics">Analytics</option>
+            </select>
+
             <label for="UserID">User ID:</label>
-            <input type="text" name="UserID" placeholder="Enter UserID">
+            <input type="text" id="UserID" name="UserID" required>
 
             <label for="password">Password:</label>
-            <input type="password" name="Password" placeholder="Enter Password">
-
-            <input type="submit" value="Login">
-
+            <input type="password" id="password" name="password" required>
+            
             <button type="submit">Login</button>
         </form>
     </div>
