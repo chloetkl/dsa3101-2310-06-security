@@ -47,8 +47,13 @@
             width: 98%;
         }
  
-        #AnalyticsContent, #PredictionsContent {
-            display: block;
+        #AnalyticsContent,
+        #PredictionsContent {
+            display: none;
+        }
+
+        #iframe {
+            display: none;
         }
     </style>
 </head>
@@ -85,11 +90,13 @@
                             <option value="Libraries">Libraries</option>
                         </select>
                         <br>
-                        <label for="Crimes">Crimes:</label>
+                        <label for="Crimes">Incident Types:</label>
                         <br>
                         <input type="checkbox" id="LostFound" name="LostFound" value="Lost and Found" checked>
                         <label for="LostFound">Lost and Found</label>
                         <br>
+                        <input type="checkbox" id="StolenItems" name="StolenItems" value="Stolen Items">
+                        <label for="StolenItems">Stolen Items</label>
                         <input type="checkbox" id="DamagedProperties" name="DamagedProperties" value="Damaged Properties">
                         <label for="DamagedProperties">Damaged Properties</label>
                         <br>
@@ -112,8 +119,8 @@
         </div>
         <div class="content" id="PredictionsContent">
             <h2>Predictions Page</h2>
+            <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="100%" height="600"></iframe>
         </div>
-        <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="100%" height="600"></iframe>
     </div>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -228,6 +235,18 @@
         document.querySelector('.tab').addEventListener('click', function () {
             createCharts();
         });
+
+        document.getElementById('AnalyticsContent').style.display = 'block';
+
+        function showContent(tabName) {
+            if (tabName === 'Analytics') {
+                document.getElementById('AnalyticsContent').style.display = 'block';
+                document.getElementById('PredictionsContent').style.display = 'none';
+            } else if (tabName === 'Predictions') {
+                document.getElementById('AnalyticsContent').style.display = 'none';
+                document.getElementById('PredictionsContent').style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>
