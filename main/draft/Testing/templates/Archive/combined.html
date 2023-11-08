@@ -32,6 +32,7 @@
 
         iframe {
             width: 100%;
+            height: calc(100vh - 100px); /* Adjust height to accommodate the header */
             border: none;
             margin-top: 100px; /* Place iframe content below the header */
         }
@@ -52,13 +53,11 @@
         .modal {
             display: none;
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            z-index: 1000; /* Adjust the z-index as needed */
-            /* Add other necessary styles */
+            top: 10;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
@@ -113,7 +112,7 @@
         </div>
     </div>
 
-    <iframe srcdoc="{{ map_html | safe }}" width="100%" height="500" frameborder="0"></iframe>
+    <iframe src="color_coded_incidents_map.html" id="map"></iframe>
 
     <button class="pull-tab" onclick="openTab()">Open Tab</button>
 
@@ -124,6 +123,7 @@
 
             <input type="text" id="idFilter" placeholder="Filter by Incident ID">
             <input type="date" id="dateFilter">
+            <input type="text" id="timeFilter" placeholder="Filter by Time">
             <select id="typeFilter">
                 <option value="all">Incident Type</option>
                 <option value="lost and found">Lost and Found</option>
@@ -184,23 +184,7 @@
                         </select><br><br>
                         <label for="location">Location:</label>
                         <select id="location" required>
-                            <option>BIZ</option>
-                            <option>BTC</option>
-                            <option>CDE</option>
-                            <option>COM</option>
-                            <option>DNMS</option>
-                            <option>FASS</option>
-                            <option>FOS</option>
-                            <option>Hall</option>
-                            <option>HMKT</option>
-                            <option>KR</option>
-                            <option>KV</option>
-                            <option>OTH</option>
-                            <option>PGP</option>
-                            <option>SOC</option>
-                            <option>UCC</option>
-                            <option>UTown</option>
-                            <option>YIH</option>
+                            <!-- Options for locations -->
                         </select><br><br>
                         <label for="building">Building:</label>
                         <input type="text" id="building" required><br><br>
@@ -217,35 +201,6 @@
                     </form>
                 </div>
             </div>
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Incident ID</th>
-                        <th>Date</th>
-                        <th>Incident Type</th>
-                        <th>Priority</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in data %}
-                    <tr>
-                        <td>{{ row['IncidentID'] }}</td>
-                           <td>{{ row['FirstUpdate'][:9] }}</td>
-                        <td>{{ row['Incidents'] }}</td>
-                        <td>{{ row['Priority'] }}</td>
-                        <td>{{ row['Location'] }}</td>
-                        <td>
-                            <select class="status-input">
-                                <option value="open" {% if row['Status'] == 'Open' %}selected{% endif %}>Open</option>
-                                <option value="close" {% if row['Status'] == 'Close' %}selected{% endif %}>Close</option>
-                            </select>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
     </div>
 
@@ -269,8 +224,21 @@
                 // Toggle display of the fetched content overlay
                 const overlay = document.getElementById('overlay');
                 overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
+    
+                // Fetch the content if the overlay is shown
+                if (overlay.style.display === 'block') {
+                    fetch('security_table.html')
+                        .then(response => response.text())
+                        .then(text => {
+                            const overlayContent = document.querySelector('.overlay-content');
+                            overlayContent.innerHTML = text;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
             }
-                        
+            
         addReportButton.addEventListener("click", () => {
             modal.style.display = "block";
         });
@@ -390,6 +358,6 @@
                 }
             });
         });
-    </script>
-</body>
-</html>
+        </script>
+        </body>
+        </html>

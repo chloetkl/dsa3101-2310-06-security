@@ -2,3 +2,4 @@ flask
 pandas
 requests
 mysql-connector-python
+folium

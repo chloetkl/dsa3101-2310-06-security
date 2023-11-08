@@ -84,22 +84,22 @@
         <div class="header">
             <h1>Login Page</h1>
         </div>
-        <div class="logo">
+	<div class="logo">
             <a href="https://imgbb.com/"><img src="https://i.ibb.co/4gmtdBs/Screenshot-2023-11-02-010050.png" alt="Logo"></a>
         </div>
-        <form action="/" method="post">
+        <form id="loginForm" onsubmit="return redirectToPage()">
             <label for="userType">User Type:</label>
             <select id="userType" name="userType">
-                <option value="Security">Select User Type</option>
-                <option value="Security">Security</option>
-                <option value="Analytics">Analytics</option>
+                <option value="security">Select User Type</option>
+                <option value="security">Security</option>
+                <option value="analytics">Analytics</option>
             </select>
 
             <label for="UserID">User ID:</label>
             <input type="text" id="UserID" name="UserID" required>
 
-            <label for="Password">Password:</label>
-            <input type="password" id="Password" name="Password" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
             
             <button type="submit">Login</button>
         </form>
