@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tabs {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+
+        .tab:hover {
+            background-color: #ddd;
+        }
+        .logo {
+            max-width: 100px;
+            height: 100px;
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+        }
+        .header-container {
+            border: 2px solid #000;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 98%;
+        }
+ 
+        #AnalyticsContent,
+        #PredictionsContent,
+        #filters {
+            display: none;
+        }
+
+        #iframe {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div class="logo">
+            <img src="https://www.nus.edu.sg/images/default-source/identity-images/NUS_logo_full-horizontal.jpg" alt="NUS Logo" style="height: 100px;">
+        </div>
+        <div class="header">
+            <h1>NUSecure</h1>
+        </div>
+        <div class="analytics-team">
+            <h1>Analytics Team</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="performance-container">
+            <h2 style="font-size: 38px;">Data Analytics Dashboard</h2>
+            <ul class="tabs">
+                <li class="tab" onclick="showContent('Analytics')">Analytics</li>
+                <li class="tab" onclick="showContent('Predictions')">Predictions</li>
+            </ul>
+
+            <div class="content" id="AnalyticsContent">
+                <h2>Analytics Page</h2>
+                <div class="filters">
+                    <form>
+                        <label for="Location">Location:</label>
+                        <select id="Location">
+                            <option value="Canteen">Canteen</option>
+                            <option value="Faculty">Faculty</option>
+                            <option value="Halls">Halls</option>
+                            <option value="Libraries">Libraries</option>
+                        </select>
+                        <br>
+                        <label for="Crimes">Incident Types:</label>
+                        <br>
+                        <input type="checkbox" id="LostFound" name="LostFound" value="Lost and Found" checked>
+                        <label for="LostFound">Lost and Found</label>
+                        <br>
+                        <input type="checkbox" id="StolenItems" name="StolenItems" value="Stolen Items">
+                        <label for="StolenItems">Stolen Items</label>
+                        <input type="checkbox" id="DamagedProperties" name="DamagedProperties" value="Damaged Properties">
+                        <label for="DamagedProperties">Damaged Properties</label>
+                        <br>
+                        <input type="checkbox" id="SexualIncidents" name="SexualIncidents" value="Sexual Incidents">
+                        <label for="SexualIncidents">Sexual Incidents</label>
+                        <br>
+                        <label for="FromDate">From Date:</label>
+                        <input type="date" id="FromDate">
+                        <br>
+                        <label for="ToDate">To Date:</label>
+                        <input type="date" id="ToDate">
+                    </form>
+                </div>
+                <div class="chart-container">
+                    <div id="chart1" class="chart"></div>
+                    <div id="chart2" class="chart"></div>
+                    <div id="chart3" class="chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="content" id="PredictionsContent">
+            <h2>Predictions Page</h2>
+            <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="100%" height="600"></iframe>
+        </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        function showContent(tabName) {
+            var i;
+            var contents = document.getElementsByClassName("content");
+            for (i = 0; i < contents.length; i++) {
+                contents[i].style.display = "none";
+            }
+
+            document.getElementById(tabName + "Content").style.display = "block";
+        }
+
+        // Replace the following with your chart creation code
+        function createCharts() {
+            // Example data and chart creation code
+            var data = [
+                { Year: '2017', CrimeCount: 10 },
+                { Year: '2018', CrimeCount: 12 },
+                { Year: '2019', CrimeCount: 30 },
+                { Year: '2020', CrimeCount: 25 },
+                { Year: '2021', CrimeCount: 32 },
+                { Year: '2022', CrimeCount: 18 },
+                { Year: '2023', CrimeCount: 27 },
+            ];
+
+            var years = data.map(item => item.Year);
+            var crimeCounts = data.map(item => item.CrimeCount);
+
+            var data1 = [
+                { Crime: 'Lost and Found', CrimeCount: 59 },
+                { Crime: 'Assault', CrimeCount: 10 },
+                { Crime: 'Theft', CrimeCount: 9 },
+                { Crime: 'Harassment', CrimeCount: 5 },
+            ];
+            
+            var data2 = [
+                { Location: "UTown", CrimeCount: 21 },
+                { Location: 'Frontier', CrimeCount: 10 },
+                { Location: 'PGP', CrimeCount: 9 },
+                { Location: 'Museum', CrimeCount: 5 },
+            ];
+
+            var years = data.map(item => item.Year);
+            var crimeCounts = data.map(item => item.CrimeCount);
+            var typesOfcrimes = data1.map(item => item.Crime);
+            var crimeCounts1 = data1.map(item => item.CrimeCount);
+            var crimesBylocation = data2.map(item => item.Location);
+            var crimeCounts2 = data1.map(item => item.CrimeCount);
+
+            var trace1 = {
+                x: years,
+                y: crimeCounts,
+                type: 'line',
+            };
+
+            var trace2 = {
+                x: typesOfcrimes,
+                y: crimeCounts1,
+                type: 'bar',
+            };
+
+            var trace3 = {
+                y: crimesBylocation,  // Use 'y' for horizontal bars
+                x: crimeCounts2,
+                type: 'bar',
+                orientation: 'h',  // Set the orientation to horizontal
+                text: crimesBylocation.map(String),  // Display the crime counts as text on the bars
+                textposition: 'inside',  // Position the text inside the bars
+            };
+
+            var layout = {
+                title: 'Number of Crimes per Year',
+                xaxis: {
+                    title: 'Year',
+                    dtick: 1
+                },
+                yaxis: {
+                    title: 'Number of Crimes',
+                    range: [0, Math.max(...crimeCounts)] // Set the y-axis range from 0 to the maximum value
+                },
+            }
+
+            var layout1 = {
+                title: 'Total incidents by Type',
+                xaxis: {
+                    title: 'Type of Crime',
+                    dtick: 1
+                },
+                yaxis: {
+                    title: 'Number of Crimes',
+                    range: [0, Math.max(...crimeCounts)] // Set the y-axis range from 0 to the maximum value
+                },
+            }
+
+            var layout2 = {
+                title: 'Number of Crimes by Location',
+                xaxis: {
+                    title: 'Number of Crimes',
+                },
+                yaxis: {
+                    showticklabels: false
+                },
+            }
+            Plotly.newPlot('chart1', [trace1], layout);
+            Plotly.newPlot('chart2', [trace2], layout1);
+            Plotly.newPlot('chart3', [trace3], layout2);
+        }
+
+        // Call createCharts when the Analytics tab is clicked
+        document.querySelector('.tab').addEventListener('click', function () {
+            createCharts();
+        });
+
+        document.getElementById('AnalyticsContent').style.display = 'block';
+
+        function showContent(tabName) {
+            if (tabName === 'Analytics') {
+                document.getElementById('AnalyticsContent').style.display = 'block';
+                document.getElementById('PredictionsContent').style.display = 'none';
+            } else if (tabName === 'Predictions') {
+                document.getElementById('AnalyticsContent').style.display = 'none';
+                document.getElementById('PredictionsContent').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
