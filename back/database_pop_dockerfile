@@ -16,5 +16,8 @@ COPY ./database/run_commands.sh /database/run_commands.sh
 # Make the Bash script executable
 RUN chmod +x /database/run_commands.sh
 
+# Change line endings to unix
+RUN apt-get update && apt-get install -y dos2unix && dos2unix /database/run_commands.sh && chmod +x /database/run_commands.sh
+
 # Set the Bash script as the default command
 CMD ["/bin/sh", "-c", "/database/run_commands.sh"]
