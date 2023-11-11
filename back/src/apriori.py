@@ -28,7 +28,7 @@ def get_rank():
   cursor.execute(query)
   result = cursor.fetchall()
   # loading data
-  pd.DataFrame(result, columns=['Location','Time'])
+  df=pd.DataFrame(result, columns=['Location','Time'])
 
   warnings.filterwarnings("ignore")
   #changing data types
