@@ -52,12 +52,12 @@ def get_forecast_plot():
     incident_type = request.args.get('incident_type', default=False)
 
     if incident_type:
-        plot_file = f'back/models/sarima/forecast_plot/forecast_plot_{incident_type}.png'
+        plot_file = f'back/models/sarima/forecast_plot/forecast_plot_{incident_type}.html'
     else:
-        plot_file = f'back/models/sarima/forecast_plot/forecast_plot_False.png'
+        plot_file = f'back/models/sarima/forecast_plot/forecast_plot_False.html'
 
     try:
-        return send_file(plot_file, mimetype='image/png')
+        return send_file(plot_file, mimetype='text/html')
     except FileNotFoundError:
         return 'File not found.', 404
 
