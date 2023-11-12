@@ -1,42 +1,8 @@
 import mysql.connector
+from connect_sql import establish_sql_connection
 import pandas as pd
 import bcrypt
 import time
-
-
-def establish_sql_connection(max_retries=10, retry_interval=10):
-    db = None
-    cursor = None
-    retries = 0
-    while retries < max_retries:
-        try:
-            # note: for testing purposes, run on localhost
-            # db = mysql.connector.connect(
-            #     host = "localhost",
-            #     port = 1001,
-            #     user = "root",
-            #     password = "dsa3101",
-            #     database = "secdb"
-            #     )
-
-            # uncomment below for dockerised usage
-            db = mysql.connector.connect(
-                host="database",
-                user="root",
-                password="dsa3101",
-                database="secdb"
-            )
-            cursor = db.cursor()
-            break  # If connection succeeds, exit the loop
-        except mysql.connector.Error as err:
-            print(f"Database error: {err}")
-            print(f"Attempt {retries + 1}: Retrying in {retry_interval} seconds...")
-            time.sleep(retry_interval)  # Wait for a few seconds before retrying
-            retries += 1
-
-    if db is None:
-        print("Failed to establish a database connection.")
-    return db,cursor
 
 # user_roles
 def add_user_roles(filepath):
@@ -156,9 +122,9 @@ def add_incident_types(filepath):
 
 ## perform default adds
 print("Perform default adds")
-add_user_roles('./populate/User_roles.txt')
-add_incident_types('./populate/Incident_types.txt')
-add_incident_locations("./populate/Incident_location.csv")
+add_user_roles('User_roles.txt')
+add_incident_types('Incident_types.txt')
+add_incident_locations("Incident_location.csv")
 
 ## ADD user
 def add_user(username, password, role, email=None):

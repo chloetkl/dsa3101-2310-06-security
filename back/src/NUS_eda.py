@@ -1,28 +1,19 @@
 from flask import Flask, request, render_template, redirect, jsonify
 import pandas as pd
-import mysql.connector
+from connect_sql import establish_sql_connection
 import plotly.express as px
 import plotly.graph_objs as go
 
 
 app = Flask(__name__)
 
-def establish_sql_connection():
-    db = mysql.connector.connect(
-        host="database",
-        user="root",
-        password="dsa3101",
-        database="secdb"
-        )
-    return db
 
 @app.route('/generate_plots', methods=['GET'])
 def plots():
   test=request.args.get('test')
-  db = establish_sql_connection()
-  cursor = db.cursor()
-  query = "SELECT  ilocg.location_group as Location, ilog.timestamp as Time, it.type as Incidents\
-        FROM Incident_logs ilog, Incidents i,  Incident_location iloc, Incident_location_groups ilocg, Incident_types it\
+  db, cursor = establish_sql_connection()
+  query = "SELECT  ilocg.location_group as Location, ilog.time as Time, it.type as Incidents\
+        FROM Incident_logs ilog, Incidents i,  Incident_locations iloc, Incident_location_groups ilocg, Incident_types it\
         WHERE ilog.id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id AND i.incident_type_id=it.id\
         AND ilog.status='OPEN' "
   cursor.execute(query)
@@ -45,7 +36,7 @@ def plots():
   count_data['Month'] = pd.Categorical(count_data['Month'], categories=days, ordered=True)
   count_data.sort_values(by='Month',inplace=True)
   fig=px.line(count_data, x='Month', y='Count', color='Year', title='Monthly Counts by Year')
-  fig.write_html("Monthly_Counts_by_Year.html")
+  fig.write_html("templates/Monthly_Counts_by_Year.html")
 
   #Daily_Counts_by_Year
   count_data = df.groupby(['DayOfWeek', 'Year']).size().reset_index(name='Count')
@@ -53,14 +44,14 @@ def plots():
   count_data['DayOfWeek'] = pd.Categorical(count_data['DayOfWeek'], categories=days, ordered=True)
   count_data.sort_values(by='DayOfWeek',inplace=True)
   fig=px.line(count_data, x='DayOfWeek', y='Count', color='Year', title='Daily Counts by Year')
-  fig.write_html("Daily_Counts_by_Year.html")
+  fig.write_html("templates/Daily_Counts_by_Year.html")
 
   #Hourly_Counts_by_Year
   days = ['Early Morning', 'Morning', 'Afternoon', 'Evening', 'Night','Late Night']
   df['HourOfDay'] = pd.Categorical(df['HourOfDay'], categories=days, ordered=True)
   count_data = df.groupby(['HourOfDay', 'Year']).size().reset_index(name='Count')
   fig = px.line(count_data, x='HourOfDay', y='Count', color='Year', title='Hourly Counts by Year')
-  fig.write_html("Hourly_Counts_by_Year.html")
+  fig.write_html("templates/Hourly_Counts_by_Year.html")
 
   #Count_of_Location_by_Year
   grouped_data = df.groupby([ 'Year','Location']).size().reset_index(name='Count')
@@ -81,7 +72,7 @@ def plots():
     yaxis=dict(title='Count')
     )
   fig = go.Figure(data=traces, layout=layout)
-  fig.write_html("Count_of_Location_by_Year.html")
+  fig.write_html("templates/Count_of_Location_by_Year.html")
 
   #Count_of_Incidents_by_Year
   grouped_data = df.groupby([ 'Year','Incidents']).size().reset_index(name='Count')
@@ -102,7 +93,9 @@ def plots():
     yaxis=dict(title='Count')
     )
   fig = go.Figure(data=traces, layout=layout)
-  fig.write_html("Count_of_Incidents_by_Year.html")
+  fig.write_html("templates/Count_of_Incidents_by_Year.html")
+
+  return "HTMLs generated"
 
 @app.route('/plots/Monthly_Counts_by_Year', methods=['GET'])
 def month_plot():
@@ -133,3 +126,6 @@ def incident_plot():
     return render_template(
         "Count_of_Incidents_by_Year.html"
     )
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=4999)
