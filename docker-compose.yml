@@ -5,7 +5,7 @@ services:
 
   web:
     build: 
-      context: ./front
+      context: .
       dockerfile: flask_dockerfile
     ports:
       - "9001:5000"
