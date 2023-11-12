@@ -9,6 +9,11 @@ services:
       dockerfile: flask_dockerfile
     ports:
       - "9001:5000"
+    volumes:
+      - ./static:/static
+      - ./templates:/templates
+      - ./back/database:/back/database
+      - ./back/models:/back/models
 
   database:
     image: mysql

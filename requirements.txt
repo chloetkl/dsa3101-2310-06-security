@@ -9,3 +9,5 @@ mysql-connector-python
 bcrypt
 flask-login
 folium
+matplotlib
+plotly

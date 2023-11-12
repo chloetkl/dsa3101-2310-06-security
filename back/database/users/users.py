@@ -109,6 +109,7 @@ def authenticate(user,password):
     
     return authenticated, user_role
 
-print(authenticate("sec1","sec1")) ## Should be (True, security)
-print(authenticate("sec1","random")) ## Should be (False, None)
-print(authenticate("sec2","random")) ## Should be (False, None)
+# checks
+# print(authenticate("sec1","sec1")) ## Should be (True, security)
+# print(authenticate("sec1","random")) ## Should be (False, None)
+# print(authenticate("sec2","random")) ## Should be (False, None)
