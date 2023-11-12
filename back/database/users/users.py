@@ -99,7 +99,7 @@ def authenticate(user,password):
     if authenticated:
         query = f"SELECT User_roles.role \
             FROM Users \
-            LEFT JOIN User_roles ON Users.id = User_roles.id\
+            LEFT JOIN User_roles ON Users.role_id = User_roles.id\
                 WHERE Users.username = '{user}';"
         cursor.execute(query)
         user_role = cursor.fetchone()[0]

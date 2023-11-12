@@ -3,10 +3,13 @@ from flask import Flask, request, send_file, render_template, jsonify, redirect,
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
+from connect_sql import establish_sql_connection
 import pandas as pd
 
 app = Flask(__name__)
-login_manager = LoginManager(app)
+app.secret_key = 'secret_key'
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 class User(UserMixin):
     def __init__(self, user_id, username, role):
@@ -14,15 +17,47 @@ class User(UserMixin):
         self.username = username
         self.role = role
 
-def get_user(user_id,password):
-    authenticated, role = authenticate(user_id, password)
-    if authenticated:
-        return User(user_id, user_id, role)
-    return None
+def get_user_from_username(username):
+    db,cursor = establish_sql_connection()
+    query = f'SELECT Users.id, Users.username, User_roles.role \
+        FROM Users LEFT JOIN User_roles ON Users.role_id = User_roles.id \
+            WHERE Users.username = "{username}";'
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    db.close()
+
+    # Check if the result is not None
+    if result:
+        user_id, username, role = result
+        print(f'User {username} added')
+        return User(user_id, username,role)
+    else:
+        print('No user found')
+        return None
 
 @login_manager.user_loader
 def load_user(user_id):
-    return get_user(user_id)
+    db,cursor = establish_sql_connection()
+    query = f'SELECT Users.id, Users.username, User_roles.role \
+        FROM Users LEFT JOIN User_roles ON Users.role_id = User_roles.id \
+            WHERE Users.id= "{user_id}";'
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    db.close()
+
+    # Check if the result is not None
+    if result:
+        user_id, username, role = result
+        print(f'User {username} logged in')
+        return User(user_id, username,role)
+    else:
+        print('No user found')
+        return None
+
 
 def role_required(required_role):
     def decorator(func):
@@ -38,17 +73,20 @@ def role_required(required_role):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        user_id = request.form['UserID']
+        username = request.form['UserID']
         password = request.form['Password']
         
-        authenticated, role = authenticate(user_id,password)
+        authenticated, role = authenticate(username,password)
         
-        user = get_user(user_id,password) # create user
-        if user == None:
+        if authenticated:
+            user = get_user_from_username(username) # create user
+            login_user(user)
+        else:
             return "Invalid UserID or Password"
+        
         if role == 'security':
             return redirect(url_for('security'))
-        elif role == 'security':
+        elif role == 'analytics':
             return redirect(url_for('analytics'))
         
     return render_template('home.html')
@@ -79,6 +117,8 @@ def send_p():
 @app.route('/security', methods=['GET', 'POST'])
 @login_required
 def security():
+    username = current_user.id
+    print(f"User {username} is authenticated")
     # if request.method == 'POST':
     #     new_report = {
     #         'IncidentID': request.form['id'],
@@ -96,7 +136,7 @@ def security():
 
     #     update_csv(new_report)
 
-    data = pd.read_csv('data/data_test.csv')
+    data = pd.read_csv('front/data/data_test.csv')
 
     ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
     # df['FirstUpdate'] = pd.to_datetime(df['FirstUpdate'])
@@ -116,6 +156,7 @@ def security():
 @login_required
 @role_required('analytics')
 def analytics():
+    user_id = current_user.id
     return render_template('analytics.html')
 
 
