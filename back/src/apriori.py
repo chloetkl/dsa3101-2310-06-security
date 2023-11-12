@@ -1,28 +1,18 @@
 from flask import Flask, request, render_template, redirect, jsonify
 import pandas as pd
-import mysql.connector
+from connect_sql import establish_sql_connection
 from mlxtend.frequent_patterns import apriori
 import matplotlib.pyplot as plt
 import warnings
 
 app = Flask(__name__)
 
-def establish_sql_connection():
-    db = mysql.connector.connect(
-        host="database",
-        user="root",
-        password="dsa3101",
-        database="secdb"
-        )
-    return db
-
 @app.route('/rank_priority', methods=['GET'])
 def get_rank():
   test=request.args.get('test')
-  db = establish_sql_connection()
-  cursor = db.cursor()
-  query = "SELECT  ilocg.location_group as Location, ilog.timestamp as Time\
-        FROM Incident_logs ilog, Incidents i,  Incident_location iloc, Incident_location_groups ilocg\
+  db,cursor = establish_sql_connection()
+  query = "SELECT  ilocg.location_group as Location, ilog.time as Time\
+        FROM Incident_logs ilog, Incidents i,  Incident_locations iloc, Incident_location_groups ilocg\
         WHERE ilog.id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id\
         AND ilog.status='OPEN' "
   cursor.execute(query)
@@ -88,3 +78,6 @@ def get_rank():
         return f'Priority {rank+1} out of {total}'
 
   return print( "Error: Check spelling or format! e.g.['PGP', 'Saturday', 'Afternoon'] \nOR \nNew Combination. Please add to the database!")
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=4998, debug=True)
