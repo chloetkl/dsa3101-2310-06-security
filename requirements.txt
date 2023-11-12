@@ -7,3 +7,5 @@ pmdarima
 joblib
 mysql-connector-python
 bcrypt
+flask-login
+folium
