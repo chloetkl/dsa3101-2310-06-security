@@ -122,9 +122,9 @@ def add_incident_types(filepath):
 
 ## perform default adds
 print("Perform default adds")
-add_user_roles('User_roles.txt')
-add_incident_types('Incident_types.txt')
-add_incident_locations("Incident_location.csv")
+add_user_roles('./populate/User_roles.txt')
+add_incident_types('./populate/Incident_types.txt')
+add_incident_locations("./populate/Incident_location.csv")
 
 ## ADD user
 def add_user(username, password, role, email=None):
