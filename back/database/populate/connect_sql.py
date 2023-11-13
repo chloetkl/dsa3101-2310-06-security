@@ -23,9 +23,11 @@ def establish_sql_connection(max_retries=10, retry_interval=10):
             #     password="dsa3101",
             #     database="secdb"
             # )
-
+            
+            
             cursor = db.cursor()
             break  # If connection succeeds, exit the loop
+
         except mysql.connector.Error as err:
             print(f"Database error: {err}")
             print(f"Attempt {retries + 1}: Retrying in {retry_interval} seconds...")
