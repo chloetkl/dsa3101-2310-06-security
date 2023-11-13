@@ -85,7 +85,7 @@ def authenticate(user,password):
     ## Check username
     if len(hash_stored) == 0:
         print("authenticate | User not found")
-        return False
+        return False, None
     
     ## Pull hash salt
     hash_stored = hash_stored[0][0]
