@@ -14,7 +14,7 @@ def plots():
   db, cursor = establish_sql_connection()
   query = "SELECT  ilocg.location_group as Location, ilog.time as Time, it.type as Incidents\
         FROM Incident_logs ilog, Incidents i,  Incident_locations iloc, Incident_location_groups ilocg, Incident_types it\
-        WHERE ilog.id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id AND i.incident_type_id=it.id\
+        WHERE ilog.incident_id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id AND i.incident_type_id=it.id\
         AND ilog.status='OPEN' "
   cursor.execute(query)
   result = cursor.fetchall()
