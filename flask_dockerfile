@@ -7,13 +7,17 @@ FROM python:3.10.6-slim-buster
 WORKDIR /app
 COPY requirements.txt requirements.txt
 COPY nusecure.py nusecure.py
-ADD static static
-ADD data data
-ADD templates templates
-ADD static static
+COPY connect_sql.py connect_sql.py
+
+
+COPY static static
+COPY templates templates
+COPY back/database back/database
+COPY back/models back/models
+COPY front front
 
 # things to make customers.py work
 RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --default-timeout=100
 
 ENTRYPOINT python -u -m nusecure

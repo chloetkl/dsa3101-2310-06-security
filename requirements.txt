@@ -1,0 +1,13 @@
+flask
+pandas
+requests
+numpy
+statsmodels
+pmdarima
+joblib
+mysql-connector-python
+bcrypt
+flask-login
+folium
+matplotlib
+plotly
