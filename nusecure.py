@@ -1,20 +1,164 @@
-from flask import Flask, request, send_file, render_template, jsonify
+from functools import wraps
+from flask import Flask, request, send_file, render_template, jsonify, redirect, url_for
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
-
-import mysql.connector
-import bcrypt
-# from back_end.database.populate import add_user, check_auth
+from back.database.users.users import authenticate, add_user
+from connect_sql import establish_sql_connection
+import pandas as pd
 
 app = Flask(__name__)
+app.secret_key = 'secret_key'
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+class User(UserMixin):
+    def __init__(self, user_id, username, role):
+        self.id = user_id
+        self.username = username
+        self.role = role
+
+def get_user_from_username(username):
+    db,cursor = establish_sql_connection()
+    query = f'SELECT Users.id, Users.username, User_roles.role \
+        FROM Users LEFT JOIN User_roles ON Users.role_id = User_roles.id \
+            WHERE Users.username = "{username}";'
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    db.close()
+
+    # Check if the result is not None
+    if result:
+        user_id, username, role = result
+        print(f'User {username} added')
+        return User(user_id, username,role)
+    else:
+        print('No user found')
+        return None
+
+@login_manager.user_loader
+def load_user(user_id):
+    db,cursor = establish_sql_connection()
+    query = f'SELECT Users.id, Users.username, User_roles.role \
+        FROM Users LEFT JOIN User_roles ON Users.role_id = User_roles.id \
+            WHERE Users.id= "{user_id}";'
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    db.close()
+
+    # Check if the result is not None
+    if result:
+        user_id, username, role = result
+        print(f'User {username} logged in')
+        return User(user_id, username,role)
+    else:
+        print('No user found')
+        return None
 
 
-@app.route("/")
-def nusecure():
-    return "<p>Welcome to NUSecure!</p>"
+def role_required(required_role):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if current_user.is_authenticated and current_user.role == required_role:
+                return func(*args, **kwargs)
+            else:
+                return "Unauthorized", 403  # Adjust the response accordingly
+        return wrapper
+    return decorator
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        username = request.form['UserID']
+        password = request.form['Password']
+        
+        authenticated, role = authenticate(username,password)
+        
+        if authenticated:
+            user = get_user_from_username(username) # create user
+            login_user(user)
+        else:
+            return "Invalid UserID or Password"
+        
+        if role == 'security':
+            return redirect(url_for('security'))
+        elif role == 'analytics':
+            return redirect(url_for('analytics'))
+        
+    return render_template('home.html')
+
+@app.route('/add_new_user', methods=['POST'])
+def add_new_user():
+    data = request.get_json()
+
+    if not data or 'username' not in data or 'role' not in data or 'password' not in data:
+        return jsonify({'error': 'Invalid JSON format'}), 400
+
+    username = data['username']
+    role = data['role']
+    password = data['password']
+    email = None
+    if 'email' in data:
+        email = data['email']
+
+    add_user(username,password,role,email)
+
+    return "User added"
 
 @app.route("/prediction")
+@login_required
 def send_p():
     return send_file("back/data/test.png")
+
+@app.route('/security', methods=['GET', 'POST'])
+@login_required
+def security():
+    username = current_user.id
+    print(f"User {username} is authenticated")
+    # if request.method == 'POST':
+    #     new_report = {
+    #         'IncidentID': request.form['id'],
+    #         'Description': request.form['description'],
+    #         'Incidents': request.form['type'],
+	#     'FirstUpdate': request.form['datetime'],
+	#     'Priority': request.form['priority'],
+    #         'Location': request.form['location'],
+	#     'Building': request.form['building'],
+	#     'Status': request.form['status'],
+	#     'User': request.form['user'],
+	#     'Latitude': request.form['latitude'],
+	#     'Longitude': request.form['longitude']
+    #     }
+
+    #     update_csv(new_report)
+
+    data = pd.read_csv('front/data/data_test.csv')
+
+    ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
+    # df['FirstUpdate'] = pd.to_datetime(df['FirstUpdate'])
+    # df['Date'] = df['FirstUpdate'].dt.date
+    # df['Time'] = df['FirstUpdate'].dt.time
+    # df.rename(columns={'IncidentID': 'Incident ID',
+    #                    'Incidents': 'Incident Type'}, inplace=True)
+    # df = df[['Incident ID','Description','Date','Time',
+    #          'Incident Type','Location','Building','Status','Priority',
+    #          'User','Latitude','Longitude'
+    #          ]]
+    data_dict = data.to_dict(orient='records')
+
+    return render_template('security.html', data=data_dict)
+
+@app.route('/analytics', methods=['GET'])
+@login_required
+@role_required('analytics')
+def analytics():
+    user_id = current_user.id
+    return render_template('analytics.html')
+
 
 # @app.route("/add_user", methods = ["POST"])
 # def add_user(email, username, role_id, password):
@@ -34,6 +178,7 @@ def send_p():
 
 # Endpoint to train SARIMA models for all incident types
 @app.route('/train_all', methods=['GET'])
+@login_required
 def train_all():
     incident_types = ['LOST AND FOUND','DAMAGED PROPERTY','SEXUAL INCIDENTS','STOLEN ITEMS','EMERGENCY INCIDENTS']
     train_all_sarima(incident_types)
@@ -41,6 +186,7 @@ def train_all():
 
 # Endpoint to generate forecast for all incident types
 @app.route('/forecast_all', methods=['GET'])
+@login_required
 def get_all_forecasts():
     incident_types = ['LOST AND FOUND','DAMAGED PROPERTY','SEXUAL INCIDENTS','STOLEN ITEMS','EMERGENCY INCIDENTS']
     forecast_all_sarima(incident_types)
@@ -48,6 +194,7 @@ def get_all_forecasts():
 
 # Endpoint to get forecast plots for specified type
 @app.route('/get_forecast_plot', methods=['GET'])
+@login_required
 def get_forecast_plot():
     incident_type = request.args.get('incident_type', default=False)
 

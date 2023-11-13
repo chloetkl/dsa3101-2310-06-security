@@ -200,6 +200,9 @@ add_user("sec2", "sec2", "security", email=None)
 add_user("sec3", "sec3", "security", email=None)
 add_user("sec4", "sec4", "security", email=None)
 add_user("sec5", "sec5", "security", email=None)
+add_user("analytics1", "analytics1", "analytics", email=None)
+add_user("analytics2", "analytics2", "analytics", email=None)
+add_user("analytics3", "analytics3", "analytics", email=None)
 
 ## AUTHENTICATE user
 def authenticate(user,password):
