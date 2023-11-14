@@ -72,9 +72,9 @@
             margin-top: 380px;
         }
 
-	.hidden-column {
-	    display:none;
-	}
+        .hidden-column {
+            display:none;
+        }
 
         .overlay {
             display: none;
@@ -98,22 +98,28 @@
             overflow-y: auto;
         }
 
-	table {
-	    border-collapse: collapse;
-	}
+        table {
+            border-collapse: collapse;
+        }
 
-	th, td {
-	    border: 1px solid;
-	}
+        th, td {
+            border: 1px solid;
+        }
 
-	th {
-	    background-color: #f2f2f2;
-	    position: sticky;
-	    top: 0;
-	}
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
 
         h2 {
         margin-top: 40px;
+        }
+
+        #add-new-report-form-message {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none; /* Initially hide the message */
         }
 
     </style>
@@ -245,6 +251,7 @@
                             <option>Close</option>
                         </select><br><br>
                         <button type="submit">Add</button>
+                        <div id="add-new-report-form-message" class="message"></div>
                     </form>
                 </div>
             </div>
@@ -302,11 +309,15 @@
             overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
         }
 
+
         const addReportButton = document.getElementById("addReportButton");
         const modal = document.getElementById("modal");
         const modalContent = document.getElementById("modalContent");
         // const addReportForm = document.getElementById("addReportForm");
         // const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+        addReportButton.addEventListener("click", () => {
+                 modal.style.display = "block";
+                   });
 
         const idFilter = document.getElementById("idFilter");
         const dateFilter = document.getElementById("dateFilter");
@@ -320,34 +331,38 @@
         const table = document.getElementById("dataTable");
         const rows = table.getElementsByTagName("tr");
 
-        addReportButton.addEventListener("click", () => {
-            modal.style.display = "block";
-        });
-
         const addReportForm = document.getElementById("addReportForm");
-
+        const messageElement = document.getElementById("add-new-report-form-message");
         addReportForm.addEventListener("submit", function(event) {
             event.preventDefault();
-            
+
             // Capture form data
             const formData = new FormData(addReportForm);
-            
+
             // Send data to Flask route using fetch API
             fetch('/security', {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
-                // Handle response
-                console.log('Data sent successfully');
-                // Optionally, perform actions after successful submission
+                console.log('Response status code:', response.status);
+                if (response.ok) {
+                messageElement.textContent = 'Response status code: ' + response.status;
+                addReportForm.reset(); // Clear the form on success (2xx status code)
+                } else {
+                throw new Error('Failed to add item');
+                }
             })
             .catch(error => {
-                // Handle errors
-                console.error('Error sending data:', error);
+                console.error('Error:', error.message);
+                messageElement.textContent = 'Error sending data: ' + error.message;
+            })
+            .finally(() => {
+                // Show the message element
+                messageElement.style.display = 'block';
             });
         });
-            
+                
             newRow.innerHTML = `
                 <td>${id}</td>
                 <td>${date}</td>
