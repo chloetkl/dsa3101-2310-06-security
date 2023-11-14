@@ -104,23 +104,6 @@ def home():
         
     return render_template('home.html')
 
-@app.route('/add-new-user', methods=['POST'])
-def add_new_user():
-    data = request.get_json()
-
-    if not data or 'username' not in data or 'role' not in data or 'password' not in data:
-        return jsonify({'error': 'Invalid JSON format'}), 400
-
-    username = data['username']
-    role = data['role']
-    password = data['password']
-    email = None
-    if 'email' in data:
-        email = data['email']
-
-    add_user(username,password,role,email)
-
-    return "User added"
 
 @app.route("/prediction")
 @login_required
