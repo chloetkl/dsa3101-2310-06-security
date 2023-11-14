@@ -138,7 +138,44 @@ def security():
 
     #     update_csv(new_report)
 
-    data = pd.read_csv('front/data/data_test.csv')
+    db,cursor = establish_sql_connection()
+    query = f'SELECT Incident_logs.incident_id,\
+        Incidents.description,\
+        Incident_logs.priority,\
+        Incident_types.type,\
+        Incident_location_groups.location_group,\
+        Incident_locations.location,\
+        Incident_locations.latitude,\
+        Incident_locations.longitude,\
+        Users.username,\
+        Incident_logs.time,\
+        Incident_logs.status\
+        FROM Incident_logs\
+        LEFT JOIN Incidents ON Incident_logs.incident_id = Incidents.id\
+        LEFT JOIN Incident_locations ON Incidents.location_id = Incident_locations.id\
+        LEFT JOIN Incident_location_groups ON Incident_locations.location_group_id = Incident_location_groups.id\
+        LEFT JOIN Incident_types ON Incidents.incident_type_id = Incident_types.id\
+        LEFT JOIN Users ON Incident_logs.user_id = Users.id'
+    cursor.execute(query)
+    result = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    data = pd.DataFrame(result, columns = columns)
+
+    condition = data['status'] == 'Open'
+    data['FirstUpdate'] = ''
+    data.loc[condition, 'FirstUpdate'] = data.loc[condition, 'time']
+    data['FirstUpdate'] = data['FirstUpdate'].shift(+1)
+    data.drop(data[data['status'] == 'Open'].index, inplace=True)
+    data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 'type':'Incidents', 'location_group':'Location', 'location':'Building', 'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 'time': 'LatestUpdate', 'status':'Status'}, inplace=True)
+    data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
+    data['LatestUpdate'] = pd.to_datetime(data['LatestUpdate'])
+    data['FirstUpdate'] = data['FirstUpdate'].dt.strftime('%d/%m/%Y %H:%M')
+    data['LatestUpdate'] = data['LatestUpdate'].dt.strftime('%d/%m/%Y %H:%M')
+
+
+    data = data[['IncidentID', 'Description', 'Priority', 'Incidents', 'Location', 'Building', 'Latitude', 'Longitude', 'User', 'FirstUpdate', 'LatestUpdate', 'Status']]
+
+    #data = pd.read_csv('front/data/data_test.csv')
 
     ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
     data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
