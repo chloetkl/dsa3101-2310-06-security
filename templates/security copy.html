@@ -149,7 +149,6 @@
                 <option value="lost and found">Lost and Found</option>
                 <option value="damaged property">Damaged Property</option>
                 <option value="stolen items">Stolen Items</option>
-                <option value="emergency incident">Emergency Incidents</option>
                 <option value="sexual incidents">Sexual Incidents</option>
             </select>
             <select id="priorityFilter">
@@ -198,27 +197,26 @@
             <div id="modal" class="modal" height="500px">
                 <div id="modalContent" class="modal-content">
                     <h2>Add New Report</h2>
-                    <form id="addReportForm" method="POST" action="{{ url_for('security')}}">
-			            <label for="datetime">Date and Time:</label>
-                        <input type="datetime-local" id="datetime" name="datetime" required><br><br>
-                        <label for="description">Description:</label>
-                        <input type="text" id="description" name="description" required><br><br>
+                    <form id="addReportForm" method="POST">
+                        <label for="id">Incident ID:</label>
+                        <input type="text" id="id" required><br><br>
+			<label for="date">Date:</label>
+			<input type="date" id="date" required><br><br>
+                        <label for="time">Time:</label>
+                        <input type="text" id="time" required><br><br>
                         <label for="type">Incident Type:</label>
-                        <select id="type" name="type" required>
+                        <select id="type" required>
                             <option>Lost and Found</option>
                             <option>Damaged Property</option>
                             <option>Stolen Items</option>
-                            <option>Emergency Incidents</option>
                             <option>Sexual Incidents</option>
-
                         </select><br><br>
-                        <label for="priority">Priority:</label>
-                        <select id="priority" name="priority" required>
+                        <select id="priority" required>
                             <option>Normal</option>
                             <option>High</option>
                         </select><br><br>
                         <label for="location">Location:</label>
-                        <select id="location" name="location" required>
+                        <select id="location" required>
                             <option>BIZ</option>
                             <option>BTC</option>
                             <option>CDE</option>
@@ -238,12 +236,18 @@
                             <option>YIH</option>
                         </select><br><br>
                         <label for="building">Building:</label>
-                        <input type="text" id="building" name="building" required><br><br>
+                        <input type="text" id="building" required><br><br>
                         <label for="status">Status:</label>
-                        <select id="status" name="status" required>
+                        <select id="status" required>
                             <option>Open</option>
                             <option>Close</option>
                         </select><br><br>
+                        <label for="user">User Added:</label>
+                        <input type="text" id="user" required><br><br>
+                        <label for="latitude">Latitude:</label>
+                        <input type="text" id="latitude" required><br><br>
+                        <label for="longitude">Longitude:</label>
+                        <input type="text" id="longitude" required><br><br>
                         <button type="submit">Add</button>
                     </form>
                 </div>
@@ -305,8 +309,8 @@
         const addReportButton = document.getElementById("addReportButton");
         const modal = document.getElementById("modal");
         const modalContent = document.getElementById("modalContent");
-        // const addReportForm = document.getElementById("addReportForm");
-        // const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+        const addReportForm = document.getElementById("addReportForm");
+        const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
 
         const idFilter = document.getElementById("idFilter");
         const dateFilter = document.getElementById("dateFilter");
@@ -324,30 +328,23 @@
             modal.style.display = "block";
         });
 
-        const addReportForm = document.getElementById("addReportForm");
-
-        addReportForm.addEventListener("submit", function(event) {
+            
+        addReportForm.addEventListener("submit", function (event) {
             event.preventDefault();
-            
-            // Capture form data
-            const formData = new FormData(addReportForm);
-            
-            // Send data to Flask route using fetch API
-            fetch('/security', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                // Handle response
-                console.log('Data sent successfully');
-                // Optionally, perform actions after successful submission
-            })
-            .catch(error => {
-                // Handle errors
-                console.error('Error sending data:', error);
-            });
-        });
-            
+            const id = document.getElementById("id").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+            const type = document.getElementById("type").value;
+            const priority = document.getElementById("priority").value;
+            const location = document.getElementById("location").value;
+            const building = document.getElementById("building").value;
+            const status = document.getElementById("status").value;
+            const user = document.getElementById("user").value;
+            const latitude = document.getElementById("latitude").value;
+            const longitude = document.getElementById("longitude").value;
+                
+            const newRow = document.createElement("tr");
+
             newRow.innerHTML = `
                 <td>${id}</td>
                 <td>${date}</td>
@@ -369,7 +366,7 @@
             // Clear form values
             document.getElementById("id").value = "";
             document.getElementById("date").value = "";
-	        document.getElementById("time").value = "";
+	    document.getElementById("time").value = "";
             document.getElementById("type").value = "";
             document.getElementById("priority").value = "";
             document.getElementById("location").value = "";
@@ -381,6 +378,7 @@
 
             // Close the modal
             modal.style.display = "none";
+        });
     
         idFilter.addEventListener("input", filterTable);
         dateFilter.addEventListener("input", filterTable);
