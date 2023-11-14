@@ -3,6 +3,7 @@ from flask import Flask, request, send_file, render_template, jsonify, redirect,
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
+from back.models.apriori import get_rank
 from connect_sql import establish_sql_connection
 import pandas as pd
 
@@ -10,6 +11,7 @@ app = Flask(__name__)
 app.secret_key = 'secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 class User(UserMixin):
     def __init__(self, user_id, username, role):
@@ -207,6 +209,27 @@ def get_forecast_plot():
         return send_file(plot_file, mimetype='text/html')
     except FileNotFoundError:
         return 'File not found.', 404
+    
+# Apriori Algorithm 
+
+# Default for apriori endpoint
+get_defaults = { 'location': 'PGP', 
+                 'day': 'Saturday', 
+                 'hour':'Morning'
+                 }
+
+# Endpoint to get rank_priority
+@app.route('/rank_priority', methods=['GET'])
+@login_required
+def rank_priority():
+
+    location = request.args.get('location', default=get_defaults['location'])
+    day = request.args.get('day', default=get_defaults['day'])
+    hour = request.args.get('hour', default=get_defaults['hour'])
+
+    return get_rank(location,day,hour)
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
