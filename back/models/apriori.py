@@ -72,6 +72,6 @@ def get_rank(location,day,hour):
       if test==fc['itemsets'][i]:
         rank=fc['rank'][i]
         total=fc.shape[0]
-        return f'Priority {rank+1} out of {total}'
+        return f'{test} : Priority {rank+1} out of {total}'
 
-  return "Error: Check spelling or format! e.g. location=PGP, day=Saturday, hour=Afternoon \nOR \nNew Combination. Please add to the database!"
+  return f"{test} Error: Check spelling or format! e.g. location=PGP, day=Saturday, hour=Afternoon \nOR \nNew Combination. Please add to the database!"

@@ -181,6 +181,7 @@ def analytics():
 # Endpoint to train SARIMA models for all incident types
 @app.route('/train_all', methods=['GET'])
 @login_required
+@role_required('analytics')
 def train_all():
     incident_types = ['LOST AND FOUND','DAMAGED PROPERTY','SEXUAL INCIDENTS','STOLEN ITEMS','EMERGENCY INCIDENTS']
     train_all_sarima(incident_types)
@@ -189,6 +190,7 @@ def train_all():
 # Endpoint to generate forecast for all incident types
 @app.route('/forecast_all', methods=['GET'])
 @login_required
+@role_required('analytics')
 def get_all_forecasts():
     incident_types = ['LOST AND FOUND','DAMAGED PROPERTY','SEXUAL INCIDENTS','STOLEN ITEMS','EMERGENCY INCIDENTS']
     forecast_all_sarima(incident_types)
@@ -197,6 +199,7 @@ def get_all_forecasts():
 # Endpoint to get forecast plots for specified type
 @app.route('/get_forecast_plot', methods=['GET'])
 @login_required
+@role_required('analytics')
 def get_forecast_plot():
     incident_type = request.args.get('incident_type', default=False)
 
@@ -212,22 +215,21 @@ def get_forecast_plot():
     
 # Apriori Algorithm 
 
-# Default for apriori endpoint
-get_defaults = { 'location': 'PGP', 
-                 'day': 'Saturday', 
-                 'hour':'Morning'
-                 }
-
 # Endpoint to get rank_priority
 @app.route('/rank_priority', methods=['GET'])
 @login_required
+@role_required('analytics')
 def rank_priority():
 
-    location = request.args.get('location', default=get_defaults['location'])
-    day = request.args.get('day', default=get_defaults['day'])
-    hour = request.args.get('hour', default=get_defaults['hour'])
+    location = request.args.get('location')
+    day = request.args.get('day')
+    hour = request.args.get('hour')
 
-    return get_rank(location,day,hour)
+
+    try:
+        return get_rank(location,day,hour)
+    except TypeError:
+        return 'Input not found.', 404
     
 
 
