@@ -4,11 +4,15 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
 from back.models.apriori import get_rank
+<<<<<<< HEAD
 from back.analytics.nuseda import plots
 from back.analytics.generate_heatmap import heatmap
 from back.analytics.map_pin import generate_map_points
 from connect_sql import establish_sql_connection
 from jinja2.exceptions import TemplateNotFound
+=======
+from connect_sql import establish_sql_connection, get_location_id, get_incident_type_id
+>>>>>>> main
 import pandas as pd
 
 app = Flask(__name__)
@@ -123,37 +127,116 @@ def send_p():
 @app.route('/security', methods=['GET', 'POST'])
 @login_required
 def security():
-    username = current_user.id
-    print(f"User {username} is authenticated")
-    # if request.method == 'POST':
-    #     new_report = {
-    #         'IncidentID': request.form['id'],
-    #         'Description': request.form['description'],
-    #         'Incidents': request.form['type'],
-	#     'FirstUpdate': request.form['datetime'],
-	#     'Priority': request.form['priority'],
-    #         'Location': request.form['location'],
-	#     'Building': request.form['building'],
-	#     'Status': request.form['status'],
-	#     'User': request.form['user'],
-	#     'Latitude': request.form['latitude'],
-	#     'Longitude': request.form['longitude']
-    #     }
+    user_id = current_user.id
+    print(f"User {user_id} is authenticated")
 
-    #     update_csv(new_report)
+    if request.method == 'POST':
+        try:
+            new_report = {
+                'Description': request.form['description'],
+                'Incident Type': request.form['type'],
+                'Datetime': request.form['datetime'],
+                'Priority': request.form['priority'],
+                'Location': request.form['building'],
+                'Status': request.form['status'],
+            }
 
-    data = pd.read_csv('front/data/data_test.csv')
+            db,cursor = establish_sql_connection()
+
+            ## Add incident
+            description = new_report['Description']
+            location_id = get_location_id(new_report['Location'])
+            incident_type_id = get_incident_type_id(new_report['Incident Type'])
+            query = f"INSERT INTO Incidents (description, location_id, incident_type_id) \
+                VALUES ('{description}', '{location_id}', '{incident_type_id}')"
+            cursor.execute(query)
+            db.commit()
+
+            ## Add incident logs(s)
+            incident_id = cursor.lastrowid
+            ## Add both open and close logs if new incident is close
+            status = new_report['Status']
+            priority = new_report['Priority']
+            time = new_report['Datetime']
+            notes = ""           
+
+            ## Add open log if new incident is open
+            if status == 'Close':
+                query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
+                        ('{incident_id}','Open','{priority}','{time}','{user_id}','{notes}')"
+                cursor.execute(query)
+                db.commit()
+                query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
+                        ('{incident_id}','Close','{priority}','{time}','{user_id}','{notes}')"
+                cursor.execute(query)
+                db.commit()
+            else:
+                query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
+                        ('{incident_id}','{status}','{priority}','{time}','{user_id}','{notes}')"
+                cursor.execute(query)
+                db.commit()
+
+        except Exception as e:
+            # Handle exceptions
+            print(f"An error occurred: {e}")
+            db.rollback()  # Rollback the changes in case of an error
+
+        finally:
+            if cursor:
+                cursor.close()
+            if db:
+                db.close()
+  
+
+    db,cursor = establish_sql_connection()
+    query = f'SELECT Incident_logs.incident_id,\
+        Incidents.description,\
+        Incident_logs.priority,\
+        Incident_types.type,\
+        Incident_location_groups.location_group,\
+        Incident_locations.location,\
+        Incident_locations.latitude,\
+        Incident_locations.longitude,\
+        Users.username,\
+        Incident_logs.time,\
+        Incident_logs.status\
+        FROM Incident_logs\
+        LEFT JOIN Incidents ON Incident_logs.incident_id = Incidents.id\
+        LEFT JOIN Incident_locations ON Incidents.location_id = Incident_locations.id\
+        LEFT JOIN Incident_location_groups ON Incident_locations.location_group_id = Incident_location_groups.id\
+        LEFT JOIN Incident_types ON Incidents.incident_type_id = Incident_types.id\
+        LEFT JOIN Users ON Incident_logs.user_id = Users.id'
+    cursor.execute(query)
+    result = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    data = pd.DataFrame(result, columns = columns)
+
+    condition = data['status'] == 'Open'
+    data['FirstUpdate'] = ''
+    data.loc[condition, 'FirstUpdate'] = data.loc[condition, 'time']
+    data['FirstUpdate'] = data['FirstUpdate'].shift(+1)
+    data.drop(data[data['status'] == 'Open'].index, inplace=True)
+    data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 'type':'Incidents', 'location_group':'Location', 'location':'Building', 'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 'time': 'LatestUpdate', 'status':'Status'}, inplace=True)
+    data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
+    data['LatestUpdate'] = pd.to_datetime(data['LatestUpdate'])
+    data['FirstUpdate'] = data['FirstUpdate'].dt.strftime('%d/%m/%Y %H:%M')
+    data['LatestUpdate'] = data['LatestUpdate'].dt.strftime('%d/%m/%Y %H:%M')
+
+
+    data = data[['IncidentID', 'Description', 'Priority', 'Incidents', 'Location', 'Building', 'Latitude', 'Longitude', 'User', 'FirstUpdate', 'LatestUpdate', 'Status']]
+
 
     ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
-    # df['FirstUpdate'] = pd.to_datetime(df['FirstUpdate'])
-    # df['Date'] = df['FirstUpdate'].dt.date
-    # df['Time'] = df['FirstUpdate'].dt.time
-    # df.rename(columns={'IncidentID': 'Incident ID',
-    #                    'Incidents': 'Incident Type'}, inplace=True)
-    # df = df[['Incident ID','Description','Date','Time',
-    #          'Incident Type','Location','Building','Status','Priority',
-    #          'User','Latitude','Longitude'
-    #          ]]
+    data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'],dayfirst=True)
+    data['Date'] = data['FirstUpdate'].dt.date
+    data['Time'] = data['FirstUpdate'].dt.time
+    data.rename(columns={'IncidentID': 'Incident ID',
+             'Incidents': 'Incident Type',
+	     'User': 'User Added'}, inplace=True)
+    data = data[['Incident ID','Description','Date','Time',
+             'Incident Type','Location','Building','Status','Priority',
+             'User Added','Latitude','Longitude'
+             ]]
     data_dict = data.to_dict(orient='records')
 
     return render_template('security.html', data=data_dict)

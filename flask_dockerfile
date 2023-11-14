@@ -17,7 +17,7 @@ COPY back/models back/models
 COPY back/analytics back/analytics
 COPY front front
 
-# things to make customers.py work
+# things to make nusecure.py work
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt --default-timeout=100
 

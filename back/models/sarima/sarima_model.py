@@ -7,12 +7,55 @@ import plotly.graph_objects as go
 import pickle
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from pmdarima import auto_arima
-
+from connect_sql import establish_sql_connection
 from back.models.sarima.feature_eng import engineer_features
 
 def fetch_data(incident_type=False):
-    # to edit to load from sql server
-    data = pd.read_csv("back/data/data_v0.2_intermediate(for checking)_with_status.csv")
+    db,cursor = establish_sql_connection()
+    query = f'SELECT Incident_logs.incident_id,\
+        Incident_types.type,\
+        Incident_location_groups.location_group,\
+        Incident_locations.location,\
+        Incident_locations.latitude,\
+        Incident_locations.longitude,\
+        Users.username,\
+        Incident_logs.time,\
+        Incident_logs.status\
+        FROM Incident_logs\
+        LEFT JOIN Incidents ON Incident_logs.incident_id = Incidents.id\
+        LEFT JOIN Incident_locations ON Incidents.location_id = Incident_locations.id\
+        LEFT JOIN Incident_location_groups ON Incident_locations.location_group_id = Incident_location_groups.id\
+        LEFT JOIN Incident_types ON Incidents.incident_type_id = Incident_types.id\
+        LEFT JOIN Users ON Incident_logs.user_id = Users.id'
+    
+    cursor.execute(query)
+    result = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    data = pd.DataFrame(result, columns = columns)
+
+    cond1 = data['status'] == 'Open'
+    cond2 = data['status'] =='Close'
+    data['Open'] = ''
+    data['Close'] = ''
+    data.loc[cond1, 'Open'] = data.loc[cond1, 'time']
+    data.loc[cond2, 'Close'] = data.loc[cond2, 'time']
+    data['Close'] = data['Close'].shift(-1)
+    del data['time'], data['status']
+    data['Open'] = pd.to_datetime(data['Open'])
+    data['Close'] = pd.to_datetime(data['Close'])
+    data['Add'] = ((data['Close'] - data['Open']).dt.total_seconds()) / (24*3600)
+    data = data.dropna()
+
+    data['Year'] = data['Open'].dt.year
+    data['DayOfYear'] = data['Open'].dt.dayofyear
+    data['Month'] = data['Open'].dt.month
+    data['DayOfWeek'] = data['Open'].dt.dayofweek
+    data['time_period'] = data['DayOfWeek'].apply(lambda x: 'day_weekday' if x < 5 else 'weekend')
+
+    data.rename(columns={'incident_id': 'IncidentID', 'type':'Incidents', 'location_group':'Location', 'location':'Building', 'latitude':'Latitude', 'longitude':'Longitude', 'username':'User'}, inplace=True)
+    data = data[['IncidentID', 'Open', 'Add', 'Close', 'Year', 'DayOfYear', 'Month', 'DayOfWeek', 'time_period', 'Building', 'Location', 'Latitude', 'Longitude', 'Incidents', 'User']]
+
+    #data = pd.read_csv("back/data/data_v0.2_intermediate(for checking)_with_status.csv")
     if incident_type:
         data = data.loc[data['Incidents'] == f"{incident_type}"]
     return data
