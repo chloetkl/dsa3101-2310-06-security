@@ -58,7 +58,8 @@
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 20px;
-            z-index: 1000;
+	    z-index: 1000;
+	    margin-top: 100px;
         }
 
         .modal-content {
@@ -70,6 +71,10 @@
             margin: 20px;
             margin-top: 380px;
         }
+
+	.hidden-column {
+	    display:none;
+	}
 
         .overlay {
             display: none;
@@ -88,11 +93,24 @@
         }
 
         /* Additional table styling */
-        table,
-        th,
-        td {
-            border: 1px solid black;
+        .table-container {
+	    max-height: 400px;	
+            overflow-y: auto;
         }
+
+	table {
+	    border-collapse: collapse;
+	}
+
+	th, td {
+	    border: 1px solid;
+	}
+
+	th {
+	    background-color: #f2f2f2;
+	    position: sticky;
+	    top: 0;
+	}
 
         h2 {
         margin-top: 40px;
@@ -116,7 +134,7 @@
 
     <iframe id="map" src="{{ url_for('static', filename='/color_coded_incidents_map.html') }}"></iframe>
 
-    <button class="pull-tab" onclick="openTab()">Open Tab</button>
+    <button class="pull-tab" onclick="openTab()">Table Tab</button>
 
     <!-- Fetched content shown as an overlay -->
     <div class="overlay" id="overlay">
@@ -182,8 +200,10 @@
                     <form id="addReportForm" method="POST">
                         <label for="id">Incident ID:</label>
                         <input type="text" id="id" required><br><br>
-                        <label for="datetime">Date and Time of Update:</label>
-                        <input type="text" id="datetime" required><br><br>
+			<label for="date">Date:</label>
+			<input type="date" id="date" required><br><br>
+                        <label for="time">Time:</label>
+                        <input type="text" id="time" required><br><br>
                         <label for="type">Incident Type:</label>
                         <select id="type" required>
                             <option>Lost and Found</option>
@@ -233,6 +253,7 @@
                 </div>
             </div>
 
+	    <div class="table-container">
             <table id="dataTable">
                 <thead>
                     <tr>
@@ -245,35 +266,36 @@
                         <th>Building</th>
                         <th>Status</th>
                         <th>User Added</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
+                        <th class="hidden-column">Latitude</th>
+                        <th class="hidden-column">Longitude</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for row in data %}
                     <tr>
-                        <td>{{ row['IncidentID'] }}</td>
-                        <td>{{ row['FirstUpdate'][:9] }}</td>
-                        <td>{{ row['FirstUpdate'][10:] }}</td>
-                        <td>{{ row['Incidents'] }}</td>
+                        <td>{{ row['Incident ID'] }}</td>
+                        <td>{{ row['Date'] }}</td>
+                        <td>{{ row['Time'] }}</td>
+                        <td>{{ row['Incident Type'] }}</td>
                         <td>{{ row['Priority'] }}</td>
                         <td>{{ row['Location'] }}</td>
                         <td>{{ row['Building'] }}</td>
                         <td>
-                            <select class="status-input">
+                            <select class="status-input" id="statusTable">
                                 <option value="open" {% if row['Status'] == 'Open' %}selected{% 
             endif %}>Open</option>
                                 <option value="close" {% if row['Status'] == 'Close' %}selected{% 
             endif %}>Close</option>
                             </select>
                         </td>
-                        <td>{{ row['User'] }}</td>
-                        <td>{{ row['Latitude'] }}</td>
-                        <td>{{ row['Longitude'] }}</td>
+                        <td>{{ row['User Added'] }}</td>
+                        <td class="hidden-column">{{ row['Latitude'] }}</td>
+                        <td class="hidden-column">{{ row['Longitude'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+	    </div>
         </div>
     </div>
 
@@ -310,7 +332,8 @@
         addReportForm.addEventListener("submit", function (event) {
             event.preventDefault();
             const id = document.getElementById("id").value;
-            const datetime = document.getElementById("datetime").value;
+            const date = document.getElementById("date").value;
+	    const time = document.getElementById("time").value;
             const type = document.getElementById("type").value;
             const priority = document.getElementById("priority").value;
             const location = document.getElementById("location").value;
@@ -324,8 +347,8 @@
 
             newRow.innerHTML = `
                 <td>${id}</td>
-                <td>${datetime.slice(0, 10)}</td>
-                <td>${datetime.slice(11)}</td>
+                <td>${date}</td>
+                <td>${time}</td>
                 <td>${type}</td>
                 <td>${priority}</td>
                 <td>${location}</td>
@@ -342,7 +365,8 @@
 
             // Clear form values
             document.getElementById("id").value = "";
-            document.getElementById("datetime").value = "";
+            document.getElementById("date").value = "";
+	    document.getElementById("time").value = "";
             document.getElementById("type").value = "";
             document.getElementById("priority").value = "";
             document.getElementById("location").value = "";
@@ -366,9 +390,9 @@
         userFilter.addEventListener("input", filterTable);
 
         function filterTable() {
-            const idFilterValue = idFilter.value.toLowerCase();
+            const idFilterValue = idFilter.value;
             const dateFilterValue = dateFilter.value;
-            const timeFilterValue = timeFilter.value.toLowerCase();
+            const timeFilterValue = timeFilter.value;
             const typeFilterValue = typeFilter.value.toLowerCase();
             const priorityFilterValue = priorityFilter.value.toLowerCase();
             const locationFilterValue = locationFilter.value.toLowerCase();
@@ -387,16 +411,16 @@
 
                 if (idColumn && dateColumn && timeColumn && typeColumn && priorityColumn &&
                     locationColumn && statusColumn && userColumn) {
-                    const idText = idColumn.textContent.toLowerCase();
+                    const idText = idColumn.textContent;
                     const dateText = dateColumn.textContent;
-                    const timeText = timeColumn.textContent.toLowerCase();
+                    const timeText = timeColumn.textContent;
                     const typeText = typeColumn.textContent.toLowerCase();
                     const priorityText = priorityColumn.textContent.toLowerCase();
                     const locationText = locationColumn.textContent.toLowerCase();
                     const statusText = statusColumn.textContent.toLowerCase();
                     const userText = userColumn.textContent.toLowerCase();
 
-                    const idMatch = idFilterValue === '' || idText.includes(codeFilterValue);
+                    const idMatch = idFilterValue === '' || idText.includes(idFilterValue);
                     const dateMatch = dateFilterValue === '' || dateText === dateFilterValue;
                     const timeMatch = timeFilterValue === '' || timeText.includes(timeFilterValue);
                     const typeMatch = typeFilterValue === 'all' || typeText.includes(typeFilterValue);
