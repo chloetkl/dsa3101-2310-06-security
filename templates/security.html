@@ -72,9 +72,9 @@
             margin-top: 380px;
         }
 
-	.hidden-column {
-	    display:none;
-	}
+        .hidden-column {
+            display:none;
+        }
 
         .overlay {
             display: none;
@@ -98,22 +98,28 @@
             overflow-y: auto;
         }
 
-	table {
-	    border-collapse: collapse;
-	}
+        table {
+            border-collapse: collapse;
+        }
 
-	th, td {
-	    border: 1px solid;
-	}
+        th, td {
+            border: 1px solid;
+        }
 
-	th {
-	    background-color: #f2f2f2;
-	    position: sticky;
-	    top: 0;
-	}
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
 
         h2 {
         margin-top: 40px;
+        }
+
+        #add-new-report-form-message {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none; /* Initially hide the message */
         }
 
     </style>
@@ -245,6 +251,7 @@
                             <option>Close</option>
                         </select><br><br>
                         <button type="submit">Add</button>
+                        <div id="add-new-report-form-message" class="message"></div>
                     </form>
                 </div>
             </div>
@@ -325,29 +332,32 @@
         });
 
         const addReportForm = document.getElementById("addReportForm");
-
+        const messageElement = document.getElementById("add-new-report-form-message");
         addReportForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            
-            // Capture form data
-            const formData = new FormData(addReportForm);
-            
-            // Send data to Flask route using fetch API
-            fetch('/security', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                // Handle response
-                console.log('Data sent successfully');
-                // Optionally, perform actions after successful submission
-            })
-            .catch(error => {
-                // Handle errors
-                console.error('Error sending data:', error);
-            });
+        event.preventDefault();
+
+        // Capture form data
+        const formData = new FormData(addReportForm);
+
+        // Send data to Flask route using fetch API
+        fetch('/security', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('Response status code:', response.status);
+            messageElement.textContent = 'Response status code: ' + response.status;
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            messageElement.textContent = 'Error sending data: ' + error.message;
+        })
+        .finally(() => {
+            // Show the message element
+            messageElement.style.display = 'block';
         });
-            
+    });
+                
             newRow.innerHTML = `
                 <td>${id}</td>
                 <td>${date}</td>

@@ -168,10 +168,14 @@ def security():
                 cursor.execute(query)
                 db.commit()
 
+            ## success
+            return jsonify({'message': f'New incident added successfully. Incident code: {incident_id}'}), 200
+
         except Exception as e:
             # Handle exceptions
             print(f"An error occurred: {e}")
             db.rollback()  # Rollback the changes in case of an error
+            return jsonify({'error': f'Failed to add data due to {e}'}), 500
 
         finally:
             if cursor:
