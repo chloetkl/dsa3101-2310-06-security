@@ -19,3 +19,23 @@ def establish_sql_connection():
 
     cursor = db.cursor()
     return db, cursor
+
+def get_location_id(building):
+    db, cursor = establish_sql_connection()
+    building = building.upper()
+    query = f"SELECT id FROM Incident_locations WHERE location = '{building}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    db.close()
+    return result[0] if result else None
+
+def get_incident_type_id(incident_type):
+    db, cursor = establish_sql_connection()
+    incident_type = incident_type.upper()
+    query = f"SELECT id FROM Incident_types WHERE type = '{incident_type}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    db.close()
+    return result[0] if result else None
