@@ -161,6 +161,7 @@ def add_user(username, password, role, email=None):
     except mysql.connector.Error as err:
         print(f"add_user | database error: {err}")
 
+add_user("admin", "admin", "admin", email=None)
 add_user("sec1", "sec1", "security", email=None)
 add_user("sec2", "sec2", "security", email=None)
 add_user("sec3", "sec3", "security", email=None)
