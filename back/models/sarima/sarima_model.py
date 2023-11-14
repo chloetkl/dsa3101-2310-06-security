@@ -7,8 +7,7 @@ import plotly.graph_objects as go
 import pickle
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from pmdarima import auto_arima
-from ....connect_sql import establish_sql_connection
-
+from connect_sql import establish_sql_connection
 from back.models.sarima.feature_eng import engineer_features
 
 def fetch_data(incident_type=False):
