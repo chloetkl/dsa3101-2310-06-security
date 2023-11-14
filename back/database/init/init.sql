@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS Incident_locations (
   id INT AUTO_INCREMENT PRIMARY KEY,
   location VARCHAR(255) UNIQUE,
   location_group_id INT,
-  latitude DECIMAL,
-  longitude DECIMAL,
+  latitude DECIMAL(12,9),
+  longitude DECIMAL(12,9),
   is_residence BOOLEAN,
   FOREIGN KEY (location_group_id) REFERENCES Incident_location_groups(id)
 );
