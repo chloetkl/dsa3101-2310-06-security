@@ -309,11 +309,15 @@
             overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
         }
 
+
         const addReportButton = document.getElementById("addReportButton");
         const modal = document.getElementById("modal");
         const modalContent = document.getElementById("modalContent");
         // const addReportForm = document.getElementById("addReportForm");
         // const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+        addReportButton.addEventListener("click", () => {
+                 modal.style.display = "block";
+                   });
 
         const idFilter = document.getElementById("idFilter");
         const dateFilter = document.getElementById("dateFilter");
@@ -327,36 +331,37 @@
         const table = document.getElementById("dataTable");
         const rows = table.getElementsByTagName("tr");
 
-        addReportButton.addEventListener("click", () => {
-            modal.style.display = "block";
-        });
-
         const addReportForm = document.getElementById("addReportForm");
         const messageElement = document.getElementById("add-new-report-form-message");
         addReportForm.addEventListener("submit", function(event) {
-        event.preventDefault();
+            event.preventDefault();
 
-        // Capture form data
-        const formData = new FormData(addReportForm);
+            // Capture form data
+            const formData = new FormData(addReportForm);
 
-        // Send data to Flask route using fetch API
-        fetch('/security', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            console.log('Response status code:', response.status);
-            messageElement.textContent = 'Response status code: ' + response.status;
-        })
-        .catch(error => {
-            console.error('Error:', error.message);
-            messageElement.textContent = 'Error sending data: ' + error.message;
-        })
-        .finally(() => {
-            // Show the message element
-            messageElement.style.display = 'block';
+            // Send data to Flask route using fetch API
+            fetch('/security', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Response status code:', response.status);
+                if (response.ok) {
+                messageElement.textContent = 'Response status code: ' + response.status;
+                addReportForm.reset(); // Clear the form on success (2xx status code)
+                } else {
+                throw new Error('Failed to add item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                messageElement.textContent = 'Error sending data: ' + error.message;
+            })
+            .finally(() => {
+                // Show the message element
+                messageElement.style.display = 'block';
+            });
         });
-    });
                 
             newRow.innerHTML = `
                 <td>${id}</td>
