@@ -6,6 +6,7 @@ from back.database.users.users import authenticate, add_user
 from back.models.apriori import get_rank
 from back.analytics.nuseda import plots
 from back.analytics.generate_heatmap import heatmap
+from back.analytics.map_pin import generate_map_points
 from connect_sql import establish_sql_connection
 from jinja2.exceptions import TemplateNotFound
 import pandas as pd
@@ -301,15 +302,13 @@ def heatmap_plot():
     except TemplateNotFound:
         return 'Template not found: Please generate plot first!'
 
-
-
-@app.route('/plots/color-coded-incidents', methods=['GET'])
+@app.route('/generate-map-pin', methods=['GET'])
 @login_required
-@role_required('analytics')
-def colour_plot():
-    return render_template(
-        "color_coded_incidents_map.html"
-    )
+@role_required('security')
+def map_pin_generation():
+    return generate_map_points()
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
