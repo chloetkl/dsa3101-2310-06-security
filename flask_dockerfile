@@ -14,6 +14,7 @@ COPY static static
 COPY templates templates
 COPY back/database back/database
 COPY back/models back/models
+COPY back/analytics back/analytics
 COPY front front
 
 # things to make nusecure.py work

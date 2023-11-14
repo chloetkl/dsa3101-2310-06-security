@@ -4,6 +4,11 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
 from back.models.apriori import get_rank
+from back.analytics.nuseda import plots
+from back.analytics.generate_heatmap import heatmap
+from back.analytics.map_pin import generate_map_points
+from connect_sql import establish_sql_connection
+from jinja2.exceptions import TemplateNotFound
 from connect_sql import establish_sql_connection, get_location_id, get_incident_type_id
 import pandas as pd
 
@@ -93,7 +98,7 @@ def home():
         
     return render_template('home.html')
 
-@app.route('/add_new_user', methods=['POST'])
+@app.route('/add-new-user', methods=['POST'])
 def add_new_user():
     data = request.get_json()
 
@@ -258,7 +263,7 @@ def analytics():
 #         VALUES ('{email}', '{username}', {role_id}, '{salt}', '{hash}')"
 
 # Endpoint to train SARIMA models for all incident types
-@app.route('/train_all', methods=['GET'])
+@app.route('/train-all', methods=['GET'])
 @login_required
 @role_required('analytics')
 def train_all():
@@ -267,7 +272,7 @@ def train_all():
     return jsonify({'message': 'All models trained successfully'})
 
 # Endpoint to generate forecast for all incident types
-@app.route('/forecast_all', methods=['GET'])
+@app.route('/forecast-all', methods=['GET'])
 @login_required
 @role_required('analytics')
 def get_all_forecasts():
@@ -276,7 +281,7 @@ def get_all_forecasts():
     return jsonify({'message': 'Forecasts generated for all incident types'})
 
 # Endpoint to get forecast plots for specified type
-@app.route('/get_forecast_plot', methods=['GET'])
+@app.route('/get-forecast-plot', methods=['GET'])
 @login_required
 @role_required('analytics')
 def get_forecast_plot():
@@ -295,7 +300,7 @@ def get_forecast_plot():
 # Apriori Algorithm 
 
 # Endpoint to get rank_priority
-@app.route('/rank_priority', methods=['GET'])
+@app.route('/rank-priority', methods=['GET'])
 @login_required
 @role_required('analytics')
 def rank_priority():
@@ -304,12 +309,85 @@ def rank_priority():
     day = request.args.get('day')
     hour = request.args.get('hour')
 
-
     try:
         return get_rank(location,day,hour)
     except TypeError:
         return 'Input not found.', 404
     
+#Data Visualization
+
+@app.route('/generate-plots', methods=['GET'])
+@login_required
+@role_required('analytics')
+def plot_generation():
+    return plots()
+
+
+
+@app.route('/plots/Monthly-Counts-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def monthly_plot():
+    try:
+        return render_template("Monthly_Counts_by_Year.html")
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!'
+
+@app.route('/plots/Daily-Counts-by-Year', methods=['GET'])
+def daily_plot():
+    try:
+        return render_template("Daily_Counts_by_Year.html")
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!'
+
+@app.route('/plots/Hourly-Counts-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def hourly_plot():
+    try:
+        return render_template("Hourly_Counts_by_Year.html")
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!'
+
+@app.route('/plots/Coun-_of-Location-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def location_plot():
+    try:
+        return render_template("Count_of_Location_by_Year.html")
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!'
+
+@app.route('/plots/Count-ofIncidents-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def incident_plot():
+    try:
+        return render_template("Count_of_Incidents_by_Year.html")
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!'
+
+@app.route('/generate-heatmap', methods=['GET'])
+@login_required
+@role_required('analytics')
+def heatmap_generation():
+    return heatmap()
+
+@app.route('/plots/heatmap', methods=['GET'])
+@login_required
+@role_required('analytics')
+def heatmap_plot():
+    try:
+        return render_template("heatmap1.html")
+    except TemplateNotFound:
+        return 'Template not found: Please generate plot first!'
+
+@app.route('/generate-map-pin', methods=['GET'])
+@login_required
+@role_required('security')
+def map_pin_generation():
+    return generate_map_points()
+
 
 
 if __name__ == "__main__":
