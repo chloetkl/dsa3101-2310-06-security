@@ -100,11 +100,19 @@ def home():
         elif role == 'analytics':
             return redirect(url_for('analytics'))
         elif role == 'admin':
-            return redirect(url_for('admin.admin'))
+            return redirect(url_for('admins'))
         
     return render_template('home.html')
 
-@app.route('/add-new-user', methods=['POST'])
+
+@login_required
+@role_required('admin')
+@app.route('/admins', methods=['GET', 'POST'])
+def admins():
+    user_id = current_user.id
+    return render_template('admin.html')
+
+@app.route('/admins/add-new-user', methods=['POST'])
 def add_new_user():
     data = request.get_json()
 
