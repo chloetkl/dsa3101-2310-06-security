@@ -5,22 +5,11 @@ from mlxtend.frequent_patterns import apriori
 import matplotlib.pyplot as plt
 import warnings
 
-app = Flask(__name__)
-get_defaults = { 'location': 'PgP', 
-                 'day': 'Saurday', 
-                 'hour':'Mornig'
-                 }
-
-@app.route('/rank_priority', methods=['GET'],defaults=get_defaults)
 def get_rank(location,day,hour):
-  location = request.args.get('location', default=location)
-  day = request.args.get('day', default=day)
-  hour = request.args.get('hour', default=hour)
-
   db,cursor = establish_sql_connection()
   query = "SELECT  ilocg.location_group as Location, ilog.time as Time\
         FROM Incident_logs ilog, Incidents i,  Incident_locations iloc, Incident_location_groups ilocg\
-        WHERE ilog.id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id\
+        WHERE ilog.incident_id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id\
         AND ilog.status='OPEN' "
   cursor.execute(query)
   result = cursor.fetchall()
@@ -83,9 +72,6 @@ def get_rank(location,day,hour):
       if test==fc['itemsets'][i]:
         rank=fc['rank'][i]
         total=fc.shape[0]
-        return f'Priority {rank+1} out of {total}'
+        return f'{test} : Priority {rank+1} out of {total}'
 
-  return "Error: Check spelling or format! e.g. location=PGP, day=Saturday, hour=Afternoon \nOR \nNew Combination. Please add to the database!"
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=4998, debug=True)
+  return f"{test} Error: Check spelling or format! e.g. location=PGP, day=Saturday, hour=Afternoon \nOR \nNew Combination. Please add to the database!"

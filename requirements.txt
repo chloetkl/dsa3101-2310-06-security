@@ -11,3 +11,4 @@ flask-login
 folium
 matplotlib
 plotly
+mlxtend
