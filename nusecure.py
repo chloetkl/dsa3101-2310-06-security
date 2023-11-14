@@ -4,15 +4,12 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
 from back.models.apriori import get_rank
-<<<<<<< HEAD
 from back.analytics.nuseda import plots
 from back.analytics.generate_heatmap import heatmap
 from back.analytics.map_pin import generate_map_points
 from connect_sql import establish_sql_connection
 from jinja2.exceptions import TemplateNotFound
-=======
 from connect_sql import establish_sql_connection, get_location_id, get_incident_type_id
->>>>>>> main
 import pandas as pd
 
 app = Flask(__name__)
