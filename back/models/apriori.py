@@ -9,7 +9,7 @@ def get_rank(location,day,hour):
   db,cursor = establish_sql_connection()
   query = "SELECT  ilocg.location_group as Location, ilog.time as Time\
         FROM Incident_logs ilog, Incidents i,  Incident_locations iloc, Incident_location_groups ilocg\
-        WHERE ilog.id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id\
+        WHERE ilog.incident_id=i.id AND i.location_id=iloc.id AND iloc.location_group_id=ilocg.id\
         AND ilog.status='OPEN' "
   cursor.execute(query)
   result = cursor.fetchall()
