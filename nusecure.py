@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
 from back.models.apriori import get_rank
+from back.analytics.nuseda import plots
 from connect_sql import establish_sql_connection
 import pandas as pd
 
@@ -225,12 +226,60 @@ def rank_priority():
     day = request.args.get('day')
     hour = request.args.get('hour')
 
-
     try:
         return get_rank(location,day,hour)
     except TypeError:
         return 'Input not found.', 404
     
+#Data Visualization
+
+@app.route('/generate_plots', methods=['GET'])
+@login_required
+@role_required('analytics')
+def plot_generation():
+    return plots()
+
+@app.route('/plots/Monthly_Counts_by_Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def month_plot():
+    return render_template(
+        "Monthly_Counts_by_Year.html"
+    )
+
+@app.route('/plots/Daily_Counts_by_Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def daily_plot():
+    return render_template(
+        "Daily_Counts_by_Year.html"
+    )
+
+@app.route('/plots/Hourly_Counts_by_Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def hourly_plot():
+    return render_template(
+        "Hourly_Counts_by_Year.html"
+    )
+
+@app.route('/plots/Count_of_Location_by_Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def location_plot():
+    return render_template(
+        "Count_of_Location_by_Year.html"
+    )
+
+@app.route('/plots/Count_of_Incidents_by_Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def incident_plot():
+    return render_template(
+        "Count_of_Incidents_by_Year.html"
+    )
+
+
 
 
 if __name__ == "__main__":
