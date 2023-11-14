@@ -349,7 +349,7 @@ def hourly_plot():
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
-@app.route('/plots/Coun-_of-Location-by-Year', methods=['GET'])
+@app.route('/plots/Count-of-Location-by-Year', methods=['GET'])
 @login_required
 @role_required('analytics')
 def location_plot():
@@ -358,7 +358,7 @@ def location_plot():
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
-@app.route('/plots/Count-ofIncidents-by-Year', methods=['GET'])
+@app.route('/plots/Count-of-Incidents-by-Year', methods=['GET'])
 @login_required
 @role_required('analytics')
 def incident_plot():
