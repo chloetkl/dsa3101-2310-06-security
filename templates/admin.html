@@ -64,6 +64,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999; /* Set a higher z-index to bring the modal to the front */
         }
 
         .modal-content {
@@ -73,6 +74,7 @@
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 20px;
+            z-index: 10000; /* Set a higher z-index than the modal */
         }
 
         /* Table styles */
@@ -84,6 +86,7 @@
             left: 30px;
             right: 30px;
             top: 200px; /* Adjusted position */
+            z-index: 1; /* Lower z-index for the table to be behind the modal */
         }
 
         th, td {
@@ -115,16 +118,15 @@
 
     <div id="modal" class="modal">
         <div id="modalContent" class="modal-content">
+            <button id="closeModal" style="position: absolute; top: 5px; right: 5px;">X</button>
             <h2>Add User</h2>
             <form id="addUserForm" method="POST">
-                <label for="id">User ID:</label>
-                <input type="text" id="id" required><br><br>
 
                 <label for="username">Username:</label>
                 <input type="text" id="username" required><br><br>
 
                 <label for="email">Email:</label>
-                <input type="text" id="email" required><br><br>
+                <input type="text" id="email"><br><br>
                 
                 <label for="role">Role:</label>
                 <select id="role" required>
@@ -147,7 +149,6 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Password</th>
             </tr>
         </thead>
         <tbody>
@@ -157,7 +158,6 @@
                 <td>{{ row['Username'] }}</td>
                 <td>{{ row['Email'] }}</td>
                 <td>{{ row['Role'] }}</td>
-                <td>{{ row['Password'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -168,6 +168,15 @@
         const modal = document.getElementById("modal");
         const modalContent = document.getElementById("modalContent");
 
+        const closeModalBtn = document.getElementById("closeModal");
+        closeModalBtn.addEventListener("click", function() {
+            // Close the modal
+            document.getElementById("modal").style.display = "none";
+
+            // Trigger a page refresh
+            location.reload();
+        });
+
         const addUserForm = document.getElementById("addUserForm");
         const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
         const table = document.getElementById("dataTable");
@@ -177,38 +186,57 @@
             modal.style.display = "block";
         });
 
-        addReportForm.addEventListener("submit", function (event) {
+        addUserForm.addEventListener("submit", function (event) {
             event.preventDefault();
-            
+
             // Fetch form values
-            const userId = document.getElementById("id").value;
             const username = document.getElementById("username").value;
             const email = document.getElementById("email").value;
             const role = document.getElementById("role").value;
             const password = document.getElementById("password").value;
-            
-            const newRow = document.createElement("tr");
 
-            newRow.innerHTML = `
-                <td>${userId}</td>
-                <td>${username}</td>
-                <td>${email}</td>
-                <td>${role}</td>
-                <td>${password}</td>
-            `;
+            const formData = {
+                username: username,
+                email: email,
+                role: role,
+                password: password
+            };
 
-            let tableBody = document.getElementById("yourTableBodyID");
-            tableBody.insertBefore(newRow, tableBody.firstChild);
+            fetch('/admin/add-new-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Parse the response JSON
+                } else {
+                    throw new Error('Failed to add user');
+                }
+            })
+            .then(data => {
+                // Handle the response data here
+                console.log(data); // Log the response for demonstration
+                // You can display a success message or update the UI accordingly
+                // For example:
+                // const messageElement = document.getElementById('addUserMessage');
+                // messageElement.textContent = data.message; // Display the message
 
-            document.getElementById("userId").value = "";
-            document.getElementById("username").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("role").value = "";
-            document.getElementById("password").value = "";
-            
-            // Close the modal
-            modal.style.display = "none";
+                // Clear the input fields on successful addition
+                document.getElementById("username").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("role").value = "";
+                document.getElementById("password").value = "";
+            })
+            .catch(error => {
+                // Handle errors or failed responses
+                console.error('Error:', error.message);
+                // Display an error message or handle the error condition
+            });
         });
+
 
     </script>
 </body>

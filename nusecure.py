@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Flask, request, send_file, render_template, jsonify, redirect, url_for
+from flask import Flask, request, send_file, render_template, jsonify, redirect, url_for, Blueprint
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
@@ -7,11 +7,15 @@ from back.models.apriori import get_rank
 from connect_sql import establish_sql_connection
 import pandas as pd
 
+
 app = Flask(__name__)
 app.secret_key = 'secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+## add blueprints
+from app.admin import admin_bp
+app.register_blueprint(admin_bp)
 
 class User(UserMixin):
     def __init__(self, user_id, username, role):
@@ -90,6 +94,8 @@ def home():
             return redirect(url_for('security'))
         elif role == 'analytics':
             return redirect(url_for('analytics'))
+        elif role == 'admin':
+            return redirect(url_for('admin.admin'))
         
     return render_template('home.html')
 
