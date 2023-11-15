@@ -47,6 +47,7 @@ def add_incident_locations(filepath):
 
         # Populate Incident_location_groups table with unique locations
         location_groups_added = 0
+        duplicated = 0
         for location in unique_locations:
             try:
                 query = f"INSERT INTO Incident_location_groups(location_group) VALUES ('{location}')"
@@ -54,10 +55,15 @@ def add_incident_locations(filepath):
                 db.commit()
                 location_groups_added += 1
             except mysql.connector.Error as err:
-                print(f"add_incident_locations | Error adding location group: {err}")
+                if 'Duplicate' in str(err):
+                    duplicated += 1
+                else:
+                    print(f"add_incident_locations | Error adding location group: {err}")
         print(f"add_incident_locations | Location Groups added: {location_groups_added}")
+        print(f"add_incident_locations | Location Groups previously added: {duplicated}")
         # Map CSV columns to MySQL columns and insert data into Incident_location table
         locations_added = 0
+        duplicated = 0
         for index, row in df.iterrows():
             building = row['Buildings']
             location = row['Location']
@@ -77,9 +83,13 @@ def add_incident_locations(filepath):
                 db.commit()
                 locations_added += 1
             except mysql.connector.Error as err:
-                print(f"add_incident_locations | Error adding incident location: {err}")
+                if 'Duplicate' in str(err):
+                    duplicated += 1
+                else:
+                    print(f"add_incident_locations | Error adding incident location: {err}")
 
         print(f"add_incident_locations | Locations added: {locations_added}")
+        print(f"add_incident_locations | Locations previously added: {duplicated}")
         cursor.close()
         db.close()
 
@@ -117,7 +127,10 @@ def add_incident_types(filepath):
         db.close()
 
     except mysql.connector.Error as err:
-        print(f"add_incident_types | database error: {err}")
+        if 'Duplicate' in str(err):
+            "add_incident_types | Incident typess previously added"
+        else:
+            print(f"add_incident_types | database error: {err}")
 
 
 ## perform default adds
@@ -126,15 +139,14 @@ add_user_roles('./populate/User_roles.txt')
 add_incident_types('./populate/Incident_types.txt')
 add_incident_locations("./populate/Incident_location.csv")
 
-## ADD user
 def add_user(username, password, role, email=None):
+    
     try: 
         ## establish connection
         db, cursor = establish_sql_connection()
         if db is None:
             print("add_user_roles | Failed to establish a database connection.")
-            return
-        # print(f'add_user | db established: {db.is_connected()}')
+            return False
 
         ## generate hash and salt
         salt = bcrypt.gensalt()
@@ -142,7 +154,7 @@ def add_user(username, password, role, email=None):
 
         ## get role id
         query = f'SELECT id FROM User_roles \
-                                 where role = \'{role}\';'
+                                    where role = \'{role}\';'
         cursor.execute(query)
         role_id=cursor.fetchone()[0]
 
@@ -154,12 +166,18 @@ def add_user(username, password, role, email=None):
         cursor.execute(query)
         db.commit()
         print(f"add_user | User added: {username}")
-
-        cursor.close()
-        db.close()
-
+    
     except mysql.connector.Error as err:
-        print(f"add_user | database error: {err}")
+        if 'Duplicate' in str(err):
+            print(f"add_user | User found in database: {username}")
+        else:
+            print(f"add_user | database error: {err}")
+
+    if cursor:
+        cursor.close()
+    if db:
+        db.close()
+    return True
 
 add_user("admin", "admin", "admin", email=None)
 add_user("sec1", "sec1", "security", email=None)
@@ -170,42 +188,6 @@ add_user("sec5", "sec5", "security", email=None)
 add_user("analytics1", "analytics1", "analytics", email=None)
 add_user("analytics2", "analytics2", "analytics", email=None)
 add_user("analytics3", "analytics3", "analytics", email=None)
-
-## AUTHENTICATE user
-def authenticate(user,password):
-    try:
-        db, cursor = establish_sql_connection()
-        if db is None:
-            print("add_user_roles | Failed to establish a database connection.")
-            return
-        query = f"SELECT hash from Users where username = \'{user}\'"
-        cursor.execute(query)
-        hash_stored = cursor.fetchall()
-
-        ## Check username
-        if len(hash_stored) == 0:
-            print("authenticate | User not found")
-            return False
-        
-        ## Pull shash salt
-        hash_stored = hash_stored[0][0]
-        query = f"SELECT salt from Users where username = \'{user}\'"
-        cursor.execute(query)
-        salt = cursor.fetchone()[0]
-        hash_entered = bcrypt.hashpw(password.encode('utf-8'),salt.encode('utf-8'))
-
-        cursor.close()
-        db.close()
-    
-    except mysql.connector.Error as err:
-        print(f"authenticate | database error: {err}")
-
-
-    ## Check results
-    authenticated = bcrypt.checkpw(password.encode('utf-8'),hash_stored.encode('utf-8'))
-    
-    return authenticated
-
 
 
 ## Checks
