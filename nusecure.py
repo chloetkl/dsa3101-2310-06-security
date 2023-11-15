@@ -108,11 +108,13 @@ def home():
 
 @app.route("/prediction")
 @login_required
+@role_required('analytics')
 def send_p():
     return send_file("back/data/test.png")
 
 @app.route('/security', methods=['GET', 'POST'])
 @login_required
+@role_required('security')
 def security():
     user_id = current_user.id
     print(f"User {user_id} is authenticated")
@@ -246,23 +248,6 @@ def analytics():
     user_id = current_user.id
     return render_template('analytics.html')
 
-
-# @app.route("/add_user", methods = ["POST"])
-# def add_user(email, username, role_id, password):
-#     email = request.args.get('email')
-#     username = request.args.get('username')
-#     role_id = request.args.get('role_id')
-#     password = request.args.get('password')
-#     salt = bcrypt.gensalt()
-#     hash = bcrypt.hashpw(password, salt)
-
-#     db = establish_sql_connection()
-#     cursor = db.cursor
-#     query = f"\
-#         INSERT INTO Users\
-#         (email, username, role_id, salt, hash)\
-#         VALUES ('{email}', '{username}', {role_id}, '{salt}', '{hash}')"
-
 # Endpoint to train SARIMA models for all incident types
 @app.route('/train-all', methods=['GET'])
 @login_required
@@ -335,6 +320,8 @@ def monthly_plot():
         return 'TemplateNotFound: Please generate plot first!'
 
 @app.route('/plots/Daily-Counts-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
 def daily_plot():
     try:
         return send_file("static/Daily_Counts_by_Year.html", mimetype='text/html')
