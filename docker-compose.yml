@@ -10,6 +10,7 @@ services:
     ports:
       - "9001:5000"
     volumes:
+      - ./nusecure.py:/nusecure.py
       - ./static:/static
       - ./templates:/templates
       - ./back/database:/back/database
