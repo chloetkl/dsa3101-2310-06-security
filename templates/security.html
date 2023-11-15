@@ -222,6 +222,28 @@
             font-weight: bold;
             display: none; /* Initially hide the message */
         }
+
+        .navigation-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            left: 40px;
+            top: 25px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            margin: 0;
+            transition: padding-left 0.4s;
+            text-align: left;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Hover effect for the navigation buttons */
+        .navigation-button:hover {
+            padding-left: 10px; /* Adjust padding as needed */
+        }
     </style>
 </head>
 
@@ -239,11 +261,31 @@
             </a>
         </header>
         <ul>
-            <li><a href="" onclick="showSection('dashboard')">Dashboard</a></li>
-            <li><a href="#" onclick="showSection('map')">Map</a></li>
-            <li><a href="#" onclick="showSection('patrolRoutes')">Patrol Routes</a></li>
-            <li><a href="#" onclick="showSection('settings')">Settings</a></li>
-            <li><a href="#" onclick="showSection('logout')">Logout</a></li>
+            <li>
+                <a href="" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('map')">
+                    <i class="fas fa-map"></i> Map
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('patrolRoutes')">
+                    <i class="fas fa-route"></i> Patrol Routes
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </li>
+            <li>
+                <button class="navigation-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 16.9px;"></i> Logout
+                </button>
+            </li>            
         </ul>
     </div>
 
@@ -330,7 +372,6 @@
                                 <option>Stolen Items</option>
                                 <option>Emergency Incidents</option>
                                 <option>Sexual Incidents</option>
-
                             </select><br><br>
                             <label for="priority">Priority:</label>
                             <select id="priority" name="priority" required>
@@ -436,6 +477,7 @@
         <!-- Logout Section Content -->
         <h2>Logout Section</h2>
         <p>This is the Logout content.</p>
+        <button onclick="redirectToHomePage()">Logout and Redirect</button>
     </section>
 
     <script>
@@ -509,37 +551,15 @@
                 messageElement.style.display = 'block';
             });
         });
-                
-            newRow.innerHTML = `
-                <td>${id}</td>
-                <td>${date}</td>
-                <td>${time}</td>
-                <td>${type}</td>
-                <td>${priority}</td>
-                <td>${location}</td>
-                <td>${building}</td>
-                <td>${status}</td>
-                <td>${user}</td>
-                <td>${latitude}</td>
-                <td>${longitude}</td>
-            `;
-
-            // Insert the new row at the beginning of the table
-            let tableBody = document.getElementById("yourTableBodyID"); // Replace "yourTableBodyID" with your actual table body ID
-            tableBody.insertBefore(newRow, tableBody.firstChild);
 
             // Clear form values
-            document.getElementById("id").value = "";
-            document.getElementById("date").value = "";
-	        document.getElementById("time").value = "";
+            document.getElementById("datetime").value = "";
+            document.getElementById("description").value = "";
             document.getElementById("type").value = "";
             document.getElementById("priority").value = "";
             document.getElementById("location").value = "";
             document.getElementById("building").value = "";
             document.getElementById("status").value = "";
-            document.getElementById("user").value = "";
-            document.getElementById("latitude").value = "";
-            document.getElementById("longitude").value = "";
 
             // Close the modal
             modal.style.display = "none";
@@ -624,7 +644,12 @@
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
         }
+
+        function logout() {
+            // Redirect to the home page URL
+            window.location.href = '/';
+        }
     </script>
-    </body>
+</body>
     
-    </html>
+</html>

@@ -1,14 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
+        *{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        text-decoration: none;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
+        font-family: 'Roboto', sans-serif;
+        }
+
+        .sidebar {
+        position: fixed;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background: #ffffff;
+        transition: all .5s ease;
+        border-right: 1px solid black;
+        }
+
+        .sidebar header a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: black;
+        }
+
+        .sidebar header img {
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .sidebar header {
+        font-size: 20px;
+        color: rgb(0, 0, 0);
+        line-height: 70px;
+        text-align: center;
+        background: #ffffff;
+        user-select: none;
+        }
+
+        .sidebar ul a{
+        display: block;
+        height: 100%;
+        width: 100%;
+        line-height: 65px;
+        font-size: 20px;
+        color: rgb(0, 0, 0);
+        padding-left: 40px;
+        box-sizing: border-box;
+        border-bottom: 1px solid black;
+        border-top: 1px solid rgba(255,255,255,.1);
+        transition: .4s;
+        }
+
+        ul li:hover a{
+        padding-left: 50px;
+        }
+
+        .sidebar ul a i{
+        margin-right: 16px;
+        }
+
+        #check{
+        display: none;
+        }
+
+        label #btn,label #cancel{
+        position: absolute;
+        color: #2596be;
+        border-radius: 3px;
+        cursor: pointer;
+        }
+
+        label #btn{
+        left: 40px;
+        top: 25px;
+        font-size: 35px;
+        color: rgb(0, 0, 0);
+        padding: 6px 12px;
+        transition: all .5s;
+        }
+
+        label #cancel{
+        z-index: 1111;
+        left: -195px;
+        top: 17px;
+        font-size: 30px;
+        color: #000000;
+        padding: 4px 9px;
+        transition: all .5s ease;
+        }
+
+        #check:checked ~ .sidebar{
+        left: 0;
+        }
+
+        #check:checked ~ label #btn{
+        left: 250px;
+        opacity: 0;
+        pointer-events: none;
+        }
+
+        #check:checked ~ label #cancel{
+        left: 195px;
+        }
+
+        #check:checked ~ section{
+        margin-left: 250px;
+        }
+
+        section {
+        width: 100vw; /* Use full viewport width */
+        height: 100vh; /* Use full viewport height */
+        margin: 0; /* Remove default margin */
+        padding: 0; /* Remove default padding */
+        overflow: auto; /* Add scrollbars if content exceeds viewport */
+        background: #f0f0f0; /* Background color (change as needed) */
+        }
+
+        .navigation-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
             padding: 0;
+            left: 40px;
+            top: 25px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            margin: 0;
+            transition: padding-left 0.4s;
+            text-align: left;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Hover effect for the navigation buttons */
+        .navigation-button:hover {
+            padding-left: 10px; /* Adjust padding as needed */
         }
 
         .tabs {
@@ -58,19 +196,100 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="header-container">
-        <div class="logo">
-            <img src="https://www.nus.edu.sg/images/default-source/identity-images/NUS_logo_full-horizontal.jpg" alt="NUS Logo" style="height: 100px;">
-        </div>
-        <div class="header">
-            <h1>NUSecure</h1>
-        </div>
-        <div class="analytics-team">
-            <h1>Analytics Team</h1>
-        </div>
+    <input type="checkbox" id="check">
+    <label for="check">
+        <i class="fas fa-bars" id="btn"></i>
+        <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+        <header>
+            <a href="https://imgbb.com/">
+                <img src="https://i.ibb.co/DKf23HJ/Screenshot-2023-11-15-132345-removebg-preview-1.png" alt="My App Logo" border="0">
+                <span>Analytics Team</span>
+            </a>
+        </header>
+        <ul>
+            <li>
+                <a href="" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('analytics')">
+                    <i class="fas fa-map"></i> Analytics
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('predictions')">
+                    <i class="fas fa-route"></i> Predictions
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </li>
+            <li>
+                <button class="navigation-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 16.9px;"></i> Logout
+                </button>
+            </li>            
+        </ul>
     </div>
 
+    <section id="dashboardSection">
+        <a href="https://ibb.co/9bspgLc">
+            <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
+        </a>
+    </section>
+
+    <section id="analyticsSection">
+        <div class="content" id="AnalyticsContent">
+            <h2>Analytics Page</h2>
+            <div class="filters">
+                <form>
+                    <label for="Location">Location:</label>
+                    <select id="Location">
+                        <option value="Canteen">Canteen</option>
+                        <option value="Faculty">Faculty</option>
+                        <option value="Halls">Halls</option>
+                        <option value="Libraries">Libraries</option>
+                    </select>
+                    <br>
+                    <label for="Crimes">Incident Types:</label>
+                    <br>
+                    <input type="checkbox" id="LostFound" name="LostFound" value="Lost and Found" checked>
+                    <label for="LostFound">Lost and Found</label>
+                    <br>
+                    <input type="checkbox" id="StolenItems" name="StolenItems" value="Stolen Items">
+                    <label for="StolenItems">Stolen Items</label>
+                    <input type="checkbox" id="DamagedProperties" name="DamagedProperties" value="Damaged Properties">
+                    <label for="DamagedProperties">Damaged Properties</label>
+                    <br>
+                    <input type="checkbox" id="SexualIncidents" name="SexualIncidents" value="Sexual Incidents">
+                    <label for="SexualIncidents">Sexual Incidents</label>
+                    <br>
+                    <label for="FromDate">From Date:</label>
+                    <input type="date" id="FromDate">
+                    <br>
+                    <label for="ToDate">To Date:</label>
+                    <input type="date" id="ToDate">
+                </form>
+            </div>
+            <div class="chart-container">
+                <div id="chart1" class="chart"></div>
+                <div id="chart2" class="chart"></div>
+                <div id="chart3" class="chart"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="predictionsSection" style="display: none;">
+        <h2>Predictions Page</h2>
+        <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="100%" height="600"></iframe>
+    </section>
     <div class="container">
         <div class="performance-container">
             <h2 style="font-size: 38px;">Data Analytics Dashboard</h2>
@@ -252,6 +471,22 @@
                 document.getElementById('AnalyticsContent').style.display = 'none';
                 document.getElementById('PredictionsContent').style.display = 'block';
             }
+        }
+
+        function showSection(sectionId) {
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            if (section.id === sectionId + 'Section') {
+            section.style.display = 'block';
+            } else {
+            section.style.display = 'none';
+            }
+        });
+        }
+
+        function logout() {
+            // Redirect to the home page URL
+            window.location.href = '/';
         }
 
         function trainAllModels() {
