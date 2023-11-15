@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	table, th, td {
+    	border:1px solid black;
+    }
+    .modal {
+    	display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+     }
+     .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+     }
+</style>
+</head>
+
+<h2>Filter By:</h2>
+
+<input type="text" id="idFilter" placeholder="Filter by Incident ID">
+<input type="date" id="dateFilter">
+<input type="text" id="timeFilter" placeholder="Filter by Time">
+<select id="typeFilter">
+	<option value="all">Incident Type</option>
+    <option value="lost and found">Lost and Found</option>
+    <option value="damaged property">Damaged Property</option>
+    <option value="stolen items">Stolen Items</option>
+    <option value="sexual incidents">Sexual Incidents</option>
+</select>
+<select id="priorityFilter">
+	<option value="all">Priority</option>
+    <option value="normal">Normal</option>
+    <option value="high">High</option>
+</select>
+<select id="locationFilter">
+    <option value="all">Location</option>
+    <option value="biz">BIZ</option>
+    <option value="btc">BTC</option>
+    <option value="cde">CDE</option>
+    <option value="com">COM</option>
+    <option value="dnms">DNMS</option>
+    <option value="fass">FASS</option>
+    <option value="fos">FOS</option>
+    <option value="hall">Hall</option>
+    <option value="hmkt">HMKT</option>
+    <option value="kr">KR</option>
+    <option value="kv">KV</option>
+    <option value="oth">OTH</option>
+    <option value="pgp">PGP</option>
+    <option value="soc">SOC</option>
+    <option value="ucc">UCC</option>
+    <option value="utown">UTown</option>
+    <option value="yih">YIH</option>
+</select>
+<select id="statusFilter">
+    <option value="all">Status</option>
+    <option value="open">Open</option>
+    <option value="close">Close</option>
+</select>
+<select id="userFilter">
+    <option value="all">User Added</option>
+    <option value="sec1">sec1</option>
+    <option value="sec2">sec2</option>
+    <option value="sec3">sec3</option>
+    <option value="sec4">sec4</option>
+    <option value="sec5">sec5</option>
+</select>
+
+<body>
+<h2>Incidents Table</h2>
+
+<button id="addReportButton">New Report</button><br><br>
+<div id="modal" class="modal">
+    <div id="modalContent" class="modal-content">
+        <h2>Add New Report</h2>
+        <form id="addReportForm" method="POST">
+            <label for="id">Incident ID:</label>
+            <input type="text" id="id" required><br><br>
+            <label for="datetime">Date and Time of Update:</label>
+            <input type="text" id="datetime" required><br><br>
+            <label for="type">Incident Type:</label>
+            <select id="type" required>
+                <option>Lost and Found</option>
+                <option>Damaged Property</option>
+                <option>Stolen Items</option>
+                <option>Sexual Incidents</option>
+            </select><br><br>
+            <select id="priority" required>
+                <option>Normal</option>
+                <option>High</option>
+            </select><br><br>
+            <label for="location">Location:</label>
+            <select id="location" required>
+    			<option>BIZ</option>
+    			<option>BTC</option>
+    			<option>CDE</option>
+    			<option>COM</option>
+    			<option>DNMS</option>
+    			<option>FASS</option>
+    			<option>FOS</option>
+    			<option>Hall</option>
+    			<option>HMKT</option>
+    			<option>KR</option>
+    			<option>KV</option>
+    			<option>OTH</option>
+    			<option>PGP</option>
+    			<option>SOC</option>
+    			<option>UCC</option>
+    			<option>UTown</option>
+    			<option>YIH</option>
+            </select><br><br>
+            <label for="building">Building:</label>
+            <input type="text" id="building" required><br><br>
+            <label for="status">Status:</label>
+            <select id="status" required>
+                <option>Open</option>
+                <option>Close</option>
+            </select><br><br>
+            <label for="user">User Added:</label>
+            <input type="text" id="user" required><br><br>
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" required><br><br>
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" required><br><br>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</div>
+
+<table id="dataTable">
+    <thead>
+        <tr>
+            <th>Incident ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Incident Type</th>
+            <th>Priority</th>
+            <th>Location</th>
+            <th>Building</th>
+            <th>Status</th>
+            <th>User Added</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+    	<tr>
+        	<td>{{ row['IncidentID'] }}</td>
+       		<td>{{ row['FirstUpdate'][:9] }}</td>
+        	<td>{{ row['FirstUpdate'][10:] }}</td>
+        	<td>{{ row['Incidents'] }}</td>
+            <td>{{ row['Priority'] }}</td>
+            <td>{{ row['Location'] }}</td>
+            <td>{{ row['Building'] }}</td>
+            <td>
+            	<select class="status-input">
+                	<option value="open" {% if row['Status'] == 'Open' %}selected{% 
+endif %}>Open</option>
+                	<option value="close" {% if row['Status'] == 'Close' %}selected{% 
+endif %}>Close</option>
+            	</select>
+            </td>
+        	<td>{{ row['User'] }}</td>
+            <td>{{ row['Latitude'] }}</td>
+            <td>{{ row['Longitude'] }}</td>
+    	</tr>
+    	{% endfor %}
+    </tbody>
+</table>
+            
+<script>            
+    const addReportButton = document.getElementById("addReportButton");   
+    const modal = document.getElementById("modal");
+    const modalContent = document.getElementById("modalContent");
+    const addReportForm = document.getElementById("addReportForm");
+    const tableBody = 
+document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+    
+    const idFilter = document.getElementById("idFilter");
+    const dateFilter = document.getElementById("dateFilter");
+    const timeFilter = document.getElementById("timeFilter");
+    const typeFilter = document.getElementById("typeFilter");
+    const priorityFilter = document.getElementById("priorityFilter");
+    const locationFilter = document.getElementById("locationFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const userFilter = document.getElementById("userFilter");
+            
+    const table = document.getElementById("dataTable");
+    const rows = table.getElementsByTagName("tr");
+    
+	addReportButton.addEventListener("click", () => {
+    	modal.style.display = "block";
+	});
+            
+    addReportForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const id = document.getElementById("id").value;
+        const datetime = document.getElementById("datetime").value;
+        const type = document.getElementById("type").value;
+        const priority = document.getElementById("priority").value;
+        const location = document.getElementById("location").value;
+        const building = document.getElementById("building").value;
+        const status = document.getElementById("status").value;
+        const user = document.getElementById("user").value;
+        const latitude = document.getElementById("latitude").value;
+        const longitude = document.getElementById("longitude").value;
+            
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td>${id}</td>
+            <td>${datetime[:9]}</td>
+            <td>${datetime[10:]}</td>
+            <td>${type}</td>
+            <td>${priority}</td>
+            <td>${location}</td>
+            <td>${building}</td>
+            <td>${status}</td>
+            <td>${user}</td>
+            <td>${latitude}</td>
+            <td>${longitude}</td>
+        `;
+         tableBody.insertBefore(newRow, tableBody.firstChild);
+            
+        // Clear form values
+        document.getElementById("id").value = "";
+        document.getElementById("datetime").value = "";
+        document.getElementById("type").value = "";
+        document.getElementById("priority").value = "";
+        document.getElementById("location").value = "";
+        document.getElementById("building").value = "";
+        document.getElementById("status").value = "";
+        document.getElementById("user").value = "";
+        document.getElementById("latitude").value = "";
+        document.getElementById("longitude").value = "";
+
+        // Close the modal
+        modal.style.display = "none";
+    });
+    
+    idFilter.addEventListener("input", filterTable);
+    dateFilter.addEventListener("input", filterTable);
+    timeFilter.addEventListener("input", filterTable);
+    typeFilter.addEventListener("input", filterTable);
+    priorityFilter.addEventListener("input", filterTable);
+    locationFilter.addEventListener("input", filterTable);
+    statusFilter.addEventListener("input", filterTable);
+    userFilter.addEventListener("input", filterTable);
+    
+    function filterTable() {
+        const idFilterValue = idFilter.value.toLowerCase();
+        const dateFilterValue = dateFilter.value;
+        const timeFilterValue = timeFilter.value.toLowerCase();
+        const typeFilterValue = typeFilter.value.toLowerCase();
+        const priorityFilterValue = priorityFilter.value.toLowerCase();
+        const locationFilterValue = locationFilter.value.toLowerCase();
+        const statusFilterValue = statusFilter.value.toLowerCase();
+        const userFilterValue = userFilter.value.toLowerCase();
+        
+        for (let i = 1; i < rows.length; i++) {
+            const idColumn = rows[i].getElementsByTagName("td")[0];
+            const dateColumn = rows[i].getElementsByTagName("td")[1];
+            const timeColumn = rows[i].getElementsByTagName("td")[2];
+            const typeColumn = rows[i].getElementsByTagName("td")[3];
+            const priorityColumn = rows[i].getElementsByTagName("td")[4];
+            const locationColumn = rows[i].getElementsByTagName("td")[5];
+            const statusColumn = rows[i].getElementsByTagName("td")[7];
+            const userColumn = rows[i].getElementsByTagName("td")[8];
+        
+            if (idColumn && dateColumn && timeColumn && typeColumn && priorityColumn && 
+locationColumn && statusColumn && userColumn) {
+                const idText = idColumn.textContent.toLowerCase();
+                const dateText = dateColumn.textContent;
+                const timeText = timeColumn.textContent.toLowerCase();
+                const typeText = typeColumn.textContent.toLowerCase();
+                const priorityText = priorityColumn.textContent.toLowerCase();
+                const locationText = locationColumn.textContent.toLowerCase();
+                const statusText = statusColumn.textContent.toLowerCase();
+                const userText = userColumn.textContent.toLowerCase();
+            
+                const idMatch = idFilterValue === '' || idText.includes(codeFilterValue);
+                const dateMatch = dateFilterValue === '' || dateText === dateFilterValue;
+                const timeMatch = timeFilterValue === '' || 
+timeText.includes(timeFilterValue);
+                const typeMatch = typeFilterValue === 'all' || 
+typeText.includes(typeFilterValue);
+                const priorityMatch = priorityFilterValue === 'all' || 
+priorityText.includes(priorityFilterValue);
+                const locationMatch = locationFilterValue === 'all' || 
+locationText.includes(locationFilterValue);
+                const statusMatch = statusFilterValue === 'all' || 
+statusText.includes(statusFilterValue);
+                const userMatch = userFilterValue === 'all' || 
+userText.includes(userFilterValue);
+        
+                if (idMatch && dateMatch && timeMatch && typeMatch && priorityMatch && 
+locationMatch && statusMatch && userMatch) {
+                    rows[i].style.display = "";
+                } else {  
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+    
+    const statusInputs = document.querySelectorAll(".status-input");
+    
+    statusInputs.forEach((input) => {
+    	input.addEventListener("change", function () {
+        	const row = this.closest("tr");
+        	const status = this.value;
+        	const uniqueid = row.cells[0].textContent;
+        	const record = data.find((record) => record['Incident ID'] === uniqueid);
+        	if (record) {
+            	record['Status'] = status;
+        	}
+    	});
+	});
+</script>
+</body>
+</html>
+
+
