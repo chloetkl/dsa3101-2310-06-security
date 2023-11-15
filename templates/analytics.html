@@ -82,25 +82,23 @@
             <div class="content" id="AnalyticsContent">
                 <h2>Analytics Page</h2>
                 <h3>Plots</h3>
+
                 <div id="monthlyPlotContainer">
-                    <iframe id="monthlyPlotIframe" src="/plots/Monthly-Counts-by-Year" style="width:100%; height:500px;"></iframe>
+                    <iframe id="monthlyPlotIframe" style="width:100%; height:500px;"></iframe>
                 </div>
-
                 <div id="dailyPlotContainer">
-                    <iframe id="dailyPlotIframe" src="/plots/Daily-Counts-by-Year" style="width:100%; height:500px;"></iframe>
+                    <iframe id="dailyPlotIframe" style="width:100%; height:500px;"></iframe>
                 </div>
-
                 <div id="hourlyPlotContainer">
-                    <iframe id="hourlyPlotIframe" src="/plots/Hourly-Counts-by-Year" style="width:100%; height:500px;"></iframe>
+                    <iframe id="hourlyPlotIframe" style="width:100%; height:500px;"></iframe>
                 </div>
-
                 <div id="locationPlotContainer">
-                    <iframe id="locationPlotIframe" src="/plots/Count-of-Location-by-Year" style="width:100%; height:500px;"></iframe>
+                    <iframe id="locationPlotIframe" style="width:100%; height:500px;"></iframe>
+                </div>
+                <div id="incidentPlotContainer">
+                    <iframe id="incidentPlotIframe" style="width:100%; height:500px;"></iframe>
                 </div>
 
-                <div id="incidentPlotContainer">
-                    <iframe id="incidentPlotIframe" src="/plots/Count-of-Incidents-by-Year" style="width:100%; height:500px;"></iframe>
-                </div>
 
                 <!-- edit if u want to
                 <div class="filters">
@@ -243,15 +241,6 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
-        function showContent(tabName) {
-            var i;
-            var contents = document.getElementsByClassName("content");
-            for (i = 0; i < contents.length; i++) {
-                contents[i].style.display = "none";
-            }
-
-            document.getElementById(tabName + "Content").style.display = "block";
-        }
 
         function showContent(tabName) {
             if (tabName === 'Analytics') {
@@ -357,6 +346,11 @@
             fetch('/generate-plots')
                 .then(response => {
                     if (response.ok) {
+                      loadMonthlyPlotIframe();
+                      loadDailyPlotIframe();
+                      loadHourlyPlotIframe();
+                      loadLocationPlotIframe();
+                      loadIncidentPlotIframe();
                     } else {
                         console.error('Error in generating plots');
                     }
@@ -367,6 +361,31 @@
         function loadHeatmapIframe() {
             var iframe = document.getElementById('heatmapIframe');
             iframe.src = '/plot/heatmap';
+        }
+
+        function loadMonthlyPlotIframe() {
+            var iframe = document.getElementById('monthlyPlotIframe');
+            iframe.src = '/plots/Monthly-Counts-by-Year';
+        }
+
+        function loadDailyPlotIframe() {
+            var iframe = document.getElementById('dailyPlotIframe');
+            iframe.src = '/plots/Daily-Counts-by-Year';
+        }
+
+        function loadHourlyPlotIframe() {
+            var iframe = document.getElementById('hourlyPlotIframe');
+            iframe.src = '/plots/Hourly-Counts-by-Year';
+        }
+
+        function loadLocationPlotIframe() {
+            var iframe = document.getElementById('locationPlotIframe');
+            iframe.src = '/plots/Count-of-Location-by-Year';
+        }
+
+        function loadIncidentPlotIframe() {
+            var iframe = document.getElementById('incidentPlotIframe');
+            iframe.src = '/plots/Count-of-Incidents-by-Year';
         }
 
     </script>

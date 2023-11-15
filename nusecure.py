@@ -322,14 +322,14 @@ def plot_generation():
 @role_required('analytics')
 def monthly_plot():
     try:
-        return render_template("Monthly_Counts_by_Year.html")
+        return send_file("static/Monthly_Counts_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
 @app.route('/plots/Daily-Counts-by-Year', methods=['GET'])
 def daily_plot():
     try:
-        return render_template("Daily_Counts_by_Year.html")
+        return send_file("static/Daily_Counts_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
@@ -338,7 +338,7 @@ def daily_plot():
 @role_required('analytics')
 def hourly_plot():
     try:
-        return render_template("Hourly_Counts_by_Year.html")
+        return send_file("static/Hourly_Counts_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
@@ -347,7 +347,7 @@ def hourly_plot():
 @role_required('analytics')
 def location_plot():
     try:
-        return render_template("Count_of_Location_by_Year.html")
+        return send_file("static/Count_of_Location_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
@@ -356,7 +356,7 @@ def location_plot():
 @role_required('analytics')
 def incident_plot():
     try:
-        return render_template("Count_of_Incidents_by_Year.html")
+        return render_template("static/Count_of_Incidents_by_Year.html")
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
