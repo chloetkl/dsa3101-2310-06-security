@@ -1,40 +1,50 @@
 from connect_sql import establish_sql_connection
+import mysql.connector
 import pandas as pd
 import bcrypt
 import time
 
-
 ## ADD user
 def add_user(username, password, role, email=None):
     
-    ## establish connection
-    db, cursor = establish_sql_connection()
-    if db is None:
-        print("add_user_roles | Failed to establish a database connection.")
-        return
-    # print(f'add_user | db established: {db.is_connected()}')
+    try: 
+        ## establish connection
+        db, cursor = establish_sql_connection()
+        if db is None:
+            print("add_user_roles | Failed to establish a database connection.")
+            return False
 
-    ## generate hash and salt
-    salt = bcrypt.gensalt()
-    hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+        ## generate hash and salt
+        salt = bcrypt.gensalt()
+        hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
-    ## get role id
-    query = f'SELECT id FROM User_roles \
-                                where role = \'{role}\';'
-    cursor.execute(query)
-    role_id=cursor.fetchone()[0]
+        ## get role id
+        query = f'SELECT id FROM User_roles \
+                                    where role = \'{role}\';'
+        cursor.execute(query)
+        role_id=cursor.fetchone()[0]
 
-    ## insert query
-    query = f"\
-        INSERT INTO Users\
-        (email, username, role_id, salt, hash)\
-        VALUES (\'{email}\', \'{username}\', {role_id}, \'{salt.decode('utf-8')}\', \'{hash.decode('utf-8')}\')"
-    cursor.execute(query)
-    db.commit()
-    print(f"add_user | User added: {username}")
+        ## insert query
+        query = f"\
+            INSERT INTO Users\
+            (email, username, role_id, salt, hash)\
+            VALUES (\'{email}\', \'{username}\', {role_id}, \'{salt.decode('utf-8')}\', \'{hash.decode('utf-8')}\')"
+        cursor.execute(query)
+        db.commit()
+        print(f"add_user | User added: {username}")
+    
+    except mysql.connector.Error as err:
+        if 'Duplicate' in str(err):
+            print(f"add_user | User found in database: {username}")
+        else:
+            print(f"add_user | database error: {err}")
 
-    cursor.close()
-    db.close()
+    if cursor:
+        cursor.close()
+    if db:
+        db.close()
+    return True
+
 
 ## AUTHENTICATE user
 def authenticate(user,password):

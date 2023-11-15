@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Flask, request, send_file, render_template, jsonify, redirect, url_for
+from flask import Flask, request, send_file, render_template, jsonify, redirect, url_for, Blueprint
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from back.models.sarima.sarima_model import forecast_all_sarima, train_all_sarima
 from back.database.users.users import authenticate, add_user
@@ -12,11 +12,15 @@ from jinja2.exceptions import TemplateNotFound
 from connect_sql import establish_sql_connection, get_location_id, get_incident_type_id
 import pandas as pd
 
+
 app = Flask(__name__)
 app.secret_key = 'secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+## add blueprints
+from app.admin import admin_bp
+app.register_blueprint(admin_bp)
 
 class User(UserMixin):
     def __init__(self, user_id, username, role):
@@ -95,26 +99,11 @@ def home():
             return redirect(url_for('security'))
         elif role == 'analytics':
             return redirect(url_for('analytics'))
+        elif role == 'admin':
+            return redirect(url_for('admin.admin'))
         
     return render_template('home.html')
 
-@app.route('/add-new-user', methods=['POST'])
-def add_new_user():
-    data = request.get_json()
-
-    if not data or 'username' not in data or 'role' not in data or 'password' not in data:
-        return jsonify({'error': 'Invalid JSON format'}), 400
-
-    username = data['username']
-    role = data['role']
-    password = data['password']
-    email = None
-    if 'email' in data:
-        email = data['email']
-
-    add_user(username,password,role,email)
-
-    return "User added"
 
 @app.route("/prediction")
 @login_required
@@ -393,6 +382,14 @@ def map_pin_generation():
     return generate_map_points()
 
 
+    
+@app.route('/logout', methods=['GET'])
+def logout():
+    try:
+        logout_user()
+        return redirect(url_for('home')), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

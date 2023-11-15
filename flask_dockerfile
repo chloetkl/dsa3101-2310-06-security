@@ -9,7 +9,7 @@ COPY requirements.txt requirements.txt
 COPY nusecure.py nusecure.py
 COPY connect_sql.py connect_sql.py
 
-
+COPY app app
 COPY static static
 COPY templates templates
 COPY back/database back/database
