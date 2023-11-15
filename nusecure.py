@@ -11,6 +11,7 @@ from connect_sql import establish_sql_connection
 from jinja2.exceptions import TemplateNotFound
 from connect_sql import establish_sql_connection, get_location_id, get_incident_type_id
 import pandas as pd
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -195,29 +196,35 @@ def security():
         LEFT JOIN Incident_locations ON Incidents.location_id = Incident_locations.id\
         LEFT JOIN Incident_location_groups ON Incident_locations.location_group_id = Incident_location_groups.id\
         LEFT JOIN Incident_types ON Incidents.incident_type_id = Incident_types.id\
-        LEFT JOIN Users ON Incident_logs.user_id = Users.id'
+        LEFT JOIN Users ON Incident_logs.user_id = Users.id\
+        ORDER BY Incident_logs.time DESC;'
     cursor.execute(query)
     result = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
     data = pd.DataFrame(result, columns = columns)
 
-    condition = data['status'] == 'Open'
-    data['FirstUpdate'] = ''
-    data.loc[condition, 'FirstUpdate'] = data.loc[condition, 'time']
-    data['FirstUpdate'] = data['FirstUpdate'].shift(+1)
-    data.drop(data[data['status'] == 'Open'].index, inplace=True)
-    data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 'type':'Incidents', 'location_group':'Location', 'location':'Building', 'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 'time': 'LatestUpdate', 'status':'Status'}, inplace=True)
+    # Grouping by specified columns and aggregating time column
+    data = data.groupby(['incident_id', 'description', 'priority', 'type', 'location_group',
+                                    'location', 'latitude', 'longitude']).agg(
+                                        FirstUpdate=('time', 'min'), LatestUpdate=('time', 'max'),
+                                        username=('username', 'first'), 
+                                        status=('status', 'first') 
+                                        ).reset_index() 
+    data = data.sort_values('LatestUpdate', ascending=False)
+    today = datetime.now().date()
+    data = data[data['LatestUpdate'].dt.date <= today]
+    data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 
+                         'type':'Incidents', 'location_group':'Location', 'location':'Building', 
+                         'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 
+                         'time': 'LatestUpdate', 'status':'Status'}, inplace=True)
     data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
     data['LatestUpdate'] = pd.to_datetime(data['LatestUpdate'])
-    data['FirstUpdate'] = data['FirstUpdate'].dt.strftime('%d/%m/%Y %H:%M')
-    data['LatestUpdate'] = data['LatestUpdate'].dt.strftime('%d/%m/%Y %H:%M')
 
 
     data = data[['IncidentID', 'Description', 'Priority', 'Incidents', 'Location', 'Building', 'Latitude', 'Longitude', 'User', 'FirstUpdate', 'LatestUpdate', 'Status']]
 
-
-    ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
-    data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'],dayfirst=True)
+    
+    data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
     data['Date'] = data['FirstUpdate'].dt.date
     data['Time'] = data['FirstUpdate'].dt.time
     data.rename(columns={'IncidentID': 'Incident ID',
