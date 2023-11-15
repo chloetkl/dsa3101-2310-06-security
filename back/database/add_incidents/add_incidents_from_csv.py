@@ -58,6 +58,7 @@ def add_incidents_from_csv(filepath):
         })
 
         incidents_added = 0
+        duplicated = 0
         # Populate Incidents table with unique Incidents
         for index, row in unique_incidents.iterrows():
             try:
@@ -80,15 +81,20 @@ def add_incidents_from_csv(filepath):
                 cursor.execute(query)
                 incidents_added += 1
             except mysql.connector.Error as err:
-                print(f"add_incidents_from_csv | Error adding unique incident {id} to Incidents: {err}")
+                if 'Duplicate' in str(err):
+                    duplicated += 1
+                else:
+                    print(f"add_incidents_from_csv | Error: {err}")
         
         print(f"add_incidents_from_csv | Unique incidents added: {incidents_added}")
+        print(f"add_incidents_from_csv | Incidents already in database: {incidents_added}")
         db.commit()
 
         ## read logs
         df['Time'] = pd.to_datetime(df['Time'],format="%d/%m/%y %H:%M")
         incident_logs = df[['IncidentID','Status','Priority','Time','User']].drop_duplicates()
         logs_added = 0
+        duplicated = 0
         for index, row in incident_logs.iterrows():
             try:
                 id = row['IncidentID']
@@ -107,9 +113,13 @@ def add_incidents_from_csv(filepath):
                 cursor.execute(query)
                 logs_added +=1
             except mysql.connector.Error as err:
-                print(f"add_incidents_from_csv | Error adding log of incident {id} at {time} to Incidents: {err}")
+                if 'Duplicate' in str(err):
+                    duplicated += 1
+                else:
+                    print(f"add_incidents_from_csv | Error adding log of incident {id} at {time} to Incidents: {err}")
         
         print(f"add_incidents_from_csv | Incident logs added: {logs_added}")
+        print(f"add_incidents_from_csv | Incident logs already in database: {duplicated}")
         db.commit()
         
         cursor.close()
