@@ -185,6 +185,11 @@
             width: 98%;
         }
 
+        .content {
+            display: none;
+            z-index: 1000;
+        }
+
         #AnalyticsContent,
         #PredictionsContent,
         #filters {
@@ -194,6 +199,7 @@
         #iframe {
             display: none;
         }
+
     </style>
 </head>
 
@@ -211,23 +217,23 @@
             </a>
         </header>
         <ul>
-            <li>
-                <a href="" onclick="showSection('dashboard')">
+            <li onclick="showSection('dashboard')">
+                <a href="#">
                     <i class="fas fa-home"></i> Dashboard
                 </a>
             </li>
-            <li>
-                <a href="#" onclick="showSection('analytics')">
+            <li onclick="showSection('analytics')">
+                <a href="#">
                     <i class="fas fa-map"></i> Analytics
                 </a>
             </li>
-            <li>
-                <a href="#" onclick="showSection('predictions')">
+            <li onclick="showSection('predictions')">
+                <a href="#">
                     <i class="fas fa-route"></i> Predictions
                 </a>
             </li>
-            <li>
-                <a href="#" onclick="showSection('settings')">
+            <li onclick="showSection('settings')">
+                <a href="#">
                     <i class="fas fa-cog"></i> Settings
                 </a>
             </li>
@@ -235,7 +241,7 @@
                 <button class="navigation-button" onclick="logout()">
                     <i class="fas fa-sign-out-alt" style="margin-right: 16.9px;"></i> Logout
                 </button>
-            </li>            
+            </li>
         </ul>
     </div>
 
@@ -246,221 +252,111 @@
     </section>
 
     <section id="analyticsSection">
-        <div class="content" id="AnalyticsContent">
-            <h2>Analytics Page</h2>
-            <div class="filters">
-                <form>
-                    <label for="Location">Location:</label>
-                    <select id="Location">
-                        <option value="Canteen">Canteen</option>
-                        <option value="Faculty">Faculty</option>
-                        <option value="Halls">Halls</option>
-                        <option value="Libraries">Libraries</option>
-                    </select>
-                    <br>
-                    <label for="Crimes">Incident Types:</label>
-                    <br>
-                    <input type="checkbox" id="LostFound" name="LostFound" value="Lost and Found" checked>
-                    <label for="LostFound">Lost and Found</label>
-                    <br>
-                    <input type="checkbox" id="StolenItems" name="StolenItems" value="Stolen Items">
-                    <label for="StolenItems">Stolen Items</label>
-                    <input type="checkbox" id="DamagedProperties" name="DamagedProperties" value="Damaged Properties">
-                    <label for="DamagedProperties">Damaged Properties</label>
-                    <br>
-                    <input type="checkbox" id="SexualIncidents" name="SexualIncidents" value="Sexual Incidents">
-                    <label for="SexualIncidents">Sexual Incidents</label>
-                    <br>
-                    <label for="FromDate">From Date:</label>
-                    <input type="date" id="FromDate">
-                    <br>
-                    <label for="ToDate">To Date:</label>
-                    <input type="date" id="ToDate">
-                </form>
-            </div>
-            <div class="chart-container">
-                <div id="chart1" class="chart"></div>
-                <div id="chart2" class="chart"></div>
-                <div id="chart3" class="chart"></div>
-            </div>
+        <h2>Analytics Page</h2>
+        <h3>Plots</h3>
+
+        <div id="monthlyPlotContainer">
+            <iframe id="monthlyPlotIframe" style="width:100%; height:500px;"></iframe>
         </div>
+        <div id="dailyPlotContainer">
+            <iframe id="dailyPlotIframe" style="width:100%; height:500px;"></iframe>
+        </div>
+        <div id="hourlyPlotContainer">
+            <iframe id="hourlyPlotIframe" style="width:100%; height:500px;"></iframe>
+        </div>
+        <div id="locationPlotContainer">
+            <iframe id="locationPlotIframe" style="width:100%; height:500px;"></iframe>
+        </div>
+        <div id="incidentPlotContainer">
+            <iframe id="incidentPlotIframe" style="width:100%; height:500px;"></iframe>
+        </div>
+
+        <div class="content">
+            <h2> Heatmap to identify hotspots</h2>
+            <div class="heatmap-container" style="border: 1px solid #ccc; padding: 10px;">
+                <iframe id="heatmapIframe" style="width:100%; height:500px;"></iframe>
+            </div>
+        </div>    
     </section>
 
     <section id="predictionsSection" style="display: none;">
-        <h2>Predictions Page</h2>
-        <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="100%" height="600"></iframe>
-    </section>
-    <div class="container">
-        <div class="performance-container">
-            <h2 style="font-size: 38px;">Data Analytics Dashboard</h2>
-            <ul class="tabs">
-                <li class="tab" onclick="showContent('Analytics')">Analytics</li>
-                <li class="tab" onclick="showContent('Predictions')">Predictions</li>
-            </ul>
+        <div class="content" id="PredictionsContent">
+            <h2>Predictions Page</h2>
+            <h3>Priority of incidents</h3>
+            <div class="analytics-filters">
+                <label for="Location">Location:</label>
+                    <select id="RankLocation">
+                      <option value="BIZ">BIZ</option>
+                      <option value="BTC">BTC</option>
+                      <option value="CDE">CDE</option>
+                      <option value="COM">COM</option>
+                      <option value="DNMS">DNMS</option>
+                      <option value="FASS">FASS</option>
+                      <option value="FOS">FOS</option>
+                      <option value="Hall">Hall</option>
+                      <option value="HMKT">HMKT</option>
+                      <option value="KR">KR</option>
+                      <option value="KV">KV</option>
+                      <option value="OTH">OTH</option>
+                      <option value="PGP">PGP</option>
+                      <option value="SOC">SOC</option>
+                      <option value="UCC">UCC</option>
+                      <option value="UTown">UTown</option>
+                      <option value="YIH">YIH</option>
+                    </select>
 
-            <div class="content" id="AnalyticsContent">
-                <h2>Analytics Page</h2>
-                <h3>Plots</h3>
-
-                <div id="monthlyPlotContainer">
-                    <iframe id="monthlyPlotIframe" style="width:100%; height:500px;"></iframe>
-                </div>
-                <div id="dailyPlotContainer">
-                    <iframe id="dailyPlotIframe" style="width:100%; height:500px;"></iframe>
-                </div>
-                <div id="hourlyPlotContainer">
-                    <iframe id="hourlyPlotIframe" style="width:100%; height:500px;"></iframe>
-                </div>
-                <div id="locationPlotContainer">
-                    <iframe id="locationPlotIframe" style="width:100%; height:500px;"></iframe>
-                </div>
-                <div id="incidentPlotContainer">
-                    <iframe id="incidentPlotIframe" style="width:100%; height:500px;"></iframe>
-                </div>
-
-
-                <!-- edit if u want to
-                <div class="filters">
-                    <form>
-                        <label for="Location">Location:</label>
-                        <select id="Location">
-                          <option value="BIZ">BIZ</option>
-                          <option value="BTC">BTC</option>
-                          <option value="CDE">CDE</option>
-                          <option value="COM">COM</option>
-                          <option value="DNMS">DNMS</option>
-                          <option value="FASS">FASS</option>
-                          <option value="FOS">FOS</option>
-                          <option value="Hall">Hall</option>
-                          <option value="HMKT">HMKT</option>
-                          <option value="KR">KR</option>
-                          <option value="KV">KV</option>
-                          <option value="OTH">OTH</option>
-                          <option value="PGP">PGP</option>
-                          <option value="SOC">SOC</option>
-                          <option value="UCC">UCC</option>
-                          <option value="UTown">UTown</option>
-                          <option value="YIH">YIH</option>
-                        </select>
-                        <br>
-                        <label for="Crimes">Incident Types:</label>
-                        <br>
-                        <input type="checkbox" id="LostFound" name="LostFound" value="Lost and Found" checked>
-                        <label for="LostFound">Lost and Found</label>
-                        <br>
-                        <input type="checkbox" id="StolenItems" name="StolenItems" value="Stolen Items">
-                        <label for="StolenItems">Stolen Items</label>
-                        <br>
-                        <input type="checkbox" id="DamagedProperties" name="DamagedProperties" value="Damaged Properties">
-                        <label for="DamagedProperties">Damaged Properties</label>
-                        <br>
-                        <input type="checkbox" id="SexualIncidents" name="SexualIncidents" value="Sexual Incidents">
-                        <label for="SexualIncidents">Sexual Incidents</label>
-                        <br>
-                        <input type="checkbox" id="EmergencyIncidents" name="EmergencyIncidents" value="Emergency Incidents">
-                        <label for="EmergencyIncidents">Emergency Incidents</label>
-                        <br>
-                        <label for="FromDate">From Date:</label>
-                        <input type="date" id="FromDate">
-                        <br>
-                        <label for="ToDate">To Date:</label>
-                        <input type="date" id="ToDate">
-                    </form>
-                </div>
-                <div class="prediction-actions">
-
-                    <button onclick="getForecastPlot(['LostFound', 'StolenItems', 'DamagedProperties', 'SexualIncidents', 'EmergencyIncidents'])">Get Forecast Plot</button>
-                    <button onclick="GeneratePlot()">Generate Plot</button>
-                </div>
-                <div class="chart-container">
-                    <div id="chart1" class="chart"></div>
-                    <div id="chart2" class="chart"></div>
-                    <div id="chart3" class="chart"></div>
-                </div>
-                !-->
-                <div class="content">
-                    <h2> Heatmap to identify hotspots</h2>
-                    <div class="heatmap-container" style="border: 1px solid #ccc; padding: 10px;">
-                        <iframe id="heatmapIframe" style="width:100%; height:500px;"></iframe>
-                    </div>
-                </div>
+                <label for="DayInput">Day:</label>
+                    <select id="DayInput">
+                      <option value="Monday">Monday</option>
+                      <option value="Tuesday">Tuesday</option>
+                      <option value="Wednesday">Wednesday</option>
+                      <option value="Thursday">Thursday</option>
+                      <option value="Friday">Friday</option>
+                      <option value="Saturday">Saturday</option>
+                      <option value="Sunday">Sunday</option>
+                    </select>
+                <label for="HourInput">Hour:</label>
+                    <select id="HourInput">
+                      <option value="Morning">Morning</option>
+                      <option value="Afternoon">Afternoon</option>
+                      <option value="Night">Night</option>
+                    </select>
+                <button onclick="getRankPriority()">Get Rank Priority</button>
+                <p id="rankPriorityResponse"></p>
             </div>
-
-            <div class="content" id="PredictionsContent">
-                <h2>Predictions Page</h2>
-                <h3>Priority of incidents</h3>
-                <div class="analytics-filters">
-                    <label for="Location">Location:</label>
-                        <select id="RankLocation">
-                          <option value="BIZ">BIZ</option>
-                          <option value="BTC">BTC</option>
-                          <option value="CDE">CDE</option>
-                          <option value="COM">COM</option>
-                          <option value="DNMS">DNMS</option>
-                          <option value="FASS">FASS</option>
-                          <option value="FOS">FOS</option>
-                          <option value="Hall">Hall</option>
-                          <option value="HMKT">HMKT</option>
-                          <option value="KR">KR</option>
-                          <option value="KV">KV</option>
-                          <option value="OTH">OTH</option>
-                          <option value="PGP">PGP</option>
-                          <option value="SOC">SOC</option>
-                          <option value="UCC">UCC</option>
-                          <option value="UTown">UTown</option>
-                          <option value="YIH">YIH</option>
-                        </select>
-
-                    <label for="DayInput">Day:</label>
-                        <select id="DayInput">
-                          <option value="Monday">Monday</option>
-                          <option value="Tuesday">Tuesday</option>
-                          <option value="Wednesday">Wednesday</option>
-                          <option value="Thursday">Thursday</option>
-                          <option value="Friday">Friday</option>
-                          <option value="Saturday">Saturday</option>
-                          <option value="Sunday">Sunday</option>
-                        </select>
-                    <label for="HourInput">Hour:</label>
-                        <select id="HourInput">
-                          <option value="Morning">Morning</option>
-                          <option value="Afternoon">Afternoon</option>
-                          <option value="Night">Night</option>
-                        </select>
-                    <button onclick="getRankPriority()">Get Rank Priority</button>
-                    <p id="rankPriorityResponse"></p>
-                </div>
-                <br>
-                <h3>Time Series Forecasting of Incidents</h3>
-                <div class="filters">
-                    <form>
-                        <label for="incident_type">Incident Type:</label>
-                        <select id="incident_type">
-                          <option value="False">All</option>
-                          <option value="LOST AND FOUND">Lost and Found</option>
-                          <option value="STOLEN ITEMS">Stolen Items</option>
-                          <option value="DAMAGED PROPERTIES">Damaged Properties</option>
-                          <option value="SEXUAL INCIDENTS">Sexual Incidents</option>
-                          <option value="EMERGENCY INCIDENTS">Emergency Incidents</option>
-                        </select>
-                        <br>
-                    </form>
-                </div>
-                <br>
-                <button onclick="getForecastPlot()">Get Forecast Plot</button>
-                <div id="forecastPlotContainer">
-                    <iframe id="forecastPlotIframe" style="width:100%; height:500px; border:none;"></iframe>
-                </div>
-                <button onclick="trainAndForecastModels()">Train All Models</button>
-                <!-- <button onclick="forecastAll()">Forecast All</button> !-->
-
+            <br>
+            <h3>Time Series Forecasting of Incidents</h3>
+            <div class="filters">
+                <form>
+                    <label for="incident_type">Incident Type:</label>
+                    <select id="incident_type">
+                      <option value="False">All</option>
+                      <option value="LOST AND FOUND">Lost and Found</option>
+                      <option value="STOLEN ITEMS">Stolen Items</option>
+                      <option value="DAMAGED PROPERTIES">Damaged Properties</option>
+                      <option value="SEXUAL INCIDENTS">Sexual Incidents</option>
+                      <option value="EMERGENCY INCIDENTS">Emergency Incidents</option>
+                    </select>
+                    <br>
+                </form>
             </div>
+            <br>
+            <button onclick="getForecastPlot()">Get Forecast Plot</button>
+            <div id="forecastPlotContainer">
+                <iframe id="forecastPlotIframe" style="width:100%; height:500px; border:none;"></iframe>
+            </div>
+            <button onclick="trainAndForecastModels()">Train All Models</button>
+            <!-- <button onclick="forecastAll()">Forecast All</button> !-->
         </div>
-    </div>
+    </section>
 
+    <section id="settingsSection" style="display: none;">
+        <!-- Settings Section Content -->
+        <h2 style="position: relative; left: 100px; top: 30px; font-size: 30px;">Settings Section</h2>
+    </section>
+    
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
-
         function showContent(tabName) {
             if (tabName === 'Analytics') {
                 document.getElementById('AnalyticsContent').style.display = 'block';
