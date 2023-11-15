@@ -86,22 +86,22 @@ def home():
     if request.method == 'POST':
         username = request.form['UserID']
         password = request.form['Password']
-        
+
         authenticated, role = authenticate(username,password)
-        
+
         if authenticated:
             user = get_user_from_username(username) # create user
             login_user(user)
         else:
             return "Invalid UserID or Password"
-        
+
         if role == 'security':
             return redirect(url_for('security'))
         elif role == 'analytics':
             return redirect(url_for('analytics'))
         elif role == 'admin':
             return redirect(url_for('admin.admin'))
-        
+
     return render_template('home.html')
 
 
@@ -144,7 +144,7 @@ def security():
             status = new_report['Status']
             priority = new_report['Priority']
             time = new_report['Datetime']
-            notes = ""           
+            notes = ""
 
             ## Add open log if new incident is open
             if status == 'Close':
@@ -176,7 +176,7 @@ def security():
                 cursor.close()
             if db:
                 db.close()
-  
+
 
     db,cursor = establish_sql_connection()
     query = f'SELECT Incident_logs.incident_id,\
@@ -289,8 +289,8 @@ def get_forecast_plot():
         return send_file(plot_file, mimetype='text/html')
     except FileNotFoundError:
         return 'File not found.', 404
-    
-# Apriori Algorithm 
+
+# Apriori Algorithm
 
 # Endpoint to get rank_priority
 @app.route('/rank-priority', methods=['GET'])
@@ -306,7 +306,7 @@ def rank_priority():
         return get_rank(location,day,hour)
     except TypeError:
         return 'Input not found.', 404
-    
+
 #Data Visualization
 
 @app.route('/generate-plots', methods=['GET'])
@@ -366,12 +366,13 @@ def incident_plot():
 def heatmap_generation():
     return heatmap()
 
-@app.route('/plots/heatmap', methods=['GET'])
+@app.route('/plot/heatmap', methods=['GET'])
 @login_required
 @role_required('analytics')
 def heatmap_plot():
     try:
-        return render_template("heatmap1.html")
+        plot_file = "static/heatmap.html"
+        return send_file(plot_file, mimetype='text/html')
     except TemplateNotFound:
         return 'Template not found: Please generate plot first!'
 
@@ -382,7 +383,7 @@ def map_pin_generation():
     return generate_map_points()
 
 
-    
+
 @app.route('/logout', methods=['GET'])
 def logout():
     try:

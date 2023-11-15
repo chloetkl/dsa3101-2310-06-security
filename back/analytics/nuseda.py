@@ -33,7 +33,7 @@ def plots():
   count_data['Month'] = pd.Categorical(count_data['Month'], categories=days, ordered=True)
   count_data.sort_values(by='Month',inplace=True)
   fig=px.line(count_data, x='Month', y='Count', color='Year', title='Monthly Counts by Year')
-  fig.write_html("templates/Monthly_Counts_by_Year.html")
+  fig.write_html("static/Monthly_Counts_by_Year.html")
 
   #Daily_Counts_by_Year
   count_data = df.groupby(['DayOfWeek', 'Year']).size().reset_index(name='Count')
@@ -41,14 +41,14 @@ def plots():
   count_data['DayOfWeek'] = pd.Categorical(count_data['DayOfWeek'], categories=days, ordered=True)
   count_data.sort_values(by='DayOfWeek',inplace=True)
   fig=px.line(count_data, x='DayOfWeek', y='Count', color='Year', title='Daily Counts by Year')
-  fig.write_html("templates/Daily_Counts_by_Year.html")
+  fig.write_html("static/Daily_Counts_by_Year.html")
 
   #Hourly_Counts_by_Year
   days = ['Early Morning', 'Morning', 'Afternoon', 'Evening', 'Night','Late Night']
   df['HourOfDay'] = pd.Categorical(df['HourOfDay'], categories=days, ordered=True)
   count_data = df.groupby(['HourOfDay', 'Year']).size().reset_index(name='Count')
   fig = px.line(count_data, x='HourOfDay', y='Count', color='Year', title='Hourly Counts by Year')
-  fig.write_html("templates/Hourly_Counts_by_Year.html")
+  fig.write_html("static/Hourly_Counts_by_Year.html")
 
   #Count_of_Location_by_Year
   grouped_data = df.groupby([ 'Year','Location']).size().reset_index(name='Count')
@@ -69,7 +69,7 @@ def plots():
     yaxis=dict(title='Count')
     )
   fig = go.Figure(data=traces, layout=layout)
-  fig.write_html("templates/Count_of_Location_by_Year.html")
+  fig.write_html("static/Count_of_Location_by_Year.html")
 
   #Count_of_Incidents_by_Year
   grouped_data = df.groupby([ 'Year','Incidents']).size().reset_index(name='Count')
@@ -84,13 +84,12 @@ def plots():
        )
     traces.append(trace)
   layout = go.Layout(
-    barmode='group',  
+    barmode='group',
     title='Count of Incidents by Year',
     xaxis=dict(title='Incidents'),
     yaxis=dict(title='Count')
     )
   fig = go.Figure(data=traces, layout=layout)
-  fig.write_html("templates/Count_of_Incidents_by_Year.html")
+  fig.write_html("static/Count_of_Incidents_by_Year.html")
 
   return "HTMLs generated"
-

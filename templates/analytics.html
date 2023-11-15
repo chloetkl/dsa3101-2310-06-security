@@ -81,14 +81,49 @@
 
             <div class="content" id="AnalyticsContent">
                 <h2>Analytics Page</h2>
+                <h3>Plots</h3>
+                <div id="monthlyPlotContainer">
+                    <iframe id="monthlyPlotIframe" src="/plots/Monthly-Counts-by-Year" style="width:100%; height:500px;"></iframe>
+                </div>
+
+                <div id="dailyPlotContainer">
+                    <iframe id="dailyPlotIframe" src="/plots/Daily-Counts-by-Year" style="width:100%; height:500px;"></iframe>
+                </div>
+
+                <div id="hourlyPlotContainer">
+                    <iframe id="hourlyPlotIframe" src="/plots/Hourly-Counts-by-Year" style="width:100%; height:500px;"></iframe>
+                </div>
+
+                <div id="locationPlotContainer">
+                    <iframe id="locationPlotIframe" src="/plots/Count-of-Location-by-Year" style="width:100%; height:500px;"></iframe>
+                </div>
+
+                <div id="incidentPlotContainer">
+                    <iframe id="incidentPlotIframe" src="/plots/Count-of-Incidents-by-Year" style="width:100%; height:500px;"></iframe>
+                </div>
+
+                <!-- edit if u want to
                 <div class="filters">
                     <form>
                         <label for="Location">Location:</label>
                         <select id="Location">
-                            <option value="Canteen">Canteen</option>
-                            <option value="Faculty">Faculty</option>
-                            <option value="Halls">Halls</option>
-                            <option value="Libraries">Libraries</option>
+                          <option value="BIZ">BIZ</option>
+                          <option value="BTC">BTC</option>
+                          <option value="CDE">CDE</option>
+                          <option value="COM">COM</option>
+                          <option value="DNMS">DNMS</option>
+                          <option value="FASS">FASS</option>
+                          <option value="FOS">FOS</option>
+                          <option value="Hall">Hall</option>
+                          <option value="HMKT">HMKT</option>
+                          <option value="KR">KR</option>
+                          <option value="KV">KV</option>
+                          <option value="OTH">OTH</option>
+                          <option value="PGP">PGP</option>
+                          <option value="SOC">SOC</option>
+                          <option value="UCC">UCC</option>
+                          <option value="UTown">UTown</option>
+                          <option value="YIH">YIH</option>
                         </select>
                         <br>
                         <label for="Crimes">Incident Types:</label>
@@ -125,10 +160,11 @@
                     <div id="chart2" class="chart"></div>
                     <div id="chart3" class="chart"></div>
                 </div>
+                !-->
                 <div class="content">
-                    <h2>Analytics Heatmap</h2>
+                    <h2> Heatmap to identify hotspots</h2>
                     <div class="heatmap-container" style="border: 1px solid #ccc; padding: 10px;">
-                        <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="80%" height="500"></iframe>
+                        <iframe id="heatmapIframe" style="width:100%; height:500px;"></iframe>
                     </div>
                 </div>
             </div>
@@ -221,6 +257,8 @@
             if (tabName === 'Analytics') {
                 document.getElementById('AnalyticsContent').style.display = 'block';
                 document.getElementById('PredictionsContent').style.display = 'none';
+                generateHeatmap();
+                generatePlots();
             } else if (tabName === 'Predictions') {
                 document.getElementById('AnalyticsContent').style.display = 'none';
                 document.getElementById('PredictionsContent').style.display = 'block';
@@ -301,6 +339,34 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
+        }
+
+        function generateHeatmap() {
+            fetch('/generate-heatmap')
+                .then(response => {
+                    if (response.ok) {
+                        loadHeatmapIframe();
+                    } else {
+                        console.error('Error in generating heatmap');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function generatePlots() {
+            fetch('/generate-plots')
+                .then(response => {
+                    if (response.ok) {
+                    } else {
+                        console.error('Error in generating plots');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function loadHeatmapIframe() {
+            var iframe = document.getElementById('heatmapIframe');
+            iframe.src = '/plot/heatmap';
         }
 
     </script>
