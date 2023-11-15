@@ -98,11 +98,15 @@
                         <br>
                         <input type="checkbox" id="StolenItems" name="StolenItems" value="Stolen Items">
                         <label for="StolenItems">Stolen Items</label>
+                        <br>
                         <input type="checkbox" id="DamagedProperties" name="DamagedProperties" value="Damaged Properties">
                         <label for="DamagedProperties">Damaged Properties</label>
                         <br>
                         <input type="checkbox" id="SexualIncidents" name="SexualIncidents" value="Sexual Incidents">
                         <label for="SexualIncidents">Sexual Incidents</label>
+                        <br>
+                        <input type="checkbox" id="EmergencyIncidents" name="EmergencyIncidents" value="Emergency Incidents">
+                        <label for="EmergencyIncidents">Emergency Incidents</label>
                         <br>
                         <label for="FromDate">From Date:</label>
                         <input type="date" id="FromDate">
@@ -111,16 +115,68 @@
                         <input type="date" id="ToDate">
                     </form>
                 </div>
+                <div class="prediction-actions">
+                    <button onclick="trainAllModels()">Train All Models</button>
+                    <button onclick="forecastAll()">Forecast All</button>
+                    <button onclick="getForecastPlot(['LostFound', 'StolenItems', 'DamagedProperties', 'SexualIncidents', 'EmergencyIncidents'])">Get Forecast Plot</button>
+                    <button onclick="GeneratePlot()">Generate Plot</button>
+                </div>
                 <div class="chart-container">
                     <div id="chart1" class="chart"></div>
                     <div id="chart2" class="chart"></div>
                     <div id="chart3" class="chart"></div>
                 </div>
+                <div class="content">
+                    <h2>Analytics Heatmap</h2>
+                    <div class="heatmap-container" style="border: 1px solid #ccc; padding: 10px;">
+                        <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="80%" height="500"></iframe>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="content" id="PredictionsContent">
-            <h2>Predictions Page</h2>
-            <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="100%" height="600"></iframe>
+
+            <div class="content" id="PredictionsContent">
+                <h2>Predictions Page</h2>
+                <div class="prediction-actions">
+                    <button onclick="trainAllModels()">Train All Models</button>
+                    <button onclick="forecastAll()">Forecast All</button>
+                </div>
+                <br>
+                <div class="analytics-filters">
+                    <label for="Location">Location:</label>
+                        <select id="Location">
+                            <option value="LostFound">Lost and Found</option>
+                            <option value="StolenItems">Stolen Items</option>
+                            <option value="DamagedProperties">Damaged Properties</option>
+                            <option value="SexualIncidents">Sexual Incidents</option>
+                            <option value="EmergencyIncidents">Emergency Incidents</option>
+                        </select>
+
+                    <label for="DayInput">Day:</label>
+                    <input type="text" id="DayInput">
+            
+                    <label for="HourInput">Hour:</label>
+                    <input type="text" id="HourInput">
+            
+                    <button onclick="getRankPriority()">Get Rank Priority</button>
+                </div>
+                <br>
+                <div class="filters">
+                    <form>
+                        <label for="Location">Location:</label>
+                        <select id="Location">
+                            <option value="LostFound">Lost and Found</option>
+                            <option value="StolenItems">Stolen Items</option>
+                            <option value="DamagedProperties">Damaged Properties</option>
+                            <option value="SexualIncidents">Sexual Incidents</option>
+                            <option value="EmergencyIncidents">Emergency Incidents</option>
+                        </select>
+                        <br>
+                    </form>
+                </div>
+                <br>
+                <div id="forecastPlotContainer"></div>
+                    <button onclick="getForecastPlot(['LostFound', 'StolenItems', 'DamagedProperties', 'SexualIncidents', 'EmergencyIncidents'])">Get Forecast Plot</button>
+            </div>
         </div>
     </div>
 
@@ -136,109 +192,6 @@
             document.getElementById(tabName + "Content").style.display = "block";
         }
 
-        // Replace the following with your chart creation code
-        function createCharts() {
-            // Example data and chart creation code
-            var data = [
-                { Year: '2017', CrimeCount: 10 },
-                { Year: '2018', CrimeCount: 12 },
-                { Year: '2019', CrimeCount: 30 },
-                { Year: '2020', CrimeCount: 25 },
-                { Year: '2021', CrimeCount: 32 },
-                { Year: '2022', CrimeCount: 18 },
-                { Year: '2023', CrimeCount: 27 },
-            ];
-
-            var years = data.map(item => item.Year);
-            var crimeCounts = data.map(item => item.CrimeCount);
-
-            var data1 = [
-                { Crime: 'Lost and Found', CrimeCount: 59 },
-                { Crime: 'Assault', CrimeCount: 10 },
-                { Crime: 'Theft', CrimeCount: 9 },
-                { Crime: 'Harassment', CrimeCount: 5 },
-            ];
-            
-            var data2 = [
-                { Location: "UTown", CrimeCount: 21 },
-                { Location: 'Frontier', CrimeCount: 10 },
-                { Location: 'PGP', CrimeCount: 9 },
-                { Location: 'Museum', CrimeCount: 5 },
-            ];
-
-            var years = data.map(item => item.Year);
-            var crimeCounts = data.map(item => item.CrimeCount);
-            var typesOfcrimes = data1.map(item => item.Crime);
-            var crimeCounts1 = data1.map(item => item.CrimeCount);
-            var crimesBylocation = data2.map(item => item.Location);
-            var crimeCounts2 = data1.map(item => item.CrimeCount);
-
-            var trace1 = {
-                x: years,
-                y: crimeCounts,
-                type: 'line',
-            };
-
-            var trace2 = {
-                x: typesOfcrimes,
-                y: crimeCounts1,
-                type: 'bar',
-            };
-
-            var trace3 = {
-                y: crimesBylocation,  // Use 'y' for horizontal bars
-                x: crimeCounts2,
-                type: 'bar',
-                orientation: 'h',  // Set the orientation to horizontal
-                text: crimesBylocation.map(String),  // Display the crime counts as text on the bars
-                textposition: 'inside',  // Position the text inside the bars
-            };
-
-            var layout = {
-                title: 'Number of Crimes per Year',
-                xaxis: {
-                    title: 'Year',
-                    dtick: 1
-                },
-                yaxis: {
-                    title: 'Number of Crimes',
-                    range: [0, Math.max(...crimeCounts)] // Set the y-axis range from 0 to the maximum value
-                },
-            }
-
-            var layout1 = {
-                title: 'Total incidents by Type',
-                xaxis: {
-                    title: 'Type of Crime',
-                    dtick: 1
-                },
-                yaxis: {
-                    title: 'Number of Crimes',
-                    range: [0, Math.max(...crimeCounts)] // Set the y-axis range from 0 to the maximum value
-                },
-            }
-
-            var layout2 = {
-                title: 'Number of Crimes by Location',
-                xaxis: {
-                    title: 'Number of Crimes',
-                },
-                yaxis: {
-                    showticklabels: false
-                },
-            }
-            Plotly.newPlot('chart1', [trace1], layout);
-            Plotly.newPlot('chart2', [trace2], layout1);
-            Plotly.newPlot('chart3', [trace3], layout2);
-        }
-
-        // Call createCharts when the Analytics tab is clicked
-        document.querySelector('.tab').addEventListener('click', function () {
-            createCharts();
-        });
-
-        document.getElementById('AnalyticsContent').style.display = 'block';
-
         function showContent(tabName) {
             if (tabName === 'Analytics') {
                 document.getElementById('AnalyticsContent').style.display = 'block';
@@ -247,6 +200,74 @@
                 document.getElementById('AnalyticsContent').style.display = 'none';
                 document.getElementById('PredictionsContent').style.display = 'block';
             }
+        }
+
+        function trainAllModels() {
+            fetch('/train_all')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function forecastAll() {
+            fetch('/forecast_all')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function getForecastPlot(incidentType) {
+            fetch(`/get_forecast_plot?incident_type=${incidentType}`)
+                .then(response => {
+                    if (response.ok) {
+                        // Assuming the response is HTML, you can open it in a new tab
+                        return response.text();
+                    } else {
+                        throw new Error('Failed to get forecast plot');
+                    }
+                })
+                .then(html => {
+                    // Open the forecast plot in a new tab
+                    const newTab = window.open();
+                    newTab.document.write(html);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function getRankPriority() {
+            // Assuming you have location, day, and hour from your filters
+            const location = document.getElementById('Location').value;
+            const day = document.getElementById('Day').value;
+            const hour = document.getElementById('Hour').value;
+
+            // Make a fetch request to the rank_priority endpoint
+            fetch(`/rank_priority?location=${location}&day=${day}&hour=${hour}`)
+                .then(response => {
+                    if (response.ok) {
+                        // Assuming the response is JSON, you can handle it accordingly
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to get rank priority');
+                    }
+                })
+                .then(data => {
+                    // Handle the data from the response
+                    console.log(data);
+                    // Update your HTML with the data, or perform any other actions
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     </script>
 </body>
