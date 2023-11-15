@@ -46,7 +46,7 @@
             align-items: center;
             width: 98%;
         }
- 
+
         #AnalyticsContent,
         #PredictionsContent,
         #filters {
@@ -81,14 +81,47 @@
 
             <div class="content" id="AnalyticsContent">
                 <h2>Analytics Page</h2>
+                <h3>Plots</h3>
+
+                <div id="monthlyPlotContainer">
+                    <iframe id="monthlyPlotIframe" style="width:100%; height:500px;"></iframe>
+                </div>
+                <div id="dailyPlotContainer">
+                    <iframe id="dailyPlotIframe" style="width:100%; height:500px;"></iframe>
+                </div>
+                <div id="hourlyPlotContainer">
+                    <iframe id="hourlyPlotIframe" style="width:100%; height:500px;"></iframe>
+                </div>
+                <div id="locationPlotContainer">
+                    <iframe id="locationPlotIframe" style="width:100%; height:500px;"></iframe>
+                </div>
+                <div id="incidentPlotContainer">
+                    <iframe id="incidentPlotIframe" style="width:100%; height:500px;"></iframe>
+                </div>
+
+
+                <!-- edit if u want to
                 <div class="filters">
                     <form>
                         <label for="Location">Location:</label>
                         <select id="Location">
-                            <option value="Canteen">Canteen</option>
-                            <option value="Faculty">Faculty</option>
-                            <option value="Halls">Halls</option>
-                            <option value="Libraries">Libraries</option>
+                          <option value="BIZ">BIZ</option>
+                          <option value="BTC">BTC</option>
+                          <option value="CDE">CDE</option>
+                          <option value="COM">COM</option>
+                          <option value="DNMS">DNMS</option>
+                          <option value="FASS">FASS</option>
+                          <option value="FOS">FOS</option>
+                          <option value="Hall">Hall</option>
+                          <option value="HMKT">HMKT</option>
+                          <option value="KR">KR</option>
+                          <option value="KV">KV</option>
+                          <option value="OTH">OTH</option>
+                          <option value="PGP">PGP</option>
+                          <option value="SOC">SOC</option>
+                          <option value="UCC">UCC</option>
+                          <option value="UTown">UTown</option>
+                          <option value="YIH">YIH</option>
                         </select>
                         <br>
                         <label for="Crimes">Incident Types:</label>
@@ -98,11 +131,15 @@
                         <br>
                         <input type="checkbox" id="StolenItems" name="StolenItems" value="Stolen Items">
                         <label for="StolenItems">Stolen Items</label>
+                        <br>
                         <input type="checkbox" id="DamagedProperties" name="DamagedProperties" value="Damaged Properties">
                         <label for="DamagedProperties">Damaged Properties</label>
                         <br>
                         <input type="checkbox" id="SexualIncidents" name="SexualIncidents" value="Sexual Incidents">
                         <label for="SexualIncidents">Sexual Incidents</label>
+                        <br>
+                        <input type="checkbox" id="EmergencyIncidents" name="EmergencyIncidents" value="Emergency Incidents">
+                        <label for="EmergencyIncidents">Emergency Incidents</label>
                         <br>
                         <label for="FromDate">From Date:</label>
                         <input type="date" id="FromDate">
@@ -111,143 +148,246 @@
                         <input type="date" id="ToDate">
                     </form>
                 </div>
+                <div class="prediction-actions">
+
+                    <button onclick="getForecastPlot(['LostFound', 'StolenItems', 'DamagedProperties', 'SexualIncidents', 'EmergencyIncidents'])">Get Forecast Plot</button>
+                    <button onclick="GeneratePlot()">Generate Plot</button>
+                </div>
                 <div class="chart-container">
                     <div id="chart1" class="chart"></div>
                     <div id="chart2" class="chart"></div>
                     <div id="chart3" class="chart"></div>
                 </div>
+                !-->
+                <div class="content">
+                    <h2> Heatmap to identify hotspots</h2>
+                    <div class="heatmap-container" style="border: 1px solid #ccc; padding: 10px;">
+                        <iframe id="heatmapIframe" style="width:100%; height:500px;"></iframe>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="content" id="PredictionsContent">
-            <h2>Predictions Page</h2>
-            <iframe id="map" src="{{ url_for('static', filename='/heatmap.html') }}" width="100%" height="600"></iframe>
+
+            <div class="content" id="PredictionsContent">
+                <h2>Predictions Page</h2>
+                <h3>Priority of incidents</h3>
+                <div class="analytics-filters">
+                    <label for="Location">Location:</label>
+                        <select id="RankLocation">
+                          <option value="BIZ">BIZ</option>
+                          <option value="BTC">BTC</option>
+                          <option value="CDE">CDE</option>
+                          <option value="COM">COM</option>
+                          <option value="DNMS">DNMS</option>
+                          <option value="FASS">FASS</option>
+                          <option value="FOS">FOS</option>
+                          <option value="Hall">Hall</option>
+                          <option value="HMKT">HMKT</option>
+                          <option value="KR">KR</option>
+                          <option value="KV">KV</option>
+                          <option value="OTH">OTH</option>
+                          <option value="PGP">PGP</option>
+                          <option value="SOC">SOC</option>
+                          <option value="UCC">UCC</option>
+                          <option value="UTown">UTown</option>
+                          <option value="YIH">YIH</option>
+                        </select>
+
+                    <label for="DayInput">Day:</label>
+                        <select id="DayInput">
+                          <option value="Monday">Monday</option>
+                          <option value="Tuesday">Tuesday</option>
+                          <option value="Wednesday">Wednesday</option>
+                          <option value="Thursday">Thursday</option>
+                          <option value="Friday">Friday</option>
+                          <option value="Saturday">Saturday</option>
+                          <option value="Sunday">Sunday</option>
+                        </select>
+                    <label for="HourInput">Hour:</label>
+                        <select id="HourInput">
+                          <option value="Morning">Morning</option>
+                          <option value="Afternoon">Afternoon</option>
+                          <option value="Night">Night</option>
+                        </select>
+                    <button onclick="getRankPriority()">Get Rank Priority</button>
+                    <p id="rankPriorityResponse"></p>
+                </div>
+                <br>
+                <h3>Time Series Forecasting of Incidents</h3>
+                <div class="filters">
+                    <form>
+                        <label for="incident_type">Incident Type:</label>
+                        <select id="incident_type">
+                          <option value="False">All</option>
+                          <option value="LOST AND FOUND">Lost and Found</option>
+                          <option value="STOLEN ITEMS">Stolen Items</option>
+                          <option value="DAMAGED PROPERTIES">Damaged Properties</option>
+                          <option value="SEXUAL INCIDENTS">Sexual Incidents</option>
+                          <option value="EMERGENCY INCIDENTS">Emergency Incidents</option>
+                        </select>
+                        <br>
+                    </form>
+                </div>
+                <br>
+                <button onclick="getForecastPlot()">Get Forecast Plot</button>
+                <div id="forecastPlotContainer">
+                    <iframe id="forecastPlotIframe" style="width:100%; height:500px; border:none;"></iframe>
+                </div>
+                <button onclick="trainAndForecastModels()">Train All Models</button>
+                <!-- <button onclick="forecastAll()">Forecast All</button> !-->
+
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
-        function showContent(tabName) {
-            var i;
-            var contents = document.getElementsByClassName("content");
-            for (i = 0; i < contents.length; i++) {
-                contents[i].style.display = "none";
-            }
-
-            document.getElementById(tabName + "Content").style.display = "block";
-        }
-
-        // Replace the following with your chart creation code
-        function createCharts() {
-            // Example data and chart creation code
-            var data = [
-                { Year: '2017', CrimeCount: 10 },
-                { Year: '2018', CrimeCount: 12 },
-                { Year: '2019', CrimeCount: 30 },
-                { Year: '2020', CrimeCount: 25 },
-                { Year: '2021', CrimeCount: 32 },
-                { Year: '2022', CrimeCount: 18 },
-                { Year: '2023', CrimeCount: 27 },
-            ];
-
-            var years = data.map(item => item.Year);
-            var crimeCounts = data.map(item => item.CrimeCount);
-
-            var data1 = [
-                { Crime: 'Lost and Found', CrimeCount: 59 },
-                { Crime: 'Assault', CrimeCount: 10 },
-                { Crime: 'Theft', CrimeCount: 9 },
-                { Crime: 'Harassment', CrimeCount: 5 },
-            ];
-            
-            var data2 = [
-                { Location: "UTown", CrimeCount: 21 },
-                { Location: 'Frontier', CrimeCount: 10 },
-                { Location: 'PGP', CrimeCount: 9 },
-                { Location: 'Museum', CrimeCount: 5 },
-            ];
-
-            var years = data.map(item => item.Year);
-            var crimeCounts = data.map(item => item.CrimeCount);
-            var typesOfcrimes = data1.map(item => item.Crime);
-            var crimeCounts1 = data1.map(item => item.CrimeCount);
-            var crimesBylocation = data2.map(item => item.Location);
-            var crimeCounts2 = data1.map(item => item.CrimeCount);
-
-            var trace1 = {
-                x: years,
-                y: crimeCounts,
-                type: 'line',
-            };
-
-            var trace2 = {
-                x: typesOfcrimes,
-                y: crimeCounts1,
-                type: 'bar',
-            };
-
-            var trace3 = {
-                y: crimesBylocation,  // Use 'y' for horizontal bars
-                x: crimeCounts2,
-                type: 'bar',
-                orientation: 'h',  // Set the orientation to horizontal
-                text: crimesBylocation.map(String),  // Display the crime counts as text on the bars
-                textposition: 'inside',  // Position the text inside the bars
-            };
-
-            var layout = {
-                title: 'Number of Crimes per Year',
-                xaxis: {
-                    title: 'Year',
-                    dtick: 1
-                },
-                yaxis: {
-                    title: 'Number of Crimes',
-                    range: [0, Math.max(...crimeCounts)] // Set the y-axis range from 0 to the maximum value
-                },
-            }
-
-            var layout1 = {
-                title: 'Total incidents by Type',
-                xaxis: {
-                    title: 'Type of Crime',
-                    dtick: 1
-                },
-                yaxis: {
-                    title: 'Number of Crimes',
-                    range: [0, Math.max(...crimeCounts)] // Set the y-axis range from 0 to the maximum value
-                },
-            }
-
-            var layout2 = {
-                title: 'Number of Crimes by Location',
-                xaxis: {
-                    title: 'Number of Crimes',
-                },
-                yaxis: {
-                    showticklabels: false
-                },
-            }
-            Plotly.newPlot('chart1', [trace1], layout);
-            Plotly.newPlot('chart2', [trace2], layout1);
-            Plotly.newPlot('chart3', [trace3], layout2);
-        }
-
-        // Call createCharts when the Analytics tab is clicked
-        document.querySelector('.tab').addEventListener('click', function () {
-            createCharts();
-        });
-
-        document.getElementById('AnalyticsContent').style.display = 'block';
 
         function showContent(tabName) {
             if (tabName === 'Analytics') {
                 document.getElementById('AnalyticsContent').style.display = 'block';
                 document.getElementById('PredictionsContent').style.display = 'none';
+                generateHeatmap();
+                generatePlots();
             } else if (tabName === 'Predictions') {
                 document.getElementById('AnalyticsContent').style.display = 'none';
                 document.getElementById('PredictionsContent').style.display = 'block';
             }
         }
+
+        function trainAllModels() {
+            fetch('/train-all')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function forecastAll() {
+            fetch('/forecast-all')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function trainAndForecastModels() {
+            fetch('/train-all')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to train models');
+                    }
+                    return response.json();
+                })
+                .then(trainData => {
+                    alert(trainData.message);
+                    return fetch('/forecast-all');
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to perform forecasting');
+                    }
+                    return response.json();
+                })
+                .then(forecastData => {
+                    alert(forecastData.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function getForecastPlot() {
+            var incidentType = document.getElementById('incident_type').value;
+            var iframe = document.getElementById('forecastPlotIframe');
+            iframe.src = `/get-forecast-plot?incident_type=${incidentType}`;
+        }
+
+        function getRankPriority() {
+            const location = document.getElementById('RankLocation').value;
+            const day = document.getElementById('DayInput').value;
+            const hour = document.getElementById('HourInput').value;
+
+            fetch(`/rank-priority?location=${location}&day=${day}&hour=${hour}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text(); // Assuming the response is a text string
+                    } else {
+                        throw new Error('Failed to get rank priority');
+                    }
+                })
+                .then(data => {
+                    // Update the container with the response
+                    document.getElementById('rankPriorityResponse').textContent = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function generateHeatmap() {
+            fetch('/generate-heatmap')
+                .then(response => {
+                    if (response.ok) {
+                        loadHeatmapIframe();
+                    } else {
+                        console.error('Error in generating heatmap');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function generatePlots() {
+            fetch('/generate-plots')
+                .then(response => {
+                    if (response.ok) {
+                      loadMonthlyPlotIframe();
+                      loadDailyPlotIframe();
+                      loadHourlyPlotIframe();
+                      loadLocationPlotIframe();
+                      loadIncidentPlotIframe();
+                    } else {
+                        console.error('Error in generating plots');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function loadHeatmapIframe() {
+            var iframe = document.getElementById('heatmapIframe');
+            iframe.src = '/plot/heatmap';
+        }
+
+        function loadMonthlyPlotIframe() {
+            var iframe = document.getElementById('monthlyPlotIframe');
+            iframe.src = '/plots/Monthly-Counts-by-Year';
+        }
+
+        function loadDailyPlotIframe() {
+            var iframe = document.getElementById('dailyPlotIframe');
+            iframe.src = '/plots/Daily-Counts-by-Year';
+        }
+
+        function loadHourlyPlotIframe() {
+            var iframe = document.getElementById('hourlyPlotIframe');
+            iframe.src = '/plots/Hourly-Counts-by-Year';
+        }
+
+        function loadLocationPlotIframe() {
+            var iframe = document.getElementById('locationPlotIframe');
+            iframe.src = '/plots/Count-of-Location-by-Year';
+        }
+
+        function loadIncidentPlotIframe() {
+            var iframe = document.getElementById('incidentPlotIframe');
+            iframe.src = '/plots/Count-of-Incidents-by-Year';
+        }
+
     </script>
 </body>
 </html>
