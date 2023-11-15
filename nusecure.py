@@ -18,10 +18,6 @@ app.secret_key = 'secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-## add blueprints
-from app.admin import admin_bp
-app.register_blueprint(admin_bp)
-
 class User(UserMixin):
     def __init__(self, user_id, username, role):
         self.id = user_id
@@ -100,9 +96,43 @@ def home():
         elif role == 'analytics':
             return redirect(url_for('analytics'))
         elif role == 'admin':
-            return redirect(url_for('admin.admin'))
+            return redirect(url_for('admin'))
         
     return render_template('home.html')
+
+@app.route('/admin', methods=['GET'])
+@login_required
+def admin():
+    try:
+        db,cursor = establish_sql_connection()
+        query = f"SELECT Users.id as 'User ID', Users.username as 'Username', \
+            Users.email as 'Email', User_roles.role as 'Role'\
+            FROM Users LEFT JOIN User_roles ON Users.role_id = User_roles.id;"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        columns = [desc[0] for desc in cursor.description]
+        data = pd.DataFrame(result, columns = columns)
+
+        data = data[['User ID', 'Username', 'Email', 'Role']]
+        data_dict = data.to_dict(orient='records')
+        return render_template('admin.html', data=data_dict), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/admin/add-new-user', methods=['POST'])
+@login_required
+def add_new_user():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        role = data.get('role')
+        email = data.get('email',None)
+        add_user(username,password,role,email)
+        return jsonify({'message': 'User added successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 
 @app.route("/prediction")
