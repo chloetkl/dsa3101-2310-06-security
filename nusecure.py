@@ -211,8 +211,8 @@ def security():
                                         status=('status', 'first') 
                                         ).reset_index() 
     data = data.sort_values('LatestUpdate', ascending=False)
-    today = datetime.now().date()
-    data = data[data['LatestUpdate'].dt.date <= today]
+    now = datetime.now()
+    data = data[data['LatestUpdate'].dt.date <= now]
     data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 
                          'type':'Incidents', 'location_group':'Location', 'location':'Building', 
                          'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 
