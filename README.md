@@ -9,6 +9,13 @@ The NUSecure project aims to enhance security by optimizing monitoring systems, 
 ## How to Run
 
 1. Make sure Docker is installed on your machine.
-2. Build the Docker image: `docker build -t nusecure .`
-3. Run the Docker container: `docker run --name nusecureapp -d -p 4000:5000 nusecure`
-4. Access the application in your browser at `http://localhost:4000`
+2. Build and run the Docker containers: `docker compose up --build`
+3. Access the application in your browser at `http://localhost:9001`
+
+## Login credentials
+
+Type | Username | Password 
+--- | --- | --- 
+Admin | admin | admin 
+Security team | sec1 | sec1 
+Analytics team | analytics1 | analytics1 
