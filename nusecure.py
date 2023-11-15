@@ -11,6 +11,7 @@ from connect_sql import establish_sql_connection
 from jinja2.exceptions import TemplateNotFound
 from connect_sql import establish_sql_connection, get_location_id, get_incident_type_id
 import pandas as pd
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -86,22 +87,22 @@ def home():
     if request.method == 'POST':
         username = request.form['UserID']
         password = request.form['Password']
-        
+
         authenticated, role = authenticate(username,password)
-        
+
         if authenticated:
             user = get_user_from_username(username) # create user
             login_user(user)
         else:
             return "Invalid UserID or Password"
-        
+
         if role == 'security':
             return redirect(url_for('security'))
         elif role == 'analytics':
             return redirect(url_for('analytics'))
         elif role == 'admin':
             return redirect(url_for('admin.admin'))
-        
+
     return render_template('home.html')
 
 
@@ -144,7 +145,7 @@ def security():
             status = new_report['Status']
             priority = new_report['Priority']
             time = new_report['Datetime']
-            notes = ""           
+            notes = ""
 
             ## Add open log if new incident is open
             if status == 'Close':
@@ -176,7 +177,7 @@ def security():
                 cursor.close()
             if db:
                 db.close()
-  
+
 
     db,cursor = establish_sql_connection()
     query = f'SELECT Incident_logs.incident_id,\
@@ -195,29 +196,36 @@ def security():
         LEFT JOIN Incident_locations ON Incidents.location_id = Incident_locations.id\
         LEFT JOIN Incident_location_groups ON Incident_locations.location_group_id = Incident_location_groups.id\
         LEFT JOIN Incident_types ON Incidents.incident_type_id = Incident_types.id\
-        LEFT JOIN Users ON Incident_logs.user_id = Users.id'
+        LEFT JOIN Users ON Incident_logs.user_id = Users.id\
+        ORDER BY Incident_logs.time DESC;'
     cursor.execute(query)
     result = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
     data = pd.DataFrame(result, columns = columns)
 
-    condition = data['status'] == 'Open'
-    data['FirstUpdate'] = ''
-    data.loc[condition, 'FirstUpdate'] = data.loc[condition, 'time']
-    data['FirstUpdate'] = data['FirstUpdate'].shift(+1)
-    data.drop(data[data['status'] == 'Open'].index, inplace=True)
-    data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 'type':'Incidents', 'location_group':'Location', 'location':'Building', 'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 'time': 'LatestUpdate', 'status':'Status'}, inplace=True)
+    # Grouping by specified columns and aggregating time column
+    data = data.groupby(['incident_id', 'description', 'priority', 'type', 'location_group',
+                                    'location', 'latitude', 'longitude']).agg(
+                                        FirstUpdate=('time', 'min'), LatestUpdate=('time', 'max'),
+                                        username=('username', 'first'), 
+                                        status=('status', 'first') 
+                                        ).reset_index() 
+    data = data.sort_values('LatestUpdate', ascending=False)
+    now = datetime.now()
+    end_of_today = datetime(now.year, now.month, now.day, 23, 59, 59)
+    data = data[data['LatestUpdate'] <= end_of_today]
+    data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 
+                         'type':'Incidents', 'location_group':'Location', 'location':'Building', 
+                         'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 
+                         'time': 'LatestUpdate', 'status':'Status'}, inplace=True)
     data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
     data['LatestUpdate'] = pd.to_datetime(data['LatestUpdate'])
-    data['FirstUpdate'] = data['FirstUpdate'].dt.strftime('%d/%m/%Y %H:%M')
-    data['LatestUpdate'] = data['LatestUpdate'].dt.strftime('%d/%m/%Y %H:%M')
 
 
     data = data[['IncidentID', 'Description', 'Priority', 'Incidents', 'Location', 'Building', 'Latitude', 'Longitude', 'User', 'FirstUpdate', 'LatestUpdate', 'Status']]
 
-
-    ## CODES TO UPDATE CSV IN THE FORMAT YOU WANT - use pandas to wrangle instead of java
-    data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'],dayfirst=True)
+    
+    data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
     data['Date'] = data['FirstUpdate'].dt.date
     data['Time'] = data['FirstUpdate'].dt.time
     data.rename(columns={'IncidentID': 'Incident ID',
@@ -289,8 +297,8 @@ def get_forecast_plot():
         return send_file(plot_file, mimetype='text/html')
     except FileNotFoundError:
         return 'File not found.', 404
-    
-# Apriori Algorithm 
+
+# Apriori Algorithm
 
 # Endpoint to get rank_priority
 @app.route('/rank-priority', methods=['GET'])
@@ -306,7 +314,7 @@ def rank_priority():
         return get_rank(location,day,hour)
     except TypeError:
         return 'Input not found.', 404
-    
+
 #Data Visualization
 
 @app.route('/generate-plots', methods=['GET'])
@@ -322,14 +330,14 @@ def plot_generation():
 @role_required('analytics')
 def monthly_plot():
     try:
-        return render_template("Monthly_Counts_by_Year.html")
+        return send_file("static/Monthly_Counts_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
 @app.route('/plots/Daily-Counts-by-Year', methods=['GET'])
 def daily_plot():
     try:
-        return render_template("Daily_Counts_by_Year.html")
+        return send_file("static/Daily_Counts_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
@@ -338,7 +346,7 @@ def daily_plot():
 @role_required('analytics')
 def hourly_plot():
     try:
-        return render_template("Hourly_Counts_by_Year.html")
+        return send_file("static/Hourly_Counts_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
@@ -347,7 +355,7 @@ def hourly_plot():
 @role_required('analytics')
 def location_plot():
     try:
-        return render_template("Count_of_Location_by_Year.html")
+        return send_file("static/Count_of_Location_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
@@ -356,7 +364,7 @@ def location_plot():
 @role_required('analytics')
 def incident_plot():
     try:
-        return render_template("Count_of_Incidents_by_Year.html")
+        return send_file("static/Count_of_Incidents_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
@@ -366,12 +374,13 @@ def incident_plot():
 def heatmap_generation():
     return heatmap()
 
-@app.route('/plots/heatmap', methods=['GET'])
+@app.route('/plot/heatmap', methods=['GET'])
 @login_required
 @role_required('analytics')
 def heatmap_plot():
     try:
-        return render_template("heatmap1.html")
+        plot_file = "static/heatmap.html"
+        return send_file(plot_file, mimetype='text/html')
     except TemplateNotFound:
         return 'Template not found: Please generate plot first!'
 
@@ -382,12 +391,12 @@ def map_pin_generation():
     return generate_map_points()
 
 
-    
+
 @app.route('/logout', methods=['GET'])
 def logout():
     try:
         logout_user()
-        return redirect(url_for('home')), 200
+        return redirect('/'), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
