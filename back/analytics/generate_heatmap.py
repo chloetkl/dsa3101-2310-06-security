@@ -18,9 +18,9 @@ def heatmap():
   df_l = df.dropna(subset=['Latitude', 'Longitude'])
   m = folium.Map([1.3521, 103.8198], zoom_start=12)
   heat_data = [[row['Latitude'], row['Longitude']] for index, row in df_l.iterrows()]
-  
+
   # Add heatmap to map
   HeatMap(heat_data).add_to(m)
-  m.save('templates/heatmap1.html')
+  m.save('static/heatmap.html')
 
   return "Heatmap generated."

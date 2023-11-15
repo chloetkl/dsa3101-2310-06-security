@@ -356,7 +356,7 @@ def location_plot():
 @role_required('analytics')
 def incident_plot():
     try:
-        return render_template("static/Count_of_Incidents_by_Year.html")
+        return send_file("static/Count_of_Incidents_by_Year.html", mimetype='text/html')
     except TemplateNotFound:
         return 'TemplateNotFound: Please generate plot first!'
 
