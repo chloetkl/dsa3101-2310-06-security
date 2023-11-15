@@ -46,7 +46,7 @@
             align-items: center;
             width: 98%;
         }
- 
+
         #AnalyticsContent,
         #PredictionsContent,
         #filters {
@@ -116,8 +116,7 @@
                     </form>
                 </div>
                 <div class="prediction-actions">
-                    <button onclick="trainAllModels()">Train All Models</button>
-                    <button onclick="forecastAll()">Forecast All</button>
+
                     <button onclick="getForecastPlot(['LostFound', 'StolenItems', 'DamagedProperties', 'SexualIncidents', 'EmergencyIncidents'])">Get Forecast Plot</button>
                     <button onclick="GeneratePlot()">Generate Plot</button>
                 </div>
@@ -136,46 +135,72 @@
 
             <div class="content" id="PredictionsContent">
                 <h2>Predictions Page</h2>
-                <div class="prediction-actions">
-                    <button onclick="trainAllModels()">Train All Models</button>
-                    <button onclick="forecastAll()">Forecast All</button>
-                </div>
-                <br>
+                <h3>Priority of incidents</h3>
                 <div class="analytics-filters">
                     <label for="Location">Location:</label>
-                        <select id="Location">
-                            <option value="LostFound">Lost and Found</option>
-                            <option value="StolenItems">Stolen Items</option>
-                            <option value="DamagedProperties">Damaged Properties</option>
-                            <option value="SexualIncidents">Sexual Incidents</option>
-                            <option value="EmergencyIncidents">Emergency Incidents</option>
+                        <select id="RankLocation">
+                          <option value="BIZ">BIZ</option>
+                          <option value="BTC">BTC</option>
+                          <option value="CDE">CDE</option>
+                          <option value="COM">COM</option>
+                          <option value="DNMS">DNMS</option>
+                          <option value="FASS">FASS</option>
+                          <option value="FOS">FOS</option>
+                          <option value="Hall">Hall</option>
+                          <option value="HMKT">HMKT</option>
+                          <option value="KR">KR</option>
+                          <option value="KV">KV</option>
+                          <option value="OTH">OTH</option>
+                          <option value="PGP">PGP</option>
+                          <option value="SOC">SOC</option>
+                          <option value="UCC">UCC</option>
+                          <option value="UTown">UTown</option>
+                          <option value="YIH">YIH</option>
                         </select>
 
                     <label for="DayInput">Day:</label>
-                    <input type="text" id="DayInput">
-            
+                        <select id="DayInput">
+                          <option value="Monday">Monday</option>
+                          <option value="Tuesday">Tuesday</option>
+                          <option value="Wednesday">Wednesday</option>
+                          <option value="Thursday">Thursday</option>
+                          <option value="Friday">Friday</option>
+                          <option value="Saturday">Saturday</option>
+                          <option value="Sunday">Sunday</option>
+                        </select>
                     <label for="HourInput">Hour:</label>
-                    <input type="text" id="HourInput">
-            
+                        <select id="HourInput">
+                          <option value="Morning">Morning</option>
+                          <option value="Afternoon">Afternoon</option>
+                          <option value="Night">Night</option>
+                        </select>
                     <button onclick="getRankPriority()">Get Rank Priority</button>
+                    <p id="rankPriorityResponse"></p>
                 </div>
                 <br>
+                <h3>Time Series Forecasting of Incidents</h3>
                 <div class="filters">
                     <form>
-                        <label for="Location">Location:</label>
-                        <select id="Location">
-                            <option value="LostFound">Lost and Found</option>
-                            <option value="StolenItems">Stolen Items</option>
-                            <option value="DamagedProperties">Damaged Properties</option>
-                            <option value="SexualIncidents">Sexual Incidents</option>
-                            <option value="EmergencyIncidents">Emergency Incidents</option>
+                        <label for="incident_type">Incident Type:</label>
+                        <select id="incident_type">
+                          <option value="False">All</option>
+                          <option value="LOST AND FOUND">Lost and Found</option>
+                          <option value="STOLEN ITEMS">Stolen Items</option>
+                          <option value="DAMAGED PROPERTIES">Damaged Properties</option>
+                          <option value="SEXUAL INCIDENTS">Sexual Incidents</option>
+                          <option value="EMERGENCY INCIDENTS">Emergency Incidents</option>
                         </select>
                         <br>
                     </form>
                 </div>
                 <br>
-                <div id="forecastPlotContainer"></div>
-                    <button onclick="getForecastPlot(['LostFound', 'StolenItems', 'DamagedProperties', 'SexualIncidents', 'EmergencyIncidents'])">Get Forecast Plot</button>
+                <button onclick="getForecastPlot()">Get Forecast Plot</button>
+                <div id="forecastPlotContainer">
+                    <iframe id="forecastPlotIframe" style="width:100%; height:500px; border:none;"></iframe>
+                </div>
+                <button onclick="trainAndForecastModels()">Train All Models</button>
+                <!-- <button onclick="forecastAll()">Forecast All</button> !-->
+
             </div>
         </div>
     </div>
@@ -203,7 +228,7 @@
         }
 
         function trainAllModels() {
-            fetch('/train_all')
+            fetch('/train-all')
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
@@ -214,7 +239,7 @@
         }
 
         function forecastAll() {
-            fetch('/forecast_all')
+            fetch('/forecast-all')
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
@@ -224,51 +249,60 @@
                 });
         }
 
-        function getForecastPlot(incidentType) {
-            fetch(`/get_forecast_plot?incident_type=${incidentType}`)
+        function trainAndForecastModels() {
+            fetch('/train-all')
                 .then(response => {
-                    if (response.ok) {
-                        // Assuming the response is HTML, you can open it in a new tab
-                        return response.text();
-                    } else {
-                        throw new Error('Failed to get forecast plot');
+                    if (!response.ok) {
+                        throw new Error('Failed to train models');
                     }
+                    return response.json();
                 })
-                .then(html => {
-                    // Open the forecast plot in a new tab
-                    const newTab = window.open();
-                    newTab.document.write(html);
+                .then(trainData => {
+                    alert(trainData.message);
+                    return fetch('/forecast-all');
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to perform forecasting');
+                    }
+                    return response.json();
+                })
+                .then(forecastData => {
+                    alert(forecastData.message);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
 
-        function getRankPriority() {
-            // Assuming you have location, day, and hour from your filters
-            const location = document.getElementById('Location').value;
-            const day = document.getElementById('Day').value;
-            const hour = document.getElementById('Hour').value;
+        function getForecastPlot() {
+            var incidentType = document.getElementById('incident_type').value;
+            var iframe = document.getElementById('forecastPlotIframe');
+            iframe.src = `/get-forecast-plot?incident_type=${incidentType}`;
+        }
 
-            // Make a fetch request to the rank_priority endpoint
-            fetch(`/rank_priority?location=${location}&day=${day}&hour=${hour}`)
+        function getRankPriority() {
+            const location = document.getElementById('RankLocation').value;
+            const day = document.getElementById('DayInput').value;
+            const hour = document.getElementById('HourInput').value;
+
+            fetch(`/rank-priority?location=${location}&day=${day}&hour=${hour}`)
                 .then(response => {
                     if (response.ok) {
-                        // Assuming the response is JSON, you can handle it accordingly
-                        return response.json();
+                        return response.text(); // Assuming the response is a text string
                     } else {
                         throw new Error('Failed to get rank priority');
                     }
                 })
                 .then(data => {
-                    // Handle the data from the response
-                    console.log(data);
-                    // Update your HTML with the data, or perform any other actions
+                    // Update the container with the response
+                    document.getElementById('rankPriorityResponse').textContent = data;
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+
     </script>
 </body>
 </html>
