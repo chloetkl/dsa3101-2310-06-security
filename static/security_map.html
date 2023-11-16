@@ -4,43 +4,15 @@
 <head>
     <title>Security Team Dashboard</title>
     <style>
-        .header-container {
-            border: 2px solid #000;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 99%;
-            position: fixed; /* Fix the header */
-            background: white; /* Set a background color */
-            z-index: 9999; /* Ensure it's on top */
-        }
-
-        .logo {
-            max-width: 100px;
-            height: 100px;
-        }
-
-        .header {
-            text-align: center;
-            font-size: 24px;
-        }
-
-        .security-team {
-            text-align: right;
-        }
-
         iframe {
             width: 100%;
-            height: calc(100vh - 100px);
+            height: 100vh;
             border: none;
-            margin-top: 100px; /* Place iframe content below the header */
         }
 
         .pull-tab {
             position: fixed;
             right: 1px; /* Adjust position */
-            top: 150px; /* Adjust position */
             background-color: #f44336;
             color: white;
             padding: 10px 15px;
@@ -58,8 +30,7 @@
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 20px;
-	    z-index: 1000;
-	    margin-top: 100px;
+	        z-index: 1000;
         }
 
         .modal-content {
@@ -72,17 +43,17 @@
             margin-top: 380px;
         }
 
-	.hidden-column {
-	    display:none;
-	}
+        .hidden-column {
+            display:none;
+        }
 
         .overlay {
             display: none;
             position: fixed;
-            top: 100px; /* Adjust position to avoid header */
+            top: 1px; /* Adjust position to avoid header */
             right: 0;
             width: 50%;
-            height: calc(100vh - 50px);
+            height: 100vh;
             background: rgba(255, 255, 255, 0.9);
             z-index: 9998; /* Below the pull-tab */
         }
@@ -98,40 +69,34 @@
             overflow-y: auto;
         }
 
-	table {
-	    border-collapse: collapse;
-	}
+        table {
+            border-collapse: collapse;
+        }
 
-	th, td {
-	    border: 1px solid;
-	}
+        th, td {
+            border: 1px solid;
+        }
 
-	th {
-	    background-color: #f2f2f2;
-	    position: sticky;
-	    top: 0;
-	}
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
 
         h2 {
         margin-top: 40px;
+        }
+
+        #add-new-report-form-message {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none; /* Initially hide the message */
         }
 
     </style>
 </head>
 
 <body>
-    <div class="header-container">
-        <div class="logo">
-            <img src="https://www.nus.edu.sg/images/default-source/identity-images/NUS_logo_full-horizontal.jpg" alt="NUS Logo" style="height: 100px;">
-        </div>
-        <div class="header">
-            <h1>NUSecure</h1>
-        </div>
-        <div class="security-team">
-            <h1>Security Team</h1>
-        </div>
-    </div>
-
     <iframe id="map" src="{{ url_for('static', filename='/color_coded_incidents_map.html') }}"></iframe>
 
     <button class="pull-tab" onclick="openTab()">Table Tab</button>
@@ -149,6 +114,7 @@
                 <option value="lost and found">Lost and Found</option>
                 <option value="damaged property">Damaged Property</option>
                 <option value="stolen items">Stolen Items</option>
+                <option value="emergency incident">Emergency Incidents</option>
                 <option value="sexual incidents">Sexual Incidents</option>
             </select>
             <select id="priorityFilter">
@@ -197,26 +163,27 @@
             <div id="modal" class="modal" height="500px">
                 <div id="modalContent" class="modal-content">
                     <h2>Add New Report</h2>
-                    <form id="addReportForm" method="POST">
-                        <label for="id">Incident ID:</label>
-                        <input type="text" id="id" required><br><br>
-			<label for="date">Date:</label>
-			<input type="date" id="date" required><br><br>
-                        <label for="time">Time:</label>
-                        <input type="text" id="time" required><br><br>
+                    <form id="addReportForm" method="POST" action="{{ url_for('security')}}">
+			            <label for="datetime">Date and Time:</label>
+                        <input type="datetime-local" id="datetime" name="datetime" required><br><br>
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" name="description" required><br><br>
                         <label for="type">Incident Type:</label>
-                        <select id="type" required>
+                        <select id="type" name="type" required>
                             <option>Lost and Found</option>
                             <option>Damaged Property</option>
                             <option>Stolen Items</option>
+                            <option>Emergency Incidents</option>
                             <option>Sexual Incidents</option>
+
                         </select><br><br>
-                        <select id="priority" required>
+                        <label for="priority">Priority:</label>
+                        <select id="priority" name="priority" required>
                             <option>Normal</option>
                             <option>High</option>
                         </select><br><br>
                         <label for="location">Location:</label>
-                        <select id="location" required>
+                        <select id="location" name="location" required>
                             <option>BIZ</option>
                             <option>BTC</option>
                             <option>CDE</option>
@@ -236,19 +203,14 @@
                             <option>YIH</option>
                         </select><br><br>
                         <label for="building">Building:</label>
-                        <input type="text" id="building" required><br><br>
+                        <input type="text" id="building" name="building" required><br><br>
                         <label for="status">Status:</label>
-                        <select id="status" required>
+                        <select id="status" name="status" required>
                             <option>Open</option>
                             <option>Close</option>
                         </select><br><br>
-                        <label for="user">User Added:</label>
-                        <input type="text" id="user" required><br><br>
-                        <label for="latitude">Latitude:</label>
-                        <input type="text" id="latitude" required><br><br>
-                        <label for="longitude">Longitude:</label>
-                        <input type="text" id="longitude" required><br><br>
                         <button type="submit">Add</button>
+                        <div id="add-new-report-form-message" class="message"></div>
                     </form>
                 </div>
             </div>
@@ -306,11 +268,15 @@
             overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
         }
 
+
         const addReportButton = document.getElementById("addReportButton");
         const modal = document.getElementById("modal");
         const modalContent = document.getElementById("modalContent");
-        const addReportForm = document.getElementById("addReportForm");
-        const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+        // const addReportForm = document.getElementById("addReportForm");
+        // const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+        addReportButton.addEventListener("click", () => {
+                 modal.style.display = "block";
+                   });
 
         const idFilter = document.getElementById("idFilter");
         const dateFilter = document.getElementById("dateFilter");
@@ -324,27 +290,38 @@
         const table = document.getElementById("dataTable");
         const rows = table.getElementsByTagName("tr");
 
-        addReportButton.addEventListener("click", () => {
-            modal.style.display = "block";
-        });
-
-            
-        addReportForm.addEventListener("submit", function (event) {
+        const addReportForm = document.getElementById("addReportForm");
+        const messageElement = document.getElementById("add-new-report-form-message");
+        addReportForm.addEventListener("submit", function(event) {
             event.preventDefault();
-            const id = document.getElementById("id").value;
-            const date = document.getElementById("date").value;
-            const time = document.getElementById("time").value;
-            const type = document.getElementById("type").value;
-            const priority = document.getElementById("priority").value;
-            const location = document.getElementById("location").value;
-            const building = document.getElementById("building").value;
-            const status = document.getElementById("status").value;
-            const user = document.getElementById("user").value;
-            const latitude = document.getElementById("latitude").value;
-            const longitude = document.getElementById("longitude").value;
-                
-            const newRow = document.createElement("tr");
 
+            // Capture form data
+            const formData = new FormData(addReportForm);
+
+            // Send data to Flask route using fetch API
+            fetch('/security', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Response status code:', response.status);
+                if (response.ok) {
+                messageElement.textContent = 'Response status code: ' + response.status;
+                addReportForm.reset(); // Clear the form on success (2xx status code)
+                } else {
+                throw new Error('Failed to add item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                messageElement.textContent = 'Error sending data: ' + error.message;
+            })
+            .finally(() => {
+                // Show the message element
+                messageElement.style.display = 'block';
+            });
+        });
+                
             newRow.innerHTML = `
                 <td>${id}</td>
                 <td>${date}</td>
@@ -366,7 +343,7 @@
             // Clear form values
             document.getElementById("id").value = "";
             document.getElementById("date").value = "";
-	    document.getElementById("time").value = "";
+	        document.getElementById("time").value = "";
             document.getElementById("type").value = "";
             document.getElementById("priority").value = "";
             document.getElementById("location").value = "";
@@ -378,7 +355,6 @@
 
             // Close the modal
             modal.style.display = "none";
-        });
     
         idFilter.addEventListener("input", filterTable);
         dateFilter.addEventListener("input", filterTable);
