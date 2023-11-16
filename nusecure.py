@@ -187,6 +187,16 @@ def security():
 
     return render_template('security.html', data=data_dict)
 
+@app.route('/security/generate-map-pin', methods=['GET'])
+@login_required
+@role_required('security')
+def map_pin_generation():
+    try:
+        return generate_map_points(), 200
+    except Exception as e:
+        error_message = f"Error generating map pins: {e}"
+        return jsonify({'error': error_message}), 500
+
 @app.route('/security/add-incident-report', methods=['POST'])
 @login_required
 @role_required('security')
@@ -412,19 +422,11 @@ def get_forecast_plot():
 
 
 
-@app.route('/generate-map-pin', methods=['GET'])
-@login_required
-@role_required('security')
-def map_pin_generation():
-    return generate_map_points()
-
-
-
 @app.route('/logout', methods=['GET'])
 def logout():
     try:
         logout_user()
-        return redirect('/'), 200
+        return redirect('/'), 302
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
