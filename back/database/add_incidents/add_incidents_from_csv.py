@@ -87,7 +87,7 @@ def add_incidents_from_csv(filepath):
                     print(f"add_incidents_from_csv | Error: {err}")
         
         print(f"add_incidents_from_csv | Unique incidents added: {incidents_added}")
-        print(f"add_incidents_from_csv | Incidents already in database: {incidents_added}")
+        print(f"add_incidents_from_csv | Incidents already in database: {duplicated}")
         db.commit()
 
         ## read logs

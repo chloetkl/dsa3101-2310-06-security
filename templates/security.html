@@ -120,7 +120,7 @@
                     <div id="modalContent" class="modal-content">
                         <span class="close" onclick="closeModal()">&times;</span>
                         <h2>Add New Report</h2>
-                        <form id="addReportForm" method="POST" action="{{ url_for('security')}}">
+                        <form id="addReportForm" method="POST" action="{{ url_for('security.add_incident_report')}}">
                             <label for="datetime">Date and Time:</label>
                             <input type="datetime-local" id="datetime" name="datetime" required><br><br>
                             <label for="description">Description:</label>
@@ -178,12 +178,13 @@
                                 <th>Incident ID</th>
                                 <th>Date</th>
                                 <th>Time</th>
+                                <th>Description</th>
                                 <th>Incident Type</th>
                                 <th>Priority</th>
-                                <th>Location</th>
+                                <th>Location Group</th>
                                 <th>Building</th>
                                 <th>Status</th>
-                                <th>User Added</th>
+                                <th>User</th>
                                 <th class="hidden-column">Latitude</th>
                                 <th class="hidden-column">Longitude</th>
                             </tr>
@@ -194,12 +195,13 @@
                                 <td>{{ row['Incident ID'] }}</td>
                                 <td>{{ row['Date'] }}</td>
                                 <td>{{ row['Time'] }}</td>
+                                <td>{{ row['Description'] }}</td>
                                 <td>{{ row['Incident Type'] }}</td>
                                 <td>{{ row['Priority'] }}</td>
                                 <td>{{ row['Location'] }}</td>
                                 <td>{{ row['Building'] }}</td>
                                 <td>
-                                  <form method="POST" action="{{ url_for('update_incident') }}">
+                                  <form id="updateIncidentForm" method="POST" action="{{ url_for('security.update_incident') }}">
                                     <input type="hidden" name="incident_id" value="{{ row['Incident ID'] }}">
                                     <input type="hidden" name="priority" value="{{ row['Priority'] }}">
                                     <select class="status-input" name="status" onchange="this.form.submit()">
@@ -287,7 +289,7 @@
             const formData = new FormData(addReportForm);
 
             // Send data to Flask route using fetch API
-            fetch('/security', {
+            fetch('/security/add-incident-report', {
                 method: 'POST',
                 body: formData
             })
@@ -307,6 +309,35 @@
             .finally(() => {
                 // Show the message element
                 messageElement.style.display = 'block';
+            });
+        });
+
+        const updateIncidentForm = document.getElementById("updateIncidentForm");
+        updateIncidentForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Capture form data
+            const formData = new FormData(updateIncidentForm);
+
+            // Send data to Flask route using fetch API
+            fetch('/security/update-incident', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Response status code:', response.status);
+                if (response.ok) {
+                    console.log('Incident updated successfully');
+                } else {
+                throw new Error('Failed to add item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            })
+            .finally(() => {
+                // Show tab
+                openTab()
             });
         });
 
