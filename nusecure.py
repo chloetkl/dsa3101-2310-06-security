@@ -12,6 +12,7 @@ from jinja2.exceptions import TemplateNotFound
 from connect_sql import establish_sql_connection, get_location_id, get_incident_type_id
 import pandas as pd
 from datetime import datetime
+from werkzeug.exceptions import HTTPException
 
 
 app = Flask(__name__)
@@ -19,10 +20,12 @@ app.secret_key = 'secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-## add blueprints
+## Add Blueprints
 from app.admin import admin_bp
 app.register_blueprint(admin_bp)
 
+
+## For Authentication
 class User(UserMixin):
     def __init__(self, user_id, username, role):
         self.id = user_id
@@ -82,9 +85,18 @@ def role_required(required_role):
         return wrapper
     return decorator
 
-@app.route('/', methods=['GET', 'POST'])
+## Home - Login page
+@app.route('/', methods=['GET'])
 def home():
-    if request.method == 'POST':
+    try:
+        return render_template('home.html'), 200
+    except Exception as e:
+        error_message = f"Error rendering template: {e}"
+        return jsonify({'error': error_message}), 500
+
+@app.route('/login', methods=['POST'])
+def login():
+    try:
         username = request.form['UserID']
         password = request.form['Password']
 
@@ -94,92 +106,26 @@ def home():
             user = get_user_from_username(username) # create user
             login_user(user)
         else:
-            return "Invalid UserID or Password"
+            return "Invalid UserID or Password", 401
 
         if role == 'security':
-            return redirect(url_for('security'))
+            return redirect(url_for('security')), 302
         elif role == 'analytics':
-            return redirect(url_for('analytics'))
+            return redirect(url_for('analytics')), 302
         elif role == 'admin':
-            return redirect(url_for('admin.admin'))
+            return redirect(url_for('admin.admin')), 302
+    except HTTPException as http_error:
+        return jsonify({'error': str(http_error)}), http_error.code
+    except Exception as e:
+        return jsonify({'error': f"Internal Server Error: {e}"}), 500
 
-    return render_template('home.html')
-
-
-@app.route("/prediction")
-@login_required
-@role_required('analytics')
-def send_p():
-    return send_file("back/data/test.png")
-
-@app.route('/security', methods=['GET', 'POST'])
+## Security Page
+@app.route('/security', methods=['GET'])
 @login_required
 @role_required('security')
 def security():
     user_id = current_user.id
     print(f"User {user_id} is authenticated")
-
-    if request.method == 'POST':
-        try:
-            new_report = {
-                'Description': request.form['description'],
-                'Incident Type': request.form['type'],
-                'Datetime': request.form['datetime'],
-                'Priority': request.form['priority'],
-                'Location': request.form['building'],
-                'Status': request.form['status'],
-            }
-
-            db,cursor = establish_sql_connection()
-
-            ## Add incident
-            description = new_report['Description']
-            location_id = get_location_id(new_report['Location'])
-            incident_type_id = get_incident_type_id(new_report['Incident Type'])
-            query = f"INSERT INTO Incidents (description, location_id, incident_type_id) \
-                VALUES ('{description}', '{location_id}', '{incident_type_id}')"
-            cursor.execute(query)
-            db.commit()
-
-            ## Add incident logs(s)
-            incident_id = cursor.lastrowid
-            ## Add both open and close logs if new incident is close
-            status = new_report['Status']
-            priority = new_report['Priority']
-            time = new_report['Datetime']
-            notes = ""
-
-            ## Add open log if new incident is open
-            if status == 'Close':
-                query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
-                        ('{incident_id}','Open','{priority}','{time}','{user_id}','{notes}')"
-                cursor.execute(query)
-                db.commit()
-                query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
-                        ('{incident_id}','Close','{priority}','{time}','{user_id}','{notes}')"
-                cursor.execute(query)
-                db.commit()
-            else:
-                query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
-                        ('{incident_id}','{status}','{priority}','{time}','{user_id}','{notes}')"
-                cursor.execute(query)
-                db.commit()
-
-            ## success
-            return jsonify({'message': f'New incident added successfully. Incident code: {incident_id}'}), 200
-
-        except Exception as e:
-            # Handle exceptions
-            print(f"An error occurred: {e}")
-            db.rollback()  # Rollback the changes in case of an error
-            return jsonify({'error': f'Failed to add data due to {e}'}), 500
-
-        finally:
-            if cursor:
-                cursor.close()
-            if db:
-                db.close()
-
 
     db,cursor = establish_sql_connection()
     query = f'SELECT Incident_logs.incident_id,\
@@ -240,6 +186,81 @@ def security():
     data_dict = data.to_dict(orient='records')
 
     return render_template('security.html', data=data_dict)
+
+@app.route('/security/add-incident-report', methods=['POST'])
+@login_required
+@role_required('security')
+def add_incident_report():
+    user_id = current_user.id
+    print(f"User {user_id} is authenticated")
+    try:
+        new_report = {
+            'Description': request.form['description'],
+            'Incident Type': request.form['type'],
+            'Datetime': request.form['datetime'],
+            'Priority': request.form['priority'],
+            'Location': request.form['building'],
+            'Status': request.form['status'],
+        }
+
+        db,cursor = establish_sql_connection()
+
+        ## Add incident
+        description = new_report['Description']
+        location_id = get_location_id(new_report['Location'])
+        incident_type_id = get_incident_type_id(new_report['Incident Type'])
+        query = f"INSERT INTO Incidents (description, location_id, incident_type_id) \
+            VALUES ('{description}', '{location_id}', '{incident_type_id}')"
+        cursor.execute(query)
+        db.commit()
+
+        ## Add incident logs(s)
+        incident_id = cursor.lastrowid
+        ## Add both open and close logs if new incident is close
+        status = new_report['Status']
+        priority = new_report['Priority']
+        time = new_report['Datetime']
+        notes = ""
+
+        ## Add open log if new incident is open
+        if status == 'Close':
+            query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
+                    ('{incident_id}','Open','{priority}','{time}','{user_id}','{notes}')"
+            cursor.execute(query)
+            db.commit()
+            query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
+                    ('{incident_id}','Close','{priority}','{time}','{user_id}','{notes}')"
+            cursor.execute(query)
+            db.commit()
+        else:
+            query = f"INSERT INTO Incident_logs(incident_id,status, priority,time,user_id,notes) VALUES \
+                    ('{incident_id}','{status}','{priority}','{time}','{user_id}','{notes}')"
+            cursor.execute(query)
+            db.commit()
+
+        ## success
+        return jsonify({'message': f'New incident added successfully. Incident code: {incident_id}'}), 200
+
+    except Exception as e:
+        # Handle exceptions
+        print(f"An error occurred: {e}")
+        db.rollback()  # Rollback the changes in case of an error
+        return jsonify({'error': f'Failed to add data due to {e}'}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
+
+## Analytics Page
+@app.route("/prediction")
+@login_required
+@role_required('analytics')
+def send_p():
+    return send_file("back/data/test.png")
+
+
 
 @app.route('/analytics', methods=['GET'])
 @login_required

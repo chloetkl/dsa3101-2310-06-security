@@ -204,7 +204,7 @@
             <div id="modal" class="modal" height="500px">
                 <div id="modalContent" class="modal-content">
                     <h2>Add New Report</h2>
-                    <form id="addReportForm" method="POST" action="{{ url_for('security')}}">
+                    <form id="addReportForm" method="POST" action="{{ url_for('add_incident_report')}}">
 			            <label for="datetime">Date and Time:</label>
                         <input type="datetime-local" id="datetime" name="datetime" required><br><br>
                         <label for="description">Description:</label>
@@ -340,7 +340,7 @@
             const formData = new FormData(addReportForm);
 
             // Send data to Flask route using fetch API
-            fetch('/security', {
+            fetch('/security/add-incident-report', {
                 method: 'POST',
                 body: formData
             })
