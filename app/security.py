@@ -111,9 +111,7 @@ def update_incident():
                 ('{incident_id}', '{status}', '{priority}', '{time}', '{user_id}', '{notes}')"
         cursor.execute(query)
         db.commit()
-        return jsonify({'message': f'Status of {incident_id} has changed to {status}'}), 200
         
-
     except Exception as e:
         db.rollback()
         return jsonify({'error': f'Failed to add data due to {e}'}), 500
@@ -121,6 +119,8 @@ def update_incident():
     finally:
         cursor.close()
         db.close()
+
+    return redirect(url_for('security.security'))
 
 @security_bp.route('/security/generate-map-pin', methods=['GET'])
 @login_required
