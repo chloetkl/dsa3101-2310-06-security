@@ -71,37 +71,47 @@ def save_model(model, filename):
     with open(filename, 'wb') as pkl:
         pickle.dump(model, pkl)
 
+import traceback
+from datetime import datetime
+import pandas as pd
+from pmdarima import auto_arima
+
 def train_sarima(incident_type=False):
-    if incident_type:
-        data = fetch_data(incident_type)
-    else:
-        data = fetch_data()
+    try:
+        if incident_type:
+            data = fetch_data(incident_type)
+        else:
+            data = fetch_data()
 
-    weekly_data, train, test = engineer_features(data)
+        weekly_data, train, test = engineer_features(data)
 
-    model = auto_arima(train,
-                        start_p=0, start_q=0, 
-                        max_p=0, max_q=0,     
-                        m=52,                 
-                        start_P=0, start_Q=0, 
-                        max_P=2, max_Q=2,     
-                        seasonal=True,        
-                        d=0,                  
-                        D=1,                  
-                        trace=True,           
-                        error_action='ignore',  
-                        suppress_warnings=True, 
-                        stepwise=True)
+        model = auto_arima(train,
+                           start_p=0, start_q=0, 
+                           max_p=0, max_q=0,     
+                           m=52,                 
+                           start_P=0, start_Q=0, 
+                           max_P=2, max_Q=2,     
+                           seasonal=True,        
+                           d=0,                  
+                           D=1,                  
+                           trace=True,           
+                           error_action='ignore',  
+                           suppress_warnings=True, 
+                           stepwise=True)
 
-    trained_model, mae = train_and_evaluate(model, train, test)
+        trained_model, mae = train_and_evaluate(model, train, test)
 
-    mae_df = pd.read_csv('back/models/sarima/mae_tracking.csv')
-    mae_df.loc[len(mae_df)] = [datetime.now(),incident_type, mae]
-    mae_df.to_csv('back/models/sarima/mae_tracking.csv', index=False)
+        mae_df = pd.read_csv('back/models/sarima/mae_tracking.csv')
+        mae_df.loc[len(mae_df)] = [datetime.now(), incident_type, mae]
+        mae_df.to_csv('back/models/sarima/mae_tracking.csv', index=False)
 
-    trained_model.fit(weekly_data)
-    save_model(trained_model, f'back/models/sarima/sarima_model_{incident_type}.pkl')
+        trained_model.fit(weekly_data)
+        save_model(trained_model, f'back/models/sarima/sarima_model_{incident_type}.pkl')
 
+    except Exception as e:
+        print(f"An error occurred during SARIMA model training: {e}")
+        traceback.print_exc()
+        
 def train_all_sarima(incident_types):
     train_sarima()
     for incident_type in incident_types:
