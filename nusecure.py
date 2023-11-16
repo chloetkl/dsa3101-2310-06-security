@@ -108,11 +108,13 @@ def home():
 
 @app.route("/prediction")
 @login_required
+@role_required('analytics')
 def send_p():
     return send_file("back/data/test.png")
 
 @app.route('/security', methods=['GET', 'POST'])
 @login_required
+@role_required('security')
 def security():
     user_id = current_user.id
     print(f"User {user_id} is authenticated")
@@ -212,8 +214,7 @@ def security():
                                         ).reset_index() 
     data = data.sort_values('LatestUpdate', ascending=False)
     now = datetime.now()
-    end_of_today = datetime(now.year, now.month, now.day, 23, 59, 59)
-    data = data[data['LatestUpdate'] <= end_of_today]
+    data = data[data['LatestUpdate'] <= now]
     data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 
                          'type':'Incidents', 'location_group':'Location', 'location':'Building', 
                          'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 
@@ -239,29 +240,42 @@ def security():
 
     return render_template('security.html', data=data_dict)
 
+@app.route('/security/update-incident', methods=['POST'])
+@login_required
+@role_required('security')
+def update_incident():
+    try:
+        db,cursor = establish_sql_connection()
+
+        incident_id = request.form['incident_id']
+        status = request.form['status']
+        priority = request.form['priority']
+        time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        notes = ""
+        user_id = current_user.id
+
+        query = f"INSERT INTO Incident_logs(incident_id, status, priority, time, user_id, notes) VALUES\
+                ('{incident_id}', '{status}', '{priority}', '{time}', '{user_id}', '{notes}')"
+        cursor.execute(query)
+        db.commit()
+
+    except Exception as e:
+        print(f"Error: {e}")
+        db.rollback()
+
+    finally:
+        cursor.close()
+        db.close()
+
+    return redirect(url_for('security'))
+
+
 @app.route('/analytics', methods=['GET'])
 @login_required
 @role_required('analytics')
 def analytics():
     user_id = current_user.id
     return render_template('analytics.html')
-
-
-# @app.route("/add_user", methods = ["POST"])
-# def add_user(email, username, role_id, password):
-#     email = request.args.get('email')
-#     username = request.args.get('username')
-#     role_id = request.args.get('role_id')
-#     password = request.args.get('password')
-#     salt = bcrypt.gensalt()
-#     hash = bcrypt.hashpw(password, salt)
-
-#     db = establish_sql_connection()
-#     cursor = db.cursor
-#     query = f"\
-#         INSERT INTO Users\
-#         (email, username, role_id, salt, hash)\
-#         VALUES ('{email}', '{username}', {role_id}, '{salt}', '{hash}')"
 
 # Endpoint to train SARIMA models for all incident types
 @app.route('/train-all', methods=['GET'])
@@ -335,6 +349,8 @@ def monthly_plot():
         return 'TemplateNotFound: Please generate plot first!'
 
 @app.route('/plots/Daily-Counts-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
 def daily_plot():
     try:
         return send_file("static/Daily_Counts_by_Year.html", mimetype='text/html')
