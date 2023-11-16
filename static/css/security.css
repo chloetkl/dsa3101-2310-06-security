@@ -11,6 +11,20 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+h2 {
+    position: relative; 
+    left: 100px;
+    top: 30px;
+    font-size: 30px;
+}
+
+h3 {
+    position: relative; 
+    left: 100px;
+    top: 50px;
+    font-size: 20px;
+}
+
 /* Sidebar styles */
 .sidebar {
     position: fixed;

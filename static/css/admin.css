@@ -20,6 +20,7 @@ body {
   background: #ffffff;
   transition: all .5s ease;
   border-right: 1px solid black;
+  z-index: 999;
 }
 
 .sidebar header {
