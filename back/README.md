@@ -38,14 +38,14 @@ $ docker compose up --build
 There are 3 containers in docker-compose.yml:
 1. database
 - Creates image of MySQL database 
-2. database-manage
+2. database-manager
 - Creates image of adminer on localhost:8080 to manage tables
 3. database-pop
 - Populates database with users and csv of past incidents
 - Subfolders:
   - init: Initialises 7 blank MySQL tables
   - populate: Populates User_roles, Incident_locations, Incident_location_groups, Incident_types
-  - add_users: Adds users (to be updated)
+  - add_users: Creates user accounts of 3 roles in Users for testing 
   - add_incidents: Adds incidents to Incidents and IncidentLogs
 
 
