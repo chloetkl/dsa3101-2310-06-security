@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
+        *{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        text-decoration: none;
+        }
+
+        body {
+        font-family: 'Roboto', sans-serif;
+        }
+
+        .sidebar {
+        position: fixed;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background: #ffffff;
+        transition: all .5s ease;
+        border-right: 1px solid black;
+        }
+
+        .sidebar header a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: black;
+        }
+
+        .sidebar header img {
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .sidebar header {
+        font-size: 20px;
+        color: rgb(0, 0, 0);
+        line-height: 70px;
+        text-align: center;
+        background: #ffffff;
+        user-select: none;
+        }
+
+        .sidebar ul a{
+        display: block;
+        height: 100%;
+        width: 100%;
+        line-height: 65px;
+        font-size: 20px;
+        color: rgb(0, 0, 0);
+        padding-left: 40px;
+        box-sizing: border-box;
+        border-bottom: 1px solid black;
+        border-top: 1px solid rgba(255,255,255,.1);
+        transition: .4s;
+        }
+
+        ul li:hover a{
+        padding-left: 50px;
+        }
+
+        .sidebar ul a i{
+        margin-right: 16px;
+        }
+
+        #check{
+        display: none;
+        }
+
+        label #btn,label #cancel{
+        position: absolute;
+        color: #2596be;
+        border-radius: 3px;
+        cursor: pointer;
+        }
+
+        label #btn{
+        left: 40px;
+        top: 25px;
+        font-size: 35px;
+        color: rgb(0, 0, 0);
+        padding: 6px 12px;
+        transition: all .5s;
+        }
+
+        label #cancel{
+        z-index: 1111;
+        left: -195px;
+        top: 17px;
+        font-size: 30px;
+        color: #000000;
+        padding: 4px 9px;
+        transition: all .5s ease;
+        }
+
+        #check:checked ~ .sidebar{
+        left: 0;
+        }
+
+        #check:checked ~ label #btn{
+        left: 250px;
+        opacity: 0;
+        pointer-events: none;
+        }
+
+        #check:checked ~ label #cancel{
+        left: 195px;
+        }
+
+        #check:checked ~ section{
+        margin-left: 250px;
+        }
+
+        section {
+        width: 100vw; /* Use full viewport width */
+        height: 100vh; /* Use full viewport height */
+        margin: 0; /* Remove default margin */
+        padding: 0; /* Remove default padding */
+        overflow: auto; /* Add scrollbars if content exceeds viewport */
+        background: #f0f0f0; /* Background color (change as needed) */
+        }
+
+        .navigation-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            left: 40px;
+            top: 25px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            margin: 0;
+            transition: padding-left 0.4s;
+            text-align: left;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Hover effect for the navigation buttons */
+        .navigation-button:hover {
+            padding-left: 10px; /* Adjust padding as needed */
+        }
+
+        .tabs {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+
+        .tab:hover {
+            background-color: #ddd;
+        }
+        .logo {
+            max-width: 100px;
+            height: 100px;
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+        }
+        .header-container {
+            border: 2px solid #000;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 98%;
+        }
+
+        .content {
+            display: none;
+            z-index: 1000;
+        }
+
+        #AnalyticsContent,
+        #PredictionsContent,
+        #filters {
+            display: none;
+        }
+
+        #iframe {
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body>
+    <input type="checkbox" id="check">
+    <label for="check">
+        <i class="fas fa-bars" id="btn"></i>
+        <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+        <header>
+            <a href="https://imgbb.com/">
+                <img src="https://i.ibb.co/DKf23HJ/Screenshot-2023-11-15-132345-removebg-preview-1.png" alt="My App Logo" border="0">
+                <span>Analytics Team</span>
+            </a>
+        </header>
+        <ul>
+            <li onclick="showSection('dashboard')">
+                <a href="#">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li onclick="showSection('analytics');showContent('Analytics');">
+                <a href="#">
+                    <i class="fas fa-map"></i> Analytics
+                </a>
+            </li>            
+            <li onclick="showSection('predictions')">
+                <a href="#">
+                    <i class="fas fa-route"></i> Predictions
+                </a>
+            </li>
+            <li onclick="showSection('settings')">
+                <a href="#">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </li>
+            <li>
+                <button class="navigation-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 16.9px;"></i> Logout
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <section id="dashboardSection">
+        <a href="https://ibb.co/9bspgLc">
+            <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
+        </a>
+    </section>
+
+    <section id="analyticsSection" style="display: none;">
+        <div id="AnalyticsContent">
+            <h2>Analytics Page</h2>
+            <h3>Plots</h3>
+            <div id="monthlyPlotContainer">
+                <iframe id="monthlyPlotIframe" style="width:100%; height:500px; z-index: 2000;"></iframe>
+            </div>
+            <div id="dailyPlotContainer">
+                <iframe id="dailyPlotIframe" style="width:100%; height:500px; z-index: 2000;"></iframe>
+            </div>
+            <div id="hourlyPlotContainer">
+                <iframe id="hourlyPlotIframe" style="width:100%; height:500px; z-index: 2000;"></iframe>
+            </div>
+            <div id="locationPlotContainer">
+                <iframe id="locationPlotIframe" style="width:100%; height:500px; z-index: 2000;"></iframe>
+            </div>
+            <div id="incidentPlotContainer">
+                <iframe id="incidentPlotIframe" style="width:100%; height:500px; z-index: 2000;"></iframe>
+            </div>
+
+            <h2> Heatmap to identify hotspots</h2>
+            <div class="heatmap-container" style="border: 1px solid #ccc; padding: 10px;">
+                <iframe id="heatmapIframe" style="width:100%; height:500px;"></iframe>
+            </div>   
+        </div>
+    </section>
+
+    <section id="predictionsSection" style="display: none;">
+        <h2>Predictions Page</h2>
+        <h3>Priority of incidents</h3>
+        <div class="analytics-filters">
+            <label for="Location">Location:</label>
+                <select id="RankLocation">
+                    <option value="BIZ">BIZ</option>
+                    <option value="BTC">BTC</option>
+                    <option value="CDE">CDE</option>
+                    <option value="COM">COM</option>
+                    <option value="DNMS">DNMS</option>
+                    <option value="FASS">FASS</option>
+                    <option value="FOS">FOS</option>
+                    <option value="Hall">Hall</option>
+                    <option value="HMKT">HMKT</option>
+                    <option value="KR">KR</option>
+                    <option value="KV">KV</option>
+                    <option value="OTH">OTH</option>
+                    <option value="PGP">PGP</option>
+                    <option value="SOC">SOC</option>
+                    <option value="UCC">UCC</option>
+                    <option value="UTown">UTown</option>
+                    <option value="YIH">YIH</option>
+                </select>
+
+            <label for="DayInput">Day:</label>
+                <select id="DayInput">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            <label for="HourInput">Hour:</label>
+                <select id="HourInput">
+                    <option value="Morning">Morning</option>
+                    <option value="Afternoon">Afternoon</option>
+                    <option value="Night">Night</option>
+                </select>
+            <button onclick="getRankPriority()">Get Rank Priority</button>
+            <p id="rankPriorityResponse"></p>
+        </div>
+        <br>
+        <h3>Time Series Forecasting of Incidents</h3>
+        <div class="filters">
+            <form>
+                <label for="incident_type">Incident Type:</label>
+                <select id="incident_type">
+                    <option value="False">All</option>
+                    <option value="LOST AND FOUND">Lost and Found</option>
+                    <option value="STOLEN ITEMS">Stolen Items</option>
+                    <option value="DAMAGED PROPERTIES">Damaged Properties</option>
+                    <option value="SEXUAL INCIDENTS">Sexual Incidents</option>
+                    <option value="EMERGENCY INCIDENTS">Emergency Incidents</option>
+                </select>
+                <br>
+            </form>
+        </div>
+        <br>
+        <button onclick="getForecastPlot()">Get Forecast Plot</button>
+        <div id="forecastPlotContainer">
+            <iframe id="forecastPlotIframe" style="width:100%; height:500px; border:none;"></iframe>
+        </div>
+        <button onclick="trainAndForecastModels()">Train All Models</button>
+    </section>
+
+    <section id="settingsSection" style="display: none;">
+        <!-- Settings Section Content -->
+        <h2 style="position: relative; left: 100px; top: 30px; font-size: 30px;">Settings Section</h2>
+    </section>
+    
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        function showContent(tabName) {
+            if (tabName === 'Analytics') {
+                document.getElementById('AnalyticsContent').style.display = 'block';
+                document.getElementById('PredictionsContent').style.display = 'none';
+                generateHeatmap();
+                generatePlots();
+            } else if (tabName === 'Predictions') {
+                document.getElementById('AnalyticsContent').style.display = 'none';
+                document.getElementById('PredictionsContent').style.display = 'block';
+            }
+        }
+
+        function showSection(sectionId) {
+            if (sectionId == 'analytics'){
+                generateHeatmap();
+                generatePlots();
+            }
+            
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            if (section.id === sectionId + 'Section') {
+            section.style.display = 'block';
+            } else {
+            section.style.display = 'none';
+            }
+        });
+        }
+
+        function logout() {
+            // Redirect to the home page URL
+            window.location.href = '/';
+        }
+
+        function trainAllModels() {
+            fetch('/train-all')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function forecastAll() {
+            fetch('/forecast-all')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function trainAndForecastModels() {
+            fetch('/train-all')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to train models');
+                    }
+                    return response.json();
+                })
+                .then(trainData => {
+                    alert(trainData.message);
+                    return fetch('/forecast-all');
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to perform forecasting');
+                    }
+                    return response.json();
+                })
+                .then(forecastData => {
+                    alert(forecastData.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function getForecastPlot() {
+            var incidentType = document.getElementById('incident_type').value;
+            var iframe = document.getElementById('forecastPlotIframe');
+            iframe.src = `/get-forecast-plot?incident_type=${incidentType}`;
+        }
+
+        function getRankPriority() {
+            const location = document.getElementById('RankLocation').value;
+            const day = document.getElementById('DayInput').value;
+            const hour = document.getElementById('HourInput').value;
+
+            fetch(`/rank-priority?location=${location}&day=${day}&hour=${hour}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text(); // Assuming the response is a text string
+                    } else {
+                        throw new Error('Failed to get rank priority');
+                    }
+                })
+                .then(data => {
+                    // Update the container with the response
+                    document.getElementById('rankPriorityResponse').textContent = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function generateHeatmap() {
+            fetch('/generate-heatmap')
+                .then(response => {
+                    if (response.ok) {
+                        loadHeatmapIframe();
+                    } else {
+                        console.error('Error in generating heatmap');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function generatePlots() {
+            fetch('/generate-plots')
+                .then(response => {
+                    if (response.ok) {
+                      loadMonthlyPlotIframe();
+                      loadDailyPlotIframe();
+                      loadHourlyPlotIframe();
+                      loadLocationPlotIframe();
+                      loadIncidentPlotIframe();
+                    } else {
+                        console.error('Error in generating plots');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function loadHeatmapIframe() {
+            var iframe = document.getElementById('heatmapIframe');
+            iframe.src = '/plot/heatmap';
+        }
+
+        function loadMonthlyPlotIframe() {
+            var iframe = document.getElementById('monthlyPlotIframe');
+            iframe.src = '/plots/Monthly-Counts-by-Year';
+        }
+
+        function loadDailyPlotIframe() {
+            var iframe = document.getElementById('dailyPlotIframe');
+            iframe.src = '/plots/Daily-Counts-by-Year';
+        }
+
+        function loadHourlyPlotIframe() {
+            var iframe = document.getElementById('hourlyPlotIframe');
+            iframe.src = '/plots/Hourly-Counts-by-Year';
+        }
+
+        function loadLocationPlotIframe() {
+            var iframe = document.getElementById('locationPlotIframe');
+            iframe.src = '/plots/Count-of-Location-by-Year';
+        }
+
+        function loadIncidentPlotIframe() {
+            var iframe = document.getElementById('incidentPlotIframe');
+            iframe.src = '/plots/Count-of-Incidents-by-Year';
+        }
+
+    </script>
+</body>
+</html>

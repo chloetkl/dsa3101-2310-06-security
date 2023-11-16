@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Security Team Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header-container {
+            border: 2px solid #000;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 99%;
+            position: fixed;
+            background: white;
+            z-index: 9999;
+            top: 0;
+        }
+
+        .logo {
+            max-width: 100px;
+            height: 100px;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .security-team {
+            text-align: right;
+        }
+
+        #addUser {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            position: absolute; /* Added position */
+            left: 30px;
+            top: 150px; /* Adjusted position */
+        }
+
+        #addUser:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999; /* Set a higher z-index to bring the modal to the front */
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            z-index: 10000; /* Set a higher z-index than the modal */
+        }
+
+        /* Table styles */
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            position: absolute; /* Added position */
+            left: 30px;
+            right: 30px;
+            top: 200px; /* Adjusted position */
+            z-index: 1; /* Lower z-index for the table to be behind the modal */
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-container">
+        <div class="logo">
+            <img src="https://www.nus.edu.sg/images/default-source/identity-images/NUS_logo_full-horizontal.jpg" alt="NUS Logo" style="height: 100px;">
+        </div>
+        <div class="header">
+            <h1>NUSecure</h1>
+        </div>
+        <div class="security-team">
+            <h1>Admin</h1>
+        </div>
+    </div>
+
+    <button id="addUser">New User</button><br><br>
+
+    <div id="modal" class="modal">
+        <div id="modalContent" class="modal-content">
+            <button id="closeModal" style="position: absolute; top: 5px; right: 5px;">X</button>
+            <h2>Add User</h2>
+            <form id="addUserForm" method="POST">
+
+                <label for="username">Username:</label>
+                <input type="text" id="username" required><br><br>
+
+                <label for="email">Email:</label>
+                <input type="text" id="email"><br><br>
+                
+                <label for="role">Role:</label>
+                <select id="role" required>
+                    <option>Security</option>
+                    <option>Analytics</option>
+                </select><br><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" required><br><br>
+
+                <button type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row['User ID'] }}</td>
+                <td>{{ row['Username'] }}</td>
+                <td>{{ row['Email'] }}</td>
+                <td>{{ row['Role'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        const addUser = document.getElementById("addUser");   
+        const modal = document.getElementById("modal");
+        const modalContent = document.getElementById("modalContent");
+
+        const closeModalBtn = document.getElementById("closeModal");
+        closeModalBtn.addEventListener("click", function() {
+            // Close the modal
+            document.getElementById("modal").style.display = "none";
+
+            // Trigger a page refresh
+            location.reload();
+        });
+
+        const addUserForm = document.getElementById("addUserForm");
+        const tableBody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+        const table = document.getElementById("dataTable");
+        const rows = table.getElementsByTagName("tr");
+
+        addUser.addEventListener("click", () => {
+            modal.style.display = "block";
+        });
+
+        addUserForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Fetch form values
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const role = document.getElementById("role").value;
+            const password = document.getElementById("password").value;
+
+            const formData = {
+                username: username,
+                email: email,
+                role: role,
+                password: password
+            };
+
+            fetch('/admin/add-new-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Parse the response JSON
+                } else {
+                    throw new Error('Failed to add user');
+                }
+            })
+            .then(data => {
+                // Handle the response data here
+                console.log(data); // Log the response for demonstration
+                // You can display a success message or update the UI accordingly
+                // For example:
+                // const messageElement = document.getElementById('addUserMessage');
+                // messageElement.textContent = data.message; // Display the message
+
+                // Clear the input fields on successful addition
+                document.getElementById("username").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("role").value = "";
+                document.getElementById("password").value = "";
+            })
+            .catch(error => {
+                // Handle errors or failed responses
+                console.error('Error:', error.message);
+                // Display an error message or handle the error condition
+            });
+        });
+
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
