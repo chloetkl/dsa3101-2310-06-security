@@ -441,7 +441,7 @@
                                 <td>{{ row['Location'] }}</td>
                                 <td>{{ row['Building'] }}</td>
                                 <td>
-                                  <form method="POST" action="{{ url_for('update_incident') }}">
+                                  <form id="updateIncidentForm" method="POST" action="{{ url_for('security.update_incident') }}">
                                     <input type="hidden" name="incident_id" value="{{ row['Incident ID'] }}">
                                     <input type="hidden" name="priority" value="{{ row['Priority'] }}">
                                     <select class="status-input" name="status" onchange="this.form.submit()">
@@ -549,6 +549,35 @@
             .finally(() => {
                 // Show the message element
                 messageElement.style.display = 'block';
+            });
+        });
+
+        const updateIncidentForm = document.getElementById("updateIncidentForm");
+        updateIncidentForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Capture form data
+            const formData = new FormData(updateIncidentForm);
+
+            // Send data to Flask route using fetch API
+            fetch('/security/update-incident', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Response status code:', response.status);
+                if (response.ok) {
+                    console.log('Incident updated successfully');
+                } else {
+                throw new Error('Failed to add item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            })
+            .finally(() => {
+                // Show tab
+                openTab()
             });
         });
 
