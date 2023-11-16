@@ -214,8 +214,6 @@ def security():
                                         ).reset_index() 
     data = data.sort_values('LatestUpdate', ascending=False)
     now = datetime.now()
-    #end_of_today = datetime(now.year, now.month, now.day, 23, 59, 59)
-    #data = data[data['LatestUpdate'] <= end_of_today]
     data = data[data['LatestUpdate'] <= now]
     data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 
                          'type':'Incidents', 'location_group':'Location', 'location':'Building', 
@@ -255,7 +253,7 @@ def update_incident():
         time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         notes = ""
         user_id = current_user.id
-        
+
         query = f"INSERT INTO Incident_logs(incident_id, status, priority, time, user_id, notes) VALUES\
                 ('{incident_id}', '{status}', '{priority}', '{time}', '{user_id}', '{notes}')"
         cursor.execute(query)
@@ -264,7 +262,7 @@ def update_incident():
     except Exception as e:
         print(f"Error: {e}")
         db.rollback()
-    
+
     finally:
         cursor.close()
         db.close()
