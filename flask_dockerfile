@@ -6,16 +6,8 @@ FROM python:3.10.6-slim-buster
 
 WORKDIR /app
 COPY requirements.txt requirements.txt
-COPY nusecure.py nusecure.py
 COPY connect_sql.py connect_sql.py
 
-COPY app app
-COPY static static
-COPY templates templates
-COPY back/database back/database
-COPY back/models back/models
-COPY back/analytics back/analytics
-COPY front front
 
 # things to make nusecure.py work
 RUN pip3 install --upgrade pip

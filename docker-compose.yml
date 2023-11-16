@@ -10,11 +10,14 @@ services:
     ports:
       - "9001:5000"
     volumes:
-      - ./nusecure.py:/nusecure.py
-      - ./static:/static
-      - ./templates:/templates
-      - ./back/database:/back/database
-      - ./back/models:/back/models
+      - ./nusecure.py:/app/nusecure.py
+      - ./app:/app/app
+      - ./static:/app/static
+      - ./templates:/app/templates
+      - ./back/database:/app/back/database
+      - ./back/models:/app/back/models
+      - ./back/analytics:/app/back/analytics
+      - ./front:/app/front
 
   database:
     image: mysql
