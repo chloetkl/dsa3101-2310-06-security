@@ -445,7 +445,7 @@
             const day = document.getElementById('DayInput').value;
             const hour = document.getElementById('HourInput').value;
 
-            fetch(`/analytics/rank-priority?location=${location}&day=${day}&hour=${hour}`)
+            fetch(`/analytics/predictions/rank-priority?location=${location}&day=${day}&hour=${hour}`)
                 .then(response => {
                     if (response.ok) {
                         return response.text(); // Assuming the response is a text string
