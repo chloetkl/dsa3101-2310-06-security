@@ -80,6 +80,7 @@ def role_required(required_role):
         return wrapper
     return decorator
 
+  
 ## Home - Login page
 @app.route('/', methods=['GET'])
 def home():
@@ -89,6 +90,7 @@ def home():
         error_message = f"Error rendering template: {e}"
         return jsonify({'error': error_message}), 500
 
+      
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -114,9 +116,7 @@ def login():
     except Exception as e:
         return jsonify({'error': f"Internal Server Error: {e}"}), 500
 
-
-
-
+      
 @app.route('/logout', methods=['GET'])
 def logout():
     try:
