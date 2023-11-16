@@ -40,11 +40,6 @@
                     <i class="fas fa-route"></i> Predictions
                 </a>
             </li>
-            <li onclick="showSection('settings')">
-                <a href="#">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-            </li>
             <li>
                 <button class="navigation-button" onclick="logout()">
                     <i class="fas fa-sign-out-alt" style="margin-right: 16.9px;"></i> Logout
@@ -61,7 +56,7 @@
     </section>
 
     <!--Second section is a Analoytics Page.-->
-    <section id="analyticsSection" style="display: none;">
+    <section id="analyticsSection" style="display: none;  padding-left: 100px; padding-top: 30px;">
         <div id="AnalyticsContent">
             <h2>Analytics Page</h2>
             <h3>Plots</h3>
@@ -89,7 +84,7 @@
     </section>
 
     <!--Third section is a Precitions Page.-->
-    <section id="predictionsSection" style="display: none;">
+    <section id="predictionsSection" style="display: none;  padding-left: 100px; padding-top: 30px;">
         <h2>Predictions Page</h2>
 
         <!--1. Filtering and Ranking of Incident.-->
@@ -159,12 +154,6 @@
             <iframe id="forecastPlotIframe" style="width:100%; height:500px; border:none;"></iframe>
         </div>
         <button onclick="trainAndForecastModels()">Train All Models</button>
-    </section>
-
-
-    <!-- Fouth section is the Settings page. -->
-    <section id="settingsSection" style="display: none;">
-        <h2 style="position: relative; left: 100px; top: 30px; font-size: 30px;">Settings Section</h2>
     </section>
     
     <!-- Here consists of all the scripts to run each function.-->

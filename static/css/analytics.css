@@ -149,58 +149,20 @@ section {
     padding-left: 10px; /* Adjust padding as needed */
 }
 
-/* Tabs styles */
-.tabs {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: #f1f1f1;
-}
-
-.tab {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid #ccc;
-}
-
-.tab:hover {
-    background-color: #ddd;
-}
-
-/* Additional styles */
-.logo {
-    max-width: 100px;
-    height: 100px;
-}
-
-.header {
-    text-align: center;
-    font-size: 24px;
-}
-
-.header-container {
-    border: 2px solid #000;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 98%;
-}
-
 .content {
     display: none;
     z-index: 1000;
+    max-width: 80%;
 }
 
 #AnalyticsContent,
 #PredictionsContent,
 #filters {
     display: none;
+    max-width: 80%;
 }
 
 #iframe {
     display: none;
+    max-width: 80%;
 }
