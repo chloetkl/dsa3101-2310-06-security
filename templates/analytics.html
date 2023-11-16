@@ -8,18 +8,22 @@
 </head>
 
 <body>
+    <!--This creates a sidebar that can be hidden and open for easier use.-->
     <input type="checkbox" id="check">
     <label for="check">
         <i class="fas fa-bars" id="btn"></i>
         <i class="fas fa-times" id="cancel"></i>
     </label>
     <div class="sidebar">
+        <!--In the side bar, the logo of the web is displayed along with which team the user is on.-->
         <header>
             <a href="https://imgbb.com/">
                 <img src="https://i.ibb.co/DKf23HJ/Screenshot-2023-11-15-132345-removebg-preview-1.png" alt="My App Logo" border="0">
                 <span>Analytics Team</span>
             </a>
         </header>
+
+        <!--Sections are added base on needs while a logout button is for ease.-->
         <ul>
             <li onclick="showSection('dashboard')">
                 <a href="#">
@@ -49,12 +53,14 @@
         </ul>
     </div>
 
+    <!--First section is a Dashboard Page.-->
     <section id="dashboardSection">
         <a href="https://ibb.co/9bspgLc">
             <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
         </a>
     </section>
 
+    <!--Second section is a Analoytics Page.-->
     <section id="analyticsSection" style="display: none;">
         <div id="AnalyticsContent">
             <h2>Analytics Page</h2>
@@ -82,8 +88,11 @@
         </div>
     </section>
 
+    <!--Third section is a Precitions Page.-->
     <section id="predictionsSection" style="display: none;">
         <h2>Predictions Page</h2>
+
+        <!--1. Filtering and Ranking of Incident.-->
         <h3>Priority of incidents</h3>
         <div class="analytics-filters">
             <label for="Location">Location:</label>
@@ -126,6 +135,8 @@
             <button onclick="getRankPriority()">Get Rank Priority</button>
             <p id="rankPriorityResponse"></p>
         </div>
+
+        <!--2. Filtering and Plotting of Incident.-->
         <br>
         <h3>Time Series Forecasting of Incidents</h3>
         <div class="filters">
@@ -150,13 +161,33 @@
         <button onclick="trainAndForecastModels()">Train All Models</button>
     </section>
 
+
+    <!-- Fouth section is the Settings page. -->
     <section id="settingsSection" style="display: none;">
-        <!-- Settings Section Content -->
         <h2 style="position: relative; left: 100px; top: 30px; font-size: 30px;">Settings Section</h2>
     </section>
     
+    <!-- Here consists of all the scripts to run each function.-->
+    <!-- Below everything is in java.-->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
+        //This function shows the sections amd contents.
+        function showSection(sectionId) {
+            if (sectionId == 'analytics'){
+                generateHeatmap();
+                generatePlots();
+            }
+            
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                if (section.id === sectionId + 'Section') {
+                section.style.display = 'block';
+                } else {
+                section.style.display = 'none';
+                }
+            });
+        }
+
         function showContent(tabName) {
             if (tabName === 'Analytics') {
                 document.getElementById('AnalyticsContent').style.display = 'block';
@@ -169,27 +200,12 @@
             }
         }
 
-        function showSection(sectionId) {
-            if (sectionId == 'analytics'){
-                generateHeatmap();
-                generatePlots();
-            }
-            
-        const sections = document.querySelectorAll('section');
-        sections.forEach(section => {
-            if (section.id === sectionId + 'Section') {
-            section.style.display = 'block';
-            } else {
-            section.style.display = 'none';
-            }
-        });
-        }
-
+        //This function logsout of the page.
         function logout() {
-            // Redirect to the home page URL
             window.location.href = '/';
         }
 
+        //The below functions get all the models used by back end.
         function trainAllModels() {
             fetch('/analytics/predictions/time-series/train-all')
                 .then(response => response.json())

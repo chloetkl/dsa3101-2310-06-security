@@ -103,14 +103,6 @@
                     <option value="open">Open</option>
                     <option value="close">Close</option>
                 </select>
-                <select id="userFilter">
-                    <option value="all">User Added</option>
-                    <option value="sec1">sec1</option>
-                    <option value="sec2">sec2</option>
-                    <option value="sec3">sec3</option>
-                    <option value="sec4">sec4</option>
-                    <option value="sec5">sec5</option>
-                </select>
 
                 <body>
                 <h2>Incidents Table</h2>
@@ -184,7 +176,7 @@
                                 <th>Location Group</th>
                                 <th>Building</th>
                                 <th>Status</th>
-                                <th>User</th>
+                                <th class="hidden-column">User</th>
                                 <th class="hidden-column">Latitude</th>
                                 <th class="hidden-column">Longitude</th>
                             </tr>
@@ -213,7 +205,7 @@
                                     </select>
                                   </form>
                                 </td>
-                                <td>{{ row['User Added'] }}</td>
+                                <td class="hidden-column">{{ row['User Added'] }}</td>
                                 <td class="hidden-column">{{ row['Latitude'] }}</td>
                                 <td class="hidden-column">{{ row['Longitude'] }}</td>
                             </tr>
@@ -275,7 +267,6 @@
         const priorityFilter = document.getElementById("priorityFilter");
         const locationFilter = document.getElementById("locationFilter");
         const statusFilter = document.getElementById("statusFilter");
-        const userFilter = document.getElementById("userFilter");
 
         const table = document.getElementById("dataTable");
         const rows = table.getElementsByTagName("tr");
@@ -360,7 +351,6 @@
         priorityFilter.addEventListener("input", filterTable);
         locationFilter.addEventListener("input", filterTable);
         statusFilter.addEventListener("input", filterTable);
-        userFilter.addEventListener("input", filterTable);
 
         function filterTable() {
             const idFilterValue = idFilter.value;
@@ -370,7 +360,6 @@
             const priorityFilterValue = priorityFilter.value.toLowerCase();
             const locationFilterValue = locationFilter.value.toLowerCase();
             const statusFilterValue = statusFilter.value.toLowerCase();
-            const userFilterValue = userFilter.value.toLowerCase();
 
             for (let i = 1; i < rows.length; i++) {
                 const idColumn = rows[i].getElementsByTagName("td")[0];
@@ -380,10 +369,9 @@
                 const priorityColumn = rows[i].getElementsByTagName("td")[4];
                 const locationColumn = rows[i].getElementsByTagName("td")[5];
                 const statusColumn = rows[i].getElementsByTagName("td")[7];
-                const userColumn = rows[i].getElementsByTagName("td")[8];
 
                 if (idColumn && dateColumn && timeColumn && typeColumn && priorityColumn &&
-                    locationColumn && statusColumn && userColumn) {
+                    locationColumn && statusColumn) {
                     const idText = idColumn.textContent;
                     const dateText = dateColumn.textContent;
                     const timeText = timeColumn.textContent;
@@ -391,7 +379,6 @@
                     const priorityText = priorityColumn.textContent.toLowerCase();
                     const locationText = locationColumn.textContent.toLowerCase();
                     const statusText = statusColumn.textContent.toLowerCase();
-                    const userText = userColumn.textContent.toLowerCase();
 
                     const idMatch = idFilterValue === '' || idText.includes(idFilterValue);
                     const dateMatch = dateFilterValue === '' || dateText === dateFilterValue;
@@ -400,10 +387,9 @@
                     const priorityMatch = priorityFilterValue === 'all' || priorityText.includes(priorityFilterValue);
                     const locationMatch = locationFilterValue === 'all' || locationText.includes(locationFilterValue);
                     const statusMatch = statusFilterValue === 'all' || statusText.includes(statusFilterValue);
-                    const userMatch = userFilterValue === 'all' || userText.includes(userFilterValue);
 
                     if (idMatch && dateMatch && timeMatch && typeMatch && priorityMatch &&
-                        locationMatch && statusMatch && userMatch) {
+                        locationMatch && statusMatch) {
                         rows[i].style.display = "";
                     } else {
                         rows[i].style.display = "none";
@@ -439,6 +425,5 @@
             window.location.href = '/';
         }
     </script>
-</body>
-    
+</body>   
 </html>

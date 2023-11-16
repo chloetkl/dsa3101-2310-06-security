@@ -8,26 +8,31 @@
 </head>
 
 <body>
+    <!--This creates a sidebar that can be hidden and open for easier use.-->
     <input type="checkbox" id="check">
     <label for="check">
         <i class="fas fa-bars" id="btn"></i>
         <i class="fas fa-times" id="cancel"></i>
     </label>
+
     <div class="sidebar">
+        <!--In the side bar, the logo of the web is displayed along with which team the user is on.-->
         <header>
             <a href="https://imgbb.com/">
                 <img src="https://i.ibb.co/DKf23HJ/Screenshot-2023-11-15-132345-removebg-preview-1.png" alt="My App Logo" border="0">
                 <span>Administrator</span>
             </a>
         </header>
+
+        <!--Sections are added base on needs while a logout button is for ease.-->
         <ul>
             <li>
-                <a href="/" onclick="showSection('dashboard')">
+                <a href="#" onclick="showSection('dashboard')">
                     <i class="fas fa-home"></i> Dashboard
                 </a>
             </li>
             <li>
-                <a href="users" onclick="showSection('users')">
+                <a href="#" onclick="showSection('users')">
                     <i class="fas fa-home"></i> Users
                 </a>
             </li>
@@ -39,12 +44,14 @@
         </ul>        
     </div>
 
+    <!--First section is a Dashboard Page.-->
     <section id="dashboardSection">
         <a href="https://ibb.co/9bspgLc">
             <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
         </a>
     </section>
 
+    <!--Second section is the Users Page.-->
     <section id="usersSection" style="display: none;">
         <h2 style="top: 30px; left: 100px; font-size: 50px; position: absolute;">All Users</h2>
         <button id="addUser">New User</button><br><br>
@@ -97,7 +104,10 @@
         </table>
     </section>
 
+    <!-- Here consists of all the scripts to run each function.-->
+    <!-- Below everything is in java.-->
     <script>
+        //This function shows the sections amd contents.
         function showSection(sectionId) {
         const sections = document.querySelectorAll('section');
         sections.forEach(section => {
@@ -198,7 +208,7 @@
 
         function logout() {
             // Redirect to the home page URL
-            window.location.href = '#';
+            window.location.href = '/';
         }
     </script>
 </body>
