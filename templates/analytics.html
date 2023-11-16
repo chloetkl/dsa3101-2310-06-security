@@ -26,18 +26,18 @@
         <!--Sections are added base on needs while a logout button is for ease.-->
         <ul>
             <li onclick="showSection('dashboard')">
-                <a href="#">
+                <a href="">
                     <i class="fas fa-home"></i> Dashboard
                 </a>
             </li>
             <li onclick="showSection('analytics');showContent('Analytics');">
                 <a href="#">
-                    <i class="fas fa-map"></i> Analytics
+                    <i class="fas fa-chart-bar"></i> Analytics
                 </a>
             </li>            
             <li onclick="showSection('predictions')">
                 <a href="#">
-                    <i class="fas fa-route"></i> Predictions
+                    <i class="fas fa-chart-line"></i> Predictions
                 </a>
             </li>
             <li onclick="showSection('report')">
@@ -54,10 +54,30 @@
     </div>
 
     <!--First section is a Dashboard Page.-->
-    <section id="dashboardSection">
-        <a href="https://ibb.co/9bspgLc">
-            <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
-        </a>
+    <section id="dashboardSection" style="padding-left: 100px; padding-top: 30px; 
+    background-image: url('https://i.ibb.co/ky7njvj/Background.png'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; height: 100vh;">
+        <h2 style="font-size: 50px;">Welcome to NUSecure Analytics Dashboard!</h2>
+    
+        <!-- Buttons for different sections -->
+        <div class="dashboard-buttons">
+            <button class="dashboard-button" onclick="showSection('analytics'); showContent('Analytics');">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytics</span>
+            </button>
+        
+            <button class="dashboard-button" onclick="showSection('predictions'); showContent('Predictions');">
+                <i class="fas fa-chart-line"></i>
+                <span>Predictions</span>
+            </button>
+        
+            <button class="dashboard-button" onclick="showSection('report'); showContent('Report');">
+                <i class="fas fa-flag"></i>
+                <span>Report</span>
+            </button>
+        </div>
     </section>
 
     <!--Second section is a Analoytics Page.-->
@@ -379,7 +399,6 @@
             // Display the report content in the report section
             document.getElementById('reportContent').innerHTML = reportContent;
         }
-
     </script>
 </body>
 </html>

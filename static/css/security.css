@@ -246,3 +246,41 @@ th {
 .navigation-button:hover {
     padding-left: 10px;
 }
+
+/* Style for the Dashboard buttons */
+.dashboard-buttons {
+    display: flex;
+    margin-top: 20px;
+  }
+  
+  .dashboard-button {
+    width: 300px;
+    height: 300px;
+    margin-top: 20px;
+    margin-right:50px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: #3498db;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  
+  .dashboard-button i {
+    font-size: 250px;
+  }
+  
+  .dashboard-button span {
+    font-size: 24px;
+  }
+  
+  .dashboard-button:hover {
+    background-color: #2980b9; 
+    cursor: pointer;
+  }

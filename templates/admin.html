@@ -27,7 +27,7 @@
         <!--Sections are added base on needs while a logout button is for ease.-->
         <ul>
             <li>
-                <a href="#" onclick="showSection('dashboard')">
+                <a href="" onclick="showSection('dashboard')">
                     <i class="fas fa-home"></i> Dashboard
                 </a>
             </li>
@@ -45,10 +45,20 @@
     </div>
 
     <!--First section is a Dashboard Page.-->
-    <section id="dashboardSection">
-        <a href="https://ibb.co/9bspgLc">
-            <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
-        </a>
+    <section id="dashboardSection" style="padding-left: 100px; padding-top: 30px; 
+    background-image: url('https://i.ibb.co/ky7njvj/Background.png'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; height: 100vh;">
+        <h2 style="font-size: 50px;">Welcome to NUSecure Administrator Dashboard!</h2>
+    
+        <!-- Buttons for different sections -->
+        <div class="dashboard-buttons">
+            <button class="dashboard-button" onclick="showSection('users')">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </button>
+        </div>
     </section>
 
     <!--Second section is the Users Page.-->
@@ -106,17 +116,17 @@
 
     <!-- Here consists of all the scripts to run each function.-->
     <!-- Below everything is in java.-->
-    <script>
-        //This function shows the sections amd contents.
+    <script>    
+        // Function to show sections and contents
         function showSection(sectionId) {
-        const sections = document.querySelectorAll('section');
-        sections.forEach(section => {
-            if (section.id === sectionId + 'Section') {
-            section.style.display = 'block';
-            } else {
-            section.style.display = 'none';
-            }
-        });
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                if (section.id === sectionId + 'Section') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
         }
 
         const sidebar = document.querySelector('.sidebar');
@@ -210,7 +220,7 @@
             // Redirect to the home page URL
             window.location.href = '/';
         }
-    </script>
+</script>
 </body>
 </html>
 

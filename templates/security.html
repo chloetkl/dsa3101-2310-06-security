@@ -45,12 +45,29 @@
         </ul>
     </div>
 
-    <section id="dashboardSection">
-        <a href="https://ibb.co/9bspgLc">
-            <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
-        </a>
+    <!--First section is a Dashboard Page.-->
+    <section id="dashboardSection" style="padding-left: 100px; padding-top: 30px; 
+    background-image: url('https://i.ibb.co/ky7njvj/Background.png'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; height: 100vh;">
+        <h2 style="font-size: 50px;">Welcome to NUSecure Security Dashboard!</h2>
+    
+        <!-- Buttons for different sections -->
+        <div class="dashboard-buttons">
+            <button class="dashboard-button" onclick="showSection('map')">
+                <i class="fas fa-map"></i>
+                <span>Map</span>
+            </button>
+
+            <button class="dashboard-button" onclick="showSection('patrolRoutes')">
+                <i class="fas fa-route"></i>
+                <span>Patrol Routes</span>
+            </button>
+        </div>
     </section>
 
+    <!--Second section is a Map Page.-->
     <section id="mapSection" style="display: none;">
         <iframe id="map" src="{{ url_for('static', filename='/color_coded_incidents_map.html') }}"></iframe>
 
@@ -213,6 +230,7 @@
         </div>
     </section>
     
+    <!--Third section is a Patrol Page.-->
     <section id="patrolRoutesSection" style="display: none; padding-left: 100px; padding-top: 30px;">
         <h2>Patrol Routes Section</h2>
         <p>Recommended Routes</p>
@@ -223,6 +241,8 @@
         </div>
     </section>
 
+    <!-- Here consists of all the scripts to run each function.-->
+    <!-- Below everything is in java.-->
     <script>
         function showSection(sectionId) {
         const sections = document.querySelectorAll('section');
@@ -240,7 +260,6 @@
             const overlay = document.getElementById('overlay');
             overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
         }
-
 
         const addReportButton = document.getElementById("addReportButton");
         const modal = document.getElementById("modal");
