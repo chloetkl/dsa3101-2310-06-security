@@ -439,12 +439,17 @@
                                 <td>{{ row['Location'] }}</td>
                                 <td>{{ row['Building'] }}</td>
                                 <td>
-                                    <select class="status-input" id="statusTable">
-                                        <option value="open" {% if row['Status'] == 'Open' %}selected{% 
-                    endif %}>Open</option>
-                                        <option value="close" {% if row['Status'] == 'Close' %}selected{% 
-                    endif %}>Close</option>
+                                  <form method="POST" action="{{ url_for('update_incident') }}">
+                                    <input type="hidden" name="incident_id" value="{{ row['Incident ID'] }}">
+                                    <input type="hidden" name="priority" value="{{ row['Priority'] }}">
+                                    <select class="status-input" name="status" onchange="this.form.submit()">
+                                    <!select class="status-input" id="statusTable">
+                                      <option value="Open" {% if row['Status'] == 'Open' %}selected{% 
+                          endif %}>Open</option>
+                                      <option value="Close" {% if row['Status'] == 'Close' %}selected{% 
+                          endif %}>Close</option>
                                     </select>
+                                  </form>
                                 </td>
                                 <td>{{ row['User Added'] }}</td>
                                 <td class="hidden-column">{{ row['Latitude'] }}</td>
