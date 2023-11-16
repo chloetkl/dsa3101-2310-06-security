@@ -254,23 +254,129 @@ def add_incident_report():
             db.close()
 
 ## Analytics Page
-@app.route("/prediction")
-@login_required
-@role_required('analytics')
-def send_p():
-    return send_file("back/data/test.png")
-
-
 
 @app.route('/analytics', methods=['GET'])
 @login_required
 @role_required('analytics')
 def analytics():
-    user_id = current_user.id
-    return render_template('analytics.html')
+    try:
+        return render_template('analytics.html'), 200
+    except TemplateNotFound:
+        return "Template not found", 404
+    except Exception as e:
+        # Log the error for debugging
+        print(f"An error occurred: {e}")
+        return "Internal Server Error", 500
+
+# @app.route("/prediction")
+# @login_required
+# @role_required('analytics')
+# def send_p():
+#     return send_file("back/data/test.png")
+
+### Data Visualization
+
+@app.route('/analytics/generate-plots', methods=['GET'])
+@login_required
+@role_required('analytics')
+def plot_generation():
+    try:
+        return plots(), 200 
+    except Exception as e:
+        error_message = f"Plot generation failed: {e}"
+        return jsonify({'error': error_message}), 500
+
+
+@app.route('/analytics/plots/Monthly-Counts-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def monthly_plot():
+    try:
+        return send_file("static/Monthly_Counts_by_Year.html", mimetype='text/html'), 200
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!', 404
+
+@app.route('/analytics/plots/Daily-Counts-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def daily_plot():
+    try:
+        return send_file("static/Daily_Counts_by_Year.html", mimetype='text/html'), 200
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!', 404
+
+@app.route('/analytics/plots/Hourly-Counts-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def hourly_plot():
+    try:
+        return send_file("static/Hourly_Counts_by_Year.html", mimetype='text/html'), 200
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!', 404
+
+@app.route('/analytics/plots/Count-of-Location-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def location_plot():
+    try:
+        return send_file("static/Count_of_Location_by_Year.html", mimetype='text/html'), 200
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!', 404
+
+@app.route('/analytics/plots/Count-of-Incidents-by-Year', methods=['GET'])
+@login_required
+@role_required('analytics')
+def incident_plot():
+    try:
+        return send_file("static/Count_of_Incidents_by_Year.html", mimetype='text/html'), 200
+    except TemplateNotFound:
+        return 'TemplateNotFound: Please generate plot first!', 404
+
+@app.route('/analytics/generate-heatmap', methods=['GET'])
+@login_required
+@role_required('analytics')
+def heatmap_generation():
+    try:
+        return heatmap(), 200
+    except Exception as e:
+        error_message = f"Plot generation failed: {e}"
+        return jsonify({'error': error_message}), 500 
+
+@app.route('/analytics/plot/heatmap', methods=['GET'])
+@login_required
+@role_required('analytics')
+def heatmap_plot():
+    try:
+        plot_file = "static/heatmap.html"
+        return send_file(plot_file, mimetype='text/html'), 200
+    except TemplateNotFound:
+        return 'Template not found: Please generate plot first!', 404
+    
+### Apriori Algorithm
+
+# Endpoint to get rank_priority
+@app.route('/analytics/rank-priority', methods=['GET'])
+@login_required
+@role_required('analytics')
+def rank_priority():
+
+    location = request.args.get('location')
+    day = request.args.get('day')
+    hour = request.args.get('hour')
+
+    try:
+        return get_rank(location,day,hour), 200
+    except TypeError:
+        return 'Input not found.', 404
+    except Exception as e:
+        error_message = f"An error occurred: {e}"
+        return jsonify({'error': error_message}), 500
+
+
+### SARIMA
 
 # Endpoint to train SARIMA models for all incident types
-@app.route('/train-all', methods=['GET'])
+@app.route('/analytics/predictions/time-series/train-all', methods=['GET'])
 @login_required
 @role_required('analytics')
 def train_all():
@@ -279,7 +385,7 @@ def train_all():
     return jsonify({'message': 'All models trained successfully'})
 
 # Endpoint to generate forecast for all incident types
-@app.route('/forecast-all', methods=['GET'])
+@app.route('/analytics/predictions/time-series/forecast-all', methods=['GET'])
 @login_required
 @role_required('analytics')
 def get_all_forecasts():
@@ -288,7 +394,7 @@ def get_all_forecasts():
     return jsonify({'message': 'Forecasts generated for all incident types'})
 
 # Endpoint to get forecast plots for specified type
-@app.route('/get-forecast-plot', methods=['GET'])
+@app.route('/analytics/predictions/time-series/get-forecast-plot', methods=['GET'])
 @login_required
 @role_required('analytics')
 def get_forecast_plot():
@@ -304,93 +410,7 @@ def get_forecast_plot():
     except FileNotFoundError:
         return 'File not found.', 404
 
-# Apriori Algorithm
 
-# Endpoint to get rank_priority
-@app.route('/rank-priority', methods=['GET'])
-@login_required
-@role_required('analytics')
-def rank_priority():
-
-    location = request.args.get('location')
-    day = request.args.get('day')
-    hour = request.args.get('hour')
-
-    try:
-        return get_rank(location,day,hour)
-    except TypeError:
-        return 'Input not found.', 404
-
-#Data Visualization
-
-@app.route('/generate-plots', methods=['GET'])
-@login_required
-@role_required('analytics')
-def plot_generation():
-    return plots()
-
-
-
-@app.route('/plots/Monthly-Counts-by-Year', methods=['GET'])
-@login_required
-@role_required('analytics')
-def monthly_plot():
-    try:
-        return send_file("static/Monthly_Counts_by_Year.html", mimetype='text/html')
-    except TemplateNotFound:
-        return 'TemplateNotFound: Please generate plot first!'
-
-@app.route('/plots/Daily-Counts-by-Year', methods=['GET'])
-@login_required
-@role_required('analytics')
-def daily_plot():
-    try:
-        return send_file("static/Daily_Counts_by_Year.html", mimetype='text/html')
-    except TemplateNotFound:
-        return 'TemplateNotFound: Please generate plot first!'
-
-@app.route('/plots/Hourly-Counts-by-Year', methods=['GET'])
-@login_required
-@role_required('analytics')
-def hourly_plot():
-    try:
-        return send_file("static/Hourly_Counts_by_Year.html", mimetype='text/html')
-    except TemplateNotFound:
-        return 'TemplateNotFound: Please generate plot first!'
-
-@app.route('/plots/Count-of-Location-by-Year', methods=['GET'])
-@login_required
-@role_required('analytics')
-def location_plot():
-    try:
-        return send_file("static/Count_of_Location_by_Year.html", mimetype='text/html')
-    except TemplateNotFound:
-        return 'TemplateNotFound: Please generate plot first!'
-
-@app.route('/plots/Count-of-Incidents-by-Year', methods=['GET'])
-@login_required
-@role_required('analytics')
-def incident_plot():
-    try:
-        return send_file("static/Count_of_Incidents_by_Year.html", mimetype='text/html')
-    except TemplateNotFound:
-        return 'TemplateNotFound: Please generate plot first!'
-
-@app.route('/generate-heatmap', methods=['GET'])
-@login_required
-@role_required('analytics')
-def heatmap_generation():
-    return heatmap()
-
-@app.route('/plot/heatmap', methods=['GET'])
-@login_required
-@role_required('analytics')
-def heatmap_plot():
-    try:
-        plot_file = "static/heatmap.html"
-        return send_file(plot_file, mimetype='text/html')
-    except TemplateNotFound:
-        return 'Template not found: Please generate plot first!'
 
 @app.route('/generate-map-pin', methods=['GET'])
 @login_required

@@ -387,7 +387,7 @@
         }
 
         function trainAllModels() {
-            fetch('/train-all')
+            fetch('/analytics/predictions/time-series/train-all')
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
@@ -398,7 +398,7 @@
         }
 
         function forecastAll() {
-            fetch('/forecast-all')
+            fetch('/analytics/predictions/time-series/forecast-all')
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
@@ -409,7 +409,7 @@
         }
 
         function trainAndForecastModels() {
-            fetch('/train-all')
+            fetch('/analytics/predictions/time-series/train-all')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to train models');
@@ -437,7 +437,7 @@
         function getForecastPlot() {
             var incidentType = document.getElementById('incident_type').value;
             var iframe = document.getElementById('forecastPlotIframe');
-            iframe.src = `/get-forecast-plot?incident_type=${incidentType}`;
+            iframe.src = `/analytics/predictions/time-series/get-forecast-plot?incident_type=${incidentType}`;
         }
 
         function getRankPriority() {
@@ -445,7 +445,7 @@
             const day = document.getElementById('DayInput').value;
             const hour = document.getElementById('HourInput').value;
 
-            fetch(`/rank-priority?location=${location}&day=${day}&hour=${hour}`)
+            fetch(`/analytics/rank-priority?location=${location}&day=${day}&hour=${hour}`)
                 .then(response => {
                     if (response.ok) {
                         return response.text(); // Assuming the response is a text string
@@ -463,7 +463,7 @@
         }
 
         function generateHeatmap() {
-            fetch('/generate-heatmap')
+            fetch('/analytics/generate-heatmap')
                 .then(response => {
                     if (response.ok) {
                         loadHeatmapIframe();
@@ -475,7 +475,7 @@
         }
 
         function generatePlots() {
-            fetch('/generate-plots')
+            fetch('/analytics/generate-plots')
                 .then(response => {
                     if (response.ok) {
                       loadMonthlyPlotIframe();
@@ -492,32 +492,32 @@
 
         function loadHeatmapIframe() {
             var iframe = document.getElementById('heatmapIframe');
-            iframe.src = '/plot/heatmap';
+            iframe.src = '/analytics/plot/heatmap';
         }
 
         function loadMonthlyPlotIframe() {
             var iframe = document.getElementById('monthlyPlotIframe');
-            iframe.src = '/plots/Monthly-Counts-by-Year';
+            iframe.src = '/analytics/plots/Monthly-Counts-by-Year';
         }
 
         function loadDailyPlotIframe() {
             var iframe = document.getElementById('dailyPlotIframe');
-            iframe.src = '/plots/Daily-Counts-by-Year';
+            iframe.src = '/analytics/plots/Daily-Counts-by-Year';
         }
 
         function loadHourlyPlotIframe() {
             var iframe = document.getElementById('hourlyPlotIframe');
-            iframe.src = '/plots/Hourly-Counts-by-Year';
+            iframe.src = '/analytics/plots/Hourly-Counts-by-Year';
         }
 
         function loadLocationPlotIframe() {
             var iframe = document.getElementById('locationPlotIframe');
-            iframe.src = '/plots/Count-of-Location-by-Year';
+            iframe.src = '/analytics/plots/Count-of-Location-by-Year';
         }
 
         function loadIncidentPlotIframe() {
             var iframe = document.getElementById('incidentPlotIframe');
-            iframe.src = '/plots/Count-of-Incidents-by-Year';
+            iframe.src = '/analytics/plots/Count-of-Incidents-by-Year';
         }
 
     </script>
