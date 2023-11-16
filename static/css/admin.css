@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
 
 * {
@@ -219,3 +220,226 @@ th {
   position: relative;
   overflow-x: hidden;
 }
+=======
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
+
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: #ffffff;
+  transition: all .5s ease;
+  border-right: 1px solid black;
+}
+
+.sidebar header {
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  line-height: 70px;
+  text-align: center;
+  background: #ffffff;
+  user-select: none;
+}
+
+.sidebar header a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}
+
+.sidebar header img {
+  height: 60px;
+  margin-right: 15px;
+}
+
+.sidebar ul a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  line-height: 65px;
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  padding-left: 40px;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  transition: .4s;
+}
+
+ul li:hover a {
+  padding-left: 50px;
+}
+
+.sidebar ul a i {
+  margin-right: 16px;
+}
+
+/* Sidebar checkbox for responsive design */
+#check {
+  display: none;
+}
+
+label #btn,
+label #cancel {
+  position: absolute;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+label #btn {
+  left: 40px;
+  top: 25px;
+  font-size: 35px;
+  color: rgb(0, 0, 0);
+  padding: 6px 12px;
+  transition: all .5s;
+}
+
+label #cancel {
+  z-index: 1111;
+  left: -195px;
+  top: 17px;
+  font-size: 30px;
+  color: #000000;
+  padding: 4px 9px;
+  transition: all .5s ease;
+}
+
+/* Sidebar animation based on checkbox state */
+#check:checked ~ .sidebar {
+  left: 0;
+}
+
+#check:checked ~ label #btn {
+  left: 250px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#check:checked ~ label #cancel {
+  left: 195px;
+}
+
+#check:checked ~ section {
+  margin-left: 250px;
+}
+
+/* Section styles */
+section {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  background: #f0f0f0;
+}
+
+/* Add user button */
+#addUser {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  left: 30px;
+  top: 150px;
+}
+
+#addUser:hover {
+  background-color: #0056b3;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 18;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 19;
+}
+
+/* Table styles */
+table {
+  border-collapse: collapse;
+  width: 80%;
+  margin: 20px auto;
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 200px;
+  z-index: 1;
+}
+
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Navigation button styles */
+.navigation-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  left: 40px;
+  top: 25px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  margin: 0;
+  transition: padding-left 0.4s;
+  text-align: left;
+  width: 100%;
+  position: relative;
+}
+
+/* Hover effect for the navigation buttons */
+.navigation-button:hover {
+  padding-left: 10px;
+}
+
+/* Container styles */
+.container {
+  position: relative;
+  overflow-x: hidden;
+}
+>>>>>>> 6f6a917714c6b8084c46cb12f0a754c52ab93db8
