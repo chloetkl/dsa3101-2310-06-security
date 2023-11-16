@@ -40,6 +40,11 @@
                     <i class="fas fa-route"></i> Predictions
                 </a>
             </li>
+            <li onclick="showSection('report')">
+                <a href="#">
+                    <i class="fas fa-flag"></i> Report
+                </a>
+            </li>
             <li>
                 <button class="navigation-button" onclick="logout()">
                     <i class="fas fa-sign-out-alt" style="margin-right: 16.9px;"></i> Logout
@@ -154,6 +159,39 @@
             <iframe id="forecastPlotIframe" style="width:100%; height:500px; border:none;"></iframe>
         </div>
         <button onclick="trainAndForecastModels()">Train All Models</button>
+    </section>
+
+    <!--Fourth section is a Reporting Page.-->
+    <section id="reportSection" style="display: none;  padding-left: 100px; padding-top: 30px;">
+        <h2>Report Summary</h2>
+        <div class="email-container">
+            <div class="email-header">
+                <div>
+                    <label for="toField">To:</label>
+                    <input type="text" id="toField" placeholder="Recipient's email">
+                </div>
+                <div>
+                    <label for="fromField">From:</label>
+                    <input type="text" id="fromField" placeholder="Your email">
+                </div>
+                <div>
+                    <label for="subjectField">Subject:</label>
+                    <input type="text" id="subjectField" placeholder="Subject">
+                </div>
+                <div>
+                    <label for="dateTimeField">Date and Time:</label>
+                    <input type="datetime-local" id="dateTimeField">
+                </div>
+            </div>
+            <div class="email-body">
+                <div id="reportContent">
+                    <!-- Placeholder for report content -->
+                </div>
+            </div>
+            <div class="email-footer">
+                <button onclick="generateReport()">Generate Report</button>
+            </div>
+        </div>
     </section>
     
     <!-- Here consists of all the scripts to run each function.-->
@@ -327,6 +365,19 @@
         function loadIncidentPlotIframe() {
             var iframe = document.getElementById('incidentPlotIframe');
             iframe.src = '/analytics/plots/Count-of-Incidents-by-Year';
+        }
+
+        // Function to generate report
+        function generateReport() {
+            // Assuming the analytics and predictions iframes have content to extract
+            let analyticsContent = document.getElementById('analyticsSection').innerHTML;
+            let predictionsContent = document.getElementById('predictionsSection').innerHTML;
+
+            // Combine the content for the report
+            let reportContent = analyticsContent + predictionsContent;
+
+            // Display the report content in the report section
+            document.getElementById('reportContent').innerHTML = reportContent;
         }
 
     </script>
