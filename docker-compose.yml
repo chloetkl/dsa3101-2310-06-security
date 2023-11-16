@@ -10,7 +10,7 @@ services:
     ports:
       - "9001:5000"
     volumes:
-      - ./nusecure.py:/nusecure.py
+      - ./nusecure.py:/app/nusecure.py
       - ./app:/app/app
       - ./static:/app/static
       - ./templates:/app/templates
