@@ -1,10 +1,14 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import unittest
 from unittest.mock import patch, MagicMock
-from apriori import get_rank
+from back.models.apriori import get_rank
 
 class TestGetRankFunction(unittest.TestCase):
 
-    @patch('apriori.establish_sql_connection')
+    @patch('back.models.apriori.establish_sql_connection')
     def test_get_rank_success(self, mock_establish_sql_connection):
         # Mock SQL connection and cursor
         mock_establish_sql_connection.return_value = (MagicMock(), MagicMock())
@@ -19,7 +23,7 @@ class TestGetRankFunction(unittest.TestCase):
         expected_result = "['Afternoon', 'PGP', 'Saturday'] : Priority 1 out of 2"
         self.assertEqual(result, expected_result)
 
-    @patch('apriori.establish_sql_connection')
+    @patch('back.models.apriori.establish_sql_connection')
     def test_get_rank_error(self, mock_establish_sql_connection):
         # Mock SQL connection and cursor
         mock_establish_sql_connection.return_value = (MagicMock(), MagicMock())

@@ -1,14 +1,17 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import unittest
 import pandas as pd
 from unittest.mock import patch, MagicMock
-from nuseda import plots, convert_dataframe
-from generate_heatmap import heatmap
-from map_pin import generate_map_points
-import os
+from back.analytics.nuseda import plots, convert_dataframe
+from back.analytics.generate_heatmap import heatmap
+from back.analytics.map_pin import generate_map_points
+
 
 class TestPlotsFunction(unittest.TestCase):
 
-    @patch('nuseda.establish_sql_connection')
+    @patch('back.analytics.nuseda.establish_sql_connection')
     def test_plots(self, mock_establish_sql_connection):
         # Mock SQL connection and cursor
         mock_establish_sql_connection.return_value = (MagicMock(), MagicMock())
@@ -32,7 +35,7 @@ class TestPlotsFunction(unittest.TestCase):
         # Assert that the fetchall method was called
         mock_establish_sql_connection.return_value[1].fetchall.assert_called_once()
 
-    @patch('generate_heatmap.establish_sql_connection')
+    @patch('back.analytics.generate_heatmap.establish_sql_connection')
     def test_heatmap(self, mock_establish_sql_connection):
         # Mock SQL connection and cursor
         mock_establish_sql_connection.return_value = (MagicMock(), MagicMock())
@@ -60,7 +63,7 @@ class TestPlotsFunction(unittest.TestCase):
         # Assert that the fetchall method was called
         mock_establish_sql_connection.return_value[1].fetchall.assert_called_once()
     
-    @patch('map_pin.establish_sql_connection')
+    @patch('back.analytics.map_pin.establish_sql_connection')
     def test_generate_map_points(self,  mock_establish_sql_connection):
         # Mock SQL connection and cursor
         mock_establish_sql_connection.return_value = (MagicMock(), MagicMock())
