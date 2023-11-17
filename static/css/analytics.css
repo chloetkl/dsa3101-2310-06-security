@@ -1,6 +1,7 @@
-<<<<<<< HEAD
+/* Import Google Font Roboto with various weights */
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
 
+/* Global Reset */
 * {
     padding: 0;
     margin: 0;
@@ -8,12 +9,14 @@
     text-decoration: none;
 }
 
+/* Body Styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif; /* Use Roboto font */
 }
 
-/* Sidebar styles */
+/* Sidebar Styles */
 .sidebar {
+    /* Fixed sidebar */
     position: fixed;
     left: -250px;
     width: 250px;
@@ -23,6 +26,7 @@ body {
     border-right: 1px solid black;
 }
 
+/* Sidebar Header Styles */
 .sidebar header {
     font-size: 20px;
     color: rgb(0, 0, 0);
@@ -32,6 +36,7 @@ body {
     user-select: none;
 }
 
+/* Sidebar Header Anchor Styles */
 .sidebar header a {
     display: flex;
     align-items: center;
@@ -39,11 +44,13 @@ body {
     color: black;
 }
 
+/* Sidebar Header Image Styles */
 .sidebar header img {
     height: 60px;
     margin-right: 15px;
 }
 
+/* Sidebar List Item Styles */
 .sidebar ul a {
     display: block;
     height: 100%;
@@ -58,19 +65,22 @@ body {
     transition: .4s;
 }
 
+/* Sidebar List Item Hover Effect */
 ul li:hover a {
     padding-left: 50px;
 }
 
+/* Sidebar List Item Icon Styles */
 .sidebar ul a i {
     margin-right: 16px;
 }
 
-/* Sidebar checkbox for responsive design */
+/* Checkbox for Responsive Design */
 #check {
     display: none;
 }
 
+/* Label and Button Styles */
 label #btn,
 label #cancel {
     position: absolute;
@@ -79,6 +89,7 @@ label #cancel {
     cursor: pointer;
 }
 
+/* Button Styles */
 label #btn {
     left: 40px;
     top: 25px;
@@ -98,7 +109,7 @@ label #cancel {
     transition: all .5s ease;
 }
 
-/* Sidebar animation based on checkbox state */
+/* Sidebar Animation Based on Checkbox State */
 #check:checked ~ .sidebar {
     left: 0;
 }
@@ -117,18 +128,19 @@ label #cancel {
     margin-left: 250px;
 }
 
-/* Section styles */
+/* Section Styles */
 section {
-    width: 100vw; /* Use full viewport width */
-    height: 100vh; /* Use full viewport height */
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
     margin: 0; /* Remove default margin */
     padding: 0; /* Remove default padding */
     overflow: auto; /* Add scrollbars if content exceeds viewport */
-    background: #f0f0f0; /* Background color (change as needed) */
+    background: #f0f0f0; /* Background color */
 }
 
-/* Navigation button styles */
+/* Navigation Button Styles */
 .navigation-button {
+    /* Styles for navigation buttons */
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -145,271 +157,90 @@ section {
     position: relative;
 }
 
-/* Hover effect for the navigation buttons */
+/* Navigation Button Hover Effect */
 .navigation-button:hover {
     padding-left: 10px; /* Adjust padding as needed */
 }
 
-/* Tabs styles */
-.tabs {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: #f1f1f1;
+/* Content Styles */
+.content,
+#AnalyticsContent,
+#PredictionsContent,
+#filters,
+#iframe {
+    display: none;
+    max-width: 80%;
 }
 
-.tab {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
+/* Email Container Styles */
+.email-container {
+    /* Styles for email container */
     border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 15px;
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    max-width: 80%;
 }
 
-.tab:hover {
-    background-color: #ddd;
+/* Email Header Styles */
+.email-header {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
 }
 
-/* Additional styles */
-.logo {
-    max-width: 100px;
-    height: 100px;
+.email-header h3 {
+    margin: 0;
 }
 
-.header {
+/* Email Body Styles */
+.email-body {
+    padding: 10px;
+}
+
+/* Email Footer Styles */
+.email-footer {
+    padding: 10px;
+    text-align: right;
+}
+
+/* Dashboard Button Styles */
+.dashboard-buttons {
+    display: flex;
+    margin-top: 20px;
+}
+
+.dashboard-button {
+    /* Styles for dashboard buttons */
+    width: 300px;
+    height: 300px;
+    margin-top: 20px;
+    margin-right: 50px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: #3498db;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.dashboard-button i {
+    font-size: 200px;
+}
+
+.dashboard-button span {
     font-size: 24px;
 }
 
-.header-container {
-    border: 2px solid #000;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 98%;
-}
-
-.content {
-    display: none;
-    z-index: 1000;
-}
-
-#AnalyticsContent,
-#PredictionsContent,
-#filters {
-    display: none;
-}
-
-#iframe {
-    display: none;
-}
-=======
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
-
-* {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    text-decoration: none;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
-/* Sidebar styles */
-.sidebar {
-    position: fixed;
-    left: -250px;
-    width: 250px;
-    height: 100%;
-    background: #ffffff;
-    transition: all .5s ease;
-    border-right: 1px solid black;
-}
-
-.sidebar header {
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    line-height: 70px;
-    text-align: center;
-    background: #ffffff;
-    user-select: none;
-}
-
-.sidebar header a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: black;
-}
-
-.sidebar header img {
-    height: 60px;
-    margin-right: 15px;
-}
-
-.sidebar ul a {
-    display: block;
-    height: 100%;
-    width: 100%;
-    line-height: 65px;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    padding-left: 40px;
-    box-sizing: border-box;
-    border-bottom: 1px solid black;
-    border-top: 1px solid rgba(255, 255, 255, .1);
-    transition: .4s;
-}
-
-ul li:hover a {
-    padding-left: 50px;
-}
-
-.sidebar ul a i {
-    margin-right: 16px;
-}
-
-/* Sidebar checkbox for responsive design */
-#check {
-    display: none;
-}
-
-label #btn,
-label #cancel {
-    position: absolute;
-    color: #2596be;
-    border-radius: 3px;
+/* Dashboard Button Hover Effect */
+.dashboard-button:hover {
+    background-color: #2980b9;
     cursor: pointer;
 }
-
-label #btn {
-    left: 40px;
-    top: 25px;
-    font-size: 35px;
-    color: rgb(0, 0, 0);
-    padding: 6px 12px;
-    transition: all .5s;
-}
-
-label #cancel {
-    z-index: 1111;
-    left: -195px;
-    top: 17px;
-    font-size: 30px;
-    color: #000000;
-    padding: 4px 9px;
-    transition: all .5s ease;
-}
-
-/* Sidebar animation based on checkbox state */
-#check:checked ~ .sidebar {
-    left: 0;
-}
-
-#check:checked ~ label #btn {
-    left: 250px;
-    opacity: 0;
-    pointer-events: none;
-}
-
-#check:checked ~ label #cancel {
-    left: 195px;
-}
-
-#check:checked ~ section {
-    margin-left: 250px;
-}
-
-/* Section styles */
-section {
-    width: 100vw; /* Use full viewport width */
-    height: 100vh; /* Use full viewport height */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-    overflow: auto; /* Add scrollbars if content exceeds viewport */
-    background: #f0f0f0; /* Background color (change as needed) */
-}
-
-/* Navigation button styles */
-.navigation-button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    left: 40px;
-    top: 25px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    margin: 0;
-    transition: padding-left 0.4s;
-    text-align: left;
-    width: 100%;
-    position: relative;
-}
-
-/* Hover effect for the navigation buttons */
-.navigation-button:hover {
-    padding-left: 10px; /* Adjust padding as needed */
-}
-
-/* Tabs styles */
-.tabs {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: #f1f1f1;
-}
-
-.tab {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid #ccc;
-}
-
-.tab:hover {
-    background-color: #ddd;
-}
-
-/* Additional styles */
-.logo {
-    max-width: 100px;
-    height: 100px;
-}
-
-.header {
-    text-align: center;
-    font-size: 24px;
-}
-
-.header-container {
-    border: 2px solid #000;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 98%;
-}
-
-.content {
-    display: none;
-    z-index: 1000;
-}
-
-#AnalyticsContent,
-#PredictionsContent,
-#filters {
-    display: none;
-}
-
-#iframe {
-    display: none;
-}
->>>>>>> 6f6a917714c6b8084c46cb12f0a754c52ab93db8

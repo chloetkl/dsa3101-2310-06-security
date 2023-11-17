@@ -8,27 +8,32 @@
 </head>
 
 <body>
+    <!--This creates a sidebar that can be hidden and open for easier use.-->
     <input type="checkbox" id="check">
     <label for="check">
         <i class="fas fa-bars" id="btn"></i>
         <i class="fas fa-times" id="cancel"></i>
     </label>
+
     <div class="sidebar">
+        <!--In the side bar, the logo of the web is displayed along with which team the user is on.-->
         <header>
             <a href="https://imgbb.com/">
                 <img src="https://i.ibb.co/DKf23HJ/Screenshot-2023-11-15-132345-removebg-preview-1.png" alt="My App Logo" border="0">
                 <span>Administrator</span>
             </a>
         </header>
+
+        <!--Sections are added base on needs while a logout button is for ease.-->
         <ul>
             <li>
-                <a href="/" onclick="showSection('dashboard')">
+                <a href="" onclick="showSection('dashboard')">
                     <i class="fas fa-home"></i> Dashboard
                 </a>
             </li>
             <li>
-                <a href="users" onclick="showSection('users')">
-                    <i class="fas fa-home"></i> Users
+                <a href="#" onclick="showSection('users')">
+                    <i class="fas fa-users"></i> Users
                 </a>
             </li>
             <li>
@@ -39,13 +44,25 @@
         </ul>        
     </div>
 
-    <section id="dashboardSection">
-        <a href="https://ibb.co/9bspgLc">
-            <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
-        </a>
+    <!--First section is a Dashboard Page.-->
+    <section id="dashboardSection" style="padding-left: 100px; padding-top: 30px; 
+    background-image: url('https://i.ibb.co/ky7njvj/Background.png'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; height: 100vh;">
+        <h2 style="font-size: 50px;">Welcome to NUSecure Administrator Dashboard!</h2>
+    
+        <!-- Buttons for different sections -->
+        <div class="dashboard-buttons">
+            <button class="dashboard-button" onclick="showSection('users')">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </button>
+        </div>
     </section>
 
-    <section id="usersSection" style="display: none;">
+    <!--Second section is the Users Page.-->
+    <section id="usersSection" style="display: none;  padding-left: 100px; padding-top: 30px;">
         <h2 style="top: 30px; left: 100px; font-size: 50px; position: absolute;">All Users</h2>
         <button id="addUser">New User</button><br><br>
 
@@ -97,16 +114,19 @@
         </table>
     </section>
 
-    <script>
+    <!-- Here consists of all the scripts to run each function.-->
+    <!-- Below everything is in java.-->
+    <script>    
+        // Function to show sections and contents
         function showSection(sectionId) {
-        const sections = document.querySelectorAll('section');
-        sections.forEach(section => {
-            if (section.id === sectionId + 'Section') {
-            section.style.display = 'block';
-            } else {
-            section.style.display = 'none';
-            }
-        });
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                if (section.id === sectionId + 'Section') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
         }
 
         const sidebar = document.querySelector('.sidebar');
@@ -198,9 +218,9 @@
 
         function logout() {
             // Redirect to the home page URL
-            window.location.href = '#';
+            window.location.href = '/';
         }
-    </script>
+</script>
 </body>
 </html>
 

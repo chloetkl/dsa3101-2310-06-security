@@ -36,11 +36,7 @@
                     <i class="fas fa-route"></i> Patrol Routes
                 </a>
             </li>
-            <li>
-                <a href="#" onclick="showSection('settings')">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-            </li>
+
             <li>
                 <button class="navigation-button" onclick="logout()">
                     <i class="fas fa-sign-out-alt" style="margin-right: 16.9px;"></i> Logout
@@ -49,12 +45,29 @@
         </ul>
     </div>
 
-    <section id="dashboardSection">
-        <a href="https://ibb.co/9bspgLc">
-            <img src="https://i.ibb.co/8r6mspN/Screenshot-2023-11-15-131920.png" alt="Welcome Page" border="0" height="100%" width="100%;">
-        </a>
+    <!--First section is a Dashboard Page.-->
+    <section id="dashboardSection" style="padding-left: 100px; padding-top: 30px; 
+    background-image: url('https://i.ibb.co/ky7njvj/Background.png'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; height: 100vh;">
+        <h2 style="font-size: 50px;">Welcome to NUSecure Security Dashboard!</h2>
+    
+        <!-- Buttons for different sections -->
+        <div class="dashboard-buttons">
+            <button class="dashboard-button" onclick="showSection('map')">
+                <i class="fas fa-map"></i>
+                <span>Map</span>
+            </button>
+
+            <button class="dashboard-button" onclick="showSection('patrolRoutes')">
+                <i class="fas fa-route"></i>
+                <span>Patrol Routes</span>
+            </button>
+        </div>
     </section>
 
+    <!--Second section is a Map Page.-->
     <section id="mapSection" style="display: none;">
         <iframe id="map" src="{{ url_for('static', filename='/color_coded_incidents_map.html') }}"></iframe>
 
@@ -102,14 +115,6 @@
                     <option value="all">Status</option>
                     <option value="open">Open</option>
                     <option value="close">Close</option>
-                </select>
-                <select id="userFilter">
-                    <option value="all">User Added</option>
-                    <option value="sec1">sec1</option>
-                    <option value="sec2">sec2</option>
-                    <option value="sec3">sec3</option>
-                    <option value="sec4">sec4</option>
-                    <option value="sec5">sec5</option>
                 </select>
 
                 <body>
@@ -184,7 +189,7 @@
                                 <th>Location Group</th>
                                 <th>Building</th>
                                 <th>Status</th>
-                                <th>User</th>
+                                <th class="hidden-column">User</th>
                                 <th class="hidden-column">Latitude</th>
                                 <th class="hidden-column">Longitude</th>
                             </tr>
@@ -213,7 +218,7 @@
                                     </select>
                                   </form>
                                 </td>
-                                <td>{{ row['User Added'] }}</td>
+                                <td class="hidden-column">{{ row['User Added'] }}</td>
                                 <td class="hidden-column">{{ row['Latitude'] }}</td>
                                 <td class="hidden-column">{{ row['Longitude'] }}</td>
                             </tr>
@@ -225,21 +230,19 @@
         </div>
     </section>
     
-    <section id="patrolRoutesSection" style="display: none; padding: 20px;">
-        <h2 style="font-size: 30px; margin-bottom: 15px; left: 100px;">Patrol Routes Section</h2>
-        <p style="font-size: 20px; left: 100px;">Recommended Routes</p>
+    <!--Third section is a Patrol Page.-->
+    <section id="patrolRoutesSection" style="display: none; padding-left: 100px; padding-top: 30px;">
+        <h2>Patrol Routes Section</h2>
+        <p>Recommended Routes</p>
         <div style="margin-top: 20px;">
             <a href="https://ibb.co/6WHZDyq">
                 <img src="https://i.ibb.co/QKPcYJx/Screenshot-2023-11-15-154130.png" alt="Welcome Page" border="0" style="max-width: 100%; left: 100px;">
             </a>
         </div>
     </section>
-    
-    <section id="settingsSection" style="display: none;">
-        <!-- Settings Section Content -->
-        <h2 style="position: relative; left: 100px; top: 30px; font-size: 30px;">Settings Section</h2>
-    </section>
 
+    <!-- Here consists of all the scripts to run each function.-->
+    <!-- Below everything is in java.-->
     <script>
         function showSection(sectionId) {
         const sections = document.querySelectorAll('section');
@@ -258,7 +261,6 @@
             overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
         }
 
-
         const addReportButton = document.getElementById("addReportButton");
         const modal = document.getElementById("modal");
         const modalContent = document.getElementById("modalContent");
@@ -275,7 +277,6 @@
         const priorityFilter = document.getElementById("priorityFilter");
         const locationFilter = document.getElementById("locationFilter");
         const statusFilter = document.getElementById("statusFilter");
-        const userFilter = document.getElementById("userFilter");
 
         const table = document.getElementById("dataTable");
         const rows = table.getElementsByTagName("tr");
@@ -360,7 +361,6 @@
         priorityFilter.addEventListener("input", filterTable);
         locationFilter.addEventListener("input", filterTable);
         statusFilter.addEventListener("input", filterTable);
-        userFilter.addEventListener("input", filterTable);
 
         function filterTable() {
             const idFilterValue = idFilter.value;
@@ -370,20 +370,19 @@
             const priorityFilterValue = priorityFilter.value.toLowerCase();
             const locationFilterValue = locationFilter.value.toLowerCase();
             const statusFilterValue = statusFilter.value.toLowerCase();
-            const userFilterValue = userFilter.value.toLowerCase();
 
             for (let i = 1; i < rows.length; i++) {
                 const idColumn = rows[i].getElementsByTagName("td")[0];
                 const dateColumn = rows[i].getElementsByTagName("td")[1];
                 const timeColumn = rows[i].getElementsByTagName("td")[2];
-                const typeColumn = rows[i].getElementsByTagName("td")[3];
-                const priorityColumn = rows[i].getElementsByTagName("td")[4];
-                const locationColumn = rows[i].getElementsByTagName("td")[5];
-                const statusColumn = rows[i].getElementsByTagName("td")[7];
-                const userColumn = rows[i].getElementsByTagName("td")[8];
+                const typeColumn = rows[i].getElementsByTagName("td")[4];
+                const priorityColumn = rows[i].getElementsByTagName("td")[5];
+                const locationColumn = 
+rows[i].getElementsByTagName("td")[6];
+                const statusColumn = rows[i].getElementsByTagName("td")[8];
 
                 if (idColumn && dateColumn && timeColumn && typeColumn && priorityColumn &&
-                    locationColumn && statusColumn && userColumn) {
+                    locationColumn && statusColumn) {
                     const idText = idColumn.textContent;
                     const dateText = dateColumn.textContent;
                     const timeText = timeColumn.textContent;
@@ -391,7 +390,6 @@
                     const priorityText = priorityColumn.textContent.toLowerCase();
                     const locationText = locationColumn.textContent.toLowerCase();
                     const statusText = statusColumn.textContent.toLowerCase();
-                    const userText = userColumn.textContent.toLowerCase();
 
                     const idMatch = idFilterValue === '' || idText.includes(idFilterValue);
                     const dateMatch = dateFilterValue === '' || dateText === dateFilterValue;
@@ -400,10 +398,9 @@
                     const priorityMatch = priorityFilterValue === 'all' || priorityText.includes(priorityFilterValue);
                     const locationMatch = locationFilterValue === 'all' || locationText.includes(locationFilterValue);
                     const statusMatch = statusFilterValue === 'all' || statusText.includes(statusFilterValue);
-                    const userMatch = userFilterValue === 'all' || userText.includes(userFilterValue);
 
                     if (idMatch && dateMatch && timeMatch && typeMatch && priorityMatch &&
-                        locationMatch && statusMatch && userMatch) {
+                        locationMatch && statusMatch) {
                         rows[i].style.display = "";
                     } else {
                         rows[i].style.display = "none";
@@ -439,6 +436,5 @@
             window.location.href = '/';
         }
     </script>
-</body>
-    
+</body>   
 </html>
