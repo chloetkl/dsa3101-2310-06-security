@@ -33,7 +33,7 @@
             </li>
             <li>
                 <a href="#" onclick="showSection('patrolRoutes')">
-                    <i class="fas fa-route"></i> Patrol Routes (In development with dummy image)
+                    <i class="fas fa-route"></i> Patrol Routes
                 </a>
             </li>
 
@@ -60,9 +60,10 @@
                 <span>Map</span>
             </button>
 
+            
             <button class="dashboard-button" onclick="showSection('patrolRoutes')">
                 <i class="fas fa-route"></i>
-                <span>Patrol Routes (In development)</span>
+                <span>Patrol Routes</span>
             </button>
         </div>
     </section>
@@ -230,7 +231,7 @@
         </div>
     </section>
     
-    <!--Third section is a Patrol Page.-->
+    <!--Third section is a Patrol Page.!-->
     <section id="patrolRoutesSection" style="display: none; padding-left: 100px; padding-top: 30px;">
         <h2>Patrol Routes Section</h2>
         <p>Recommended Routes</p>
@@ -245,6 +246,7 @@
     <!-- Below everything is in java.-->
     <script>
         function showSection(sectionId) {
+        fetch('/security/generate-map-pin')
         const sections = document.querySelectorAll('section');
         sections.forEach(section => {
             if (section.id === sectionId + 'Section') {
