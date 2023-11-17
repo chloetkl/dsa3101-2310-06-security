@@ -16,6 +16,8 @@ The NUSecure project aims to enhance security by optimizing monitoring systems, 
 3. Check Docker Desktop to ensure that the database_pop container has completed running and populated database.
 4. Access the application in your browser at `http://localhost:9001`
 
+**Note that the security patrol page and analytics reporting page are in development and do not work.
+
 ## Login credentials
 Type | Username | Password | Actions
 --- | --- | --- | ---

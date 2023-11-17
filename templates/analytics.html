@@ -42,7 +42,7 @@
             </li>
             <li onclick="showSection('report')">
                 <a href="#">
-                    <i class="fas fa-flag"></i> Report
+                    <i class="fas fa-flag"></i> Report (In development)
                 </a>
             </li>
             <li>
@@ -75,7 +75,7 @@
         
             <button class="dashboard-button" onclick="showSection('report'); showContent('Report');">
                 <i class="fas fa-flag"></i>
-                <span>Report</span>
+                <span>Report (IN DEVELOPMENT) </span>
             </button>
         </div>
     </section>
@@ -183,7 +183,7 @@
 
     <!--Fourth section is a Reporting Page.-->
     <section id="reportSection" style="display: none;  padding-left: 100px; padding-top: 30px;">
-        <h2>Report Summary</h2>
+        <h2>Report Summary --THIS PAGE IS STILL IN DEVELOPMENT--</h2>
         <div class="email-container">
             <div class="email-header">
                 <div>
@@ -209,7 +209,7 @@
                 </div>
             </div>
             <div class="email-footer">
-                <button onclick="generateReport()">Generate Report</button>
+                <button onclick="generateReport()">Generate Report (Does not work)</button>
             </div>
         </div>
     </section>
@@ -398,6 +398,7 @@
 
             // Display the report content in the report section
             document.getElementById('reportContent').innerHTML = reportContent;
+            
         }
     </script>
 </body>
