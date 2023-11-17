@@ -13,3 +13,5 @@ matplotlib
 plotly
 mlxtend
 Jinja2
+pytest
+pytest-mock
