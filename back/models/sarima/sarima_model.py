@@ -144,8 +144,10 @@ def forecast_sarima(incident_type=False):
 
         forecast_plot = f'back/models/sarima/forecast_plot/forecast_plot_{incident_type}.html'
         fig.write_html(forecast_plot)
+        print("Forecast generated")
+    
     except Exception as e:
-        print(f"An error occurred during SARIMA model training: {e}")
+        print(f"An error occurred during forecasting: {e}")
         traceback.print_exc()
 
 
