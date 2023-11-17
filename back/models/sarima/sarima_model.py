@@ -9,6 +9,8 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 from pmdarima import auto_arima
 from connect_sql import establish_sql_connection
 from back.models.sarima.feature_eng import engineer_features
+import traceback
+
 
 def fetch_data(incident_type=False):
     db,cursor = establish_sql_connection()
@@ -68,13 +70,13 @@ def train_and_evaluate(model, train, test):
     return model, mae
 
 def save_model(model, filename):
-    with open(filename, 'wb') as pkl:
-        pickle.dump(model, pkl)
+    try:
+        with open(filename, 'wb') as pkl:
+            pickle.dump(model, pkl)
+    except Exception as e:
+        print(f"An error occurred during SARIMA model saving: {e}")
+        traceback.print_exc()
 
-import traceback
-from datetime import datetime
-import pandas as pd
-from pmdarima import auto_arima
 
 def train_sarima(incident_type=False):
     try:
