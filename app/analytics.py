@@ -50,7 +50,7 @@ def analytics():
 @role_required('analytics')
 def plot_generation():
     try:
-        return plots(), 200 
+        return plots(), 200
     except Exception as e:
         error_message = f"Plot generation failed: {e}"
         return jsonify({'error': error_message}), 500
@@ -109,7 +109,7 @@ def heatmap_generation():
         return heatmap(), 200
     except Exception as e:
         error_message = f"Plot generation failed: {e}"
-        return jsonify({'error': error_message}), 500 
+        return jsonify({'error': error_message}), 500
 
 @analytics_bp.route('/analytics/plot/heatmap', methods=['GET'])
 @login_required
@@ -120,7 +120,7 @@ def heatmap_plot():
         return send_file(plot_file, mimetype='text/html'), 200
     except TemplateNotFound:
         return 'Template not found: Please generate plot first!', 404
-    
+
 ### Apriori Algorithm
 
 # Endpoint to get rank_priority
@@ -151,7 +151,11 @@ def rank_priority():
 def train_all():
     incident_types = ['LOST AND FOUND','DAMAGED PROPERTY','SEXUAL INCIDENTS','STOLEN ITEMS','EMERGENCY INCIDENTS']
     train_all_sarima(incident_types)
-    return jsonify({'message': 'All models trained successfully'})
+    try:
+        return jsonify({'message': 'All models trained successfully'})
+    except Exception as e:
+        error_message = f"An error occurred: {e}"
+        return jsonify({'error': error_message}), 500
 
 # Endpoint to generate forecast for all incident types
 @analytics_bp.route('/analytics/predictions/time-series/forecast-all', methods=['GET'])
@@ -160,7 +164,12 @@ def train_all():
 def get_all_forecasts():
     incident_types = ['LOST AND FOUND','DAMAGED PROPERTY','SEXUAL INCIDENTS','STOLEN ITEMS','EMERGENCY INCIDENTS']
     forecast_all_sarima(incident_types)
-    return jsonify({'message': 'Forecasts generated for all incident types'})
+    try:
+        return jsonify({'message': 'Forecasts generated for all incident types'})
+    except Exception as e:
+        error_message = f"An error occurred: {e}"
+        return jsonify({'error': error_message}), 500
+
 
 # Endpoint to get forecast plots for specified type
 @analytics_bp.route('/analytics/predictions/time-series/get-forecast-plot', methods=['GET'])

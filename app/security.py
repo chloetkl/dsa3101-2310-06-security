@@ -58,15 +58,15 @@ def security():
         data = data.groupby(['incident_id', 'description', 'priority', 'type', 'location_group',
                                         'location', 'latitude', 'longitude']).agg(
                                             FirstUpdate=('time', 'min'), LatestUpdate=('time', 'max'),
-                                            username=('username', 'first'), 
-                                            status=('status', 'first') 
-                                            ).reset_index() 
+                                            username=('username', 'first'),
+                                            status=('status', 'first')
+                                            ).reset_index()
         data = data.sort_values('LatestUpdate', ascending=False)
         now = datetime.now()
         data = data[data['LatestUpdate'] <= now]
-        data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority', 
-                            'type':'Incidents', 'location_group':'Location', 'location':'Building', 
-                            'latitude':'Latitude', 'longitude':'Longitude', 'username':'User', 
+        data.rename(columns={'incident_id': 'IncidentID', 'description':'Description','priority': 'Priority',
+                            'type':'Incidents', 'location_group':'Location', 'location':'Building',
+                            'latitude':'Latitude', 'longitude':'Longitude', 'username':'User',
                             'time': 'LatestUpdate', 'status':'Status'}, inplace=True)
         data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
         data['LatestUpdate'] = pd.to_datetime(data['LatestUpdate'])
@@ -74,7 +74,7 @@ def security():
 
         data = data[['IncidentID', 'Description', 'Priority', 'Incidents', 'Location', 'Building', 'Latitude', 'Longitude', 'User', 'FirstUpdate', 'LatestUpdate', 'Status']]
 
-        
+
         data['FirstUpdate'] = pd.to_datetime(data['FirstUpdate'])
         data['Date'] = data['FirstUpdate'].dt.date
         data['Time'] = data['FirstUpdate'].dt.time
@@ -88,10 +88,10 @@ def security():
         data_dict = data.to_dict(orient='records')
 
         return render_template('security.html', data=data_dict), 200
-    
+
     except Exception as e:
         return jsonify({'error': e}), 500
-    
+
 
 @security_bp.route('/security/update-incident', methods=['POST'])
 @login_required
@@ -111,11 +111,11 @@ def update_incident():
                 ('{incident_id}', '{status}', '{priority}', '{time}', '{user_id}', '{notes}')"
         cursor.execute(query)
         db.commit()
-        
+
     except Exception as e:
         db.rollback()
         return jsonify({'error': f'Failed to add data due to {e}'}), 500
-    
+
     finally:
         cursor.close()
         db.close()
