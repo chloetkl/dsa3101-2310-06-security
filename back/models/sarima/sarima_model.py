@@ -120,29 +120,34 @@ def train_all_sarima(incident_types):
         train_sarima(incident_type)
 
 def forecast_sarima(incident_type=False):
-    with open(f'back/models/sarima/sarima_model_{incident_type}.pkl', 'rb') as pkl:
-        model = pickle.load(pkl)
+    try:
+        with open(f'back/models/sarima/sarima_model_{incident_type}.pkl', 'rb') as pkl:
+            model = pickle.load(pkl)
 
-    future_forecast = model.predict(n_periods=52)
+        future_forecast = model.predict(n_periods=52)
 
-    last_date = datetime.now()
-    future_dates = [last_date + timedelta(weeks=i) for i in range(1, 53)]
+        last_date = datetime.now()
+        future_dates = [last_date + timedelta(weeks=i) for i in range(1, 53)]
 
-    fig = go.Figure()
+        fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=future_dates, y=round(future_forecast), mode='lines', name='Forecast'))
+        fig.add_trace(go.Scatter(x=future_dates, y=round(future_forecast), mode='lines', name='Forecast'))
 
-    if incident_type:
-        fig.update_layout(title=f'1 YEAR FORECAST OF WEEKLY COUNTS OF {incident_type}',
-                        xaxis_title='Time',
-                        yaxis_title='Predicted Count')
-    else:
-        fig.update_layout(title=f'1 YEAR FORECAST OF WEEKLY COUNTS OF ALL INCIDENTS',
-                        xaxis_title='Time',
-                        yaxis_title='Predicted Count')
+        if incident_type:
+            fig.update_layout(title=f'1 YEAR FORECAST OF WEEKLY COUNTS OF {incident_type}',
+                            xaxis_title='Time',
+                            yaxis_title='Predicted Count')
+        else:
+            fig.update_layout(title=f'1 YEAR FORECAST OF WEEKLY COUNTS OF ALL INCIDENTS',
+                            xaxis_title='Time',
+                            yaxis_title='Predicted Count')
 
-    forecast_plot = f'back/models/sarima/forecast_plot/forecast_plot_{incident_type}.html'
-    fig.write_html(forecast_plot)
+        forecast_plot = f'back/models/sarima/forecast_plot/forecast_plot_{incident_type}.html'
+        fig.write_html(forecast_plot)
+    except Exception as e:
+        print(f"An error occurred during SARIMA model training: {e}")
+        traceback.print_exc()
+
 
 def forecast_all_sarima(incident_types):
     forecast_sarima()
